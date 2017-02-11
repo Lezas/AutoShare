@@ -1,0 +1,88 @@
+{% extends 'MyAutoBundle:Default:base.html.twig'  %}
+
+
+{% block stylesheets %}
+    <link href="{{asset('bundles/Auto/css/autoblog.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('bundles/Comments/css/comments.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+            {# Blog head#}
+            <div class="header-bg" style="background: url({{ asset('uploads/foto/' ~ auto.foto) }}); background-size: cover; background-position: center">
+
+                <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
+                    <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
+                </div>
+
+            </div>
+            <div>
+                <div class="panel panel-default blog-post">
+                    <div class="panel-body">
+                        {{ auto.additionalInfo | raw }}
+                    </div>
+                </div>
+            </div>
+            {#Blog posts#}
+            {% if app.user != null %}
+                {% if app.user.id == auto.user.id %}
+                    <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Service History
+                    </a>
+                    <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Post
+                    </a>
+                {% endif %}
+            {% endif %}
+            {% for post in posts %}
+                {% if post.deleted == false %}
+            <div class="panel panel-default blog-post">
+                <div class="panel-heading">
+                    <h2 class="blog-post-title"><a href="{{ path('indexCarPost', {'postId' : post.id}) }}">{{ post.title }}</a></h2>
+
+                    <p class="blog-post-meta">{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km. </p>
+                </div>
+                <div class="panel-body">
+
+                    <p>{{ post.text|length > 200 ? post.text|striptags|slice(0, 200)|convert_encoding('unicode', 'unicode')|raw ~ ' .......' : post.text  }}</p>
+                </div>
+
+                {% if app.user != null %}
+                    {% if app.user.id == auto.user.id %}
+                    <div class="edit-car">
+                        <a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}" class="btn btn-default btn-sm ">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    </div>
+                    <div class="remove-post">
+                        <a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}" class="btn btn-default btn-sm ">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+{% endif %}
+            {% endfor %}
+            {# End of blog posts#}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+
+
+        $('.collapse-btn').click(function(){
+            $(this).siblings('.carInfo').toggleClass('collapse');
+        });
+
+        $('.pull-down').each(function() {
+            var $this=$(this);
+            $this.css('margin-top', $this.parent().height()-$this.height()*2)
+        });
+    </script>
+{% endblock %}

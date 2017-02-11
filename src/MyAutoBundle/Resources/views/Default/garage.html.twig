@@ -1,0 +1,60 @@
+{% extends 'MyAutoBundle:Default:base.html.twig'  %}
+
+{% block stylesheets %}
+    <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('bundles/Auto/css/garage.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h2>All your Cars!</h2>
+        <p>Check out all these cars</p>
+    </div>
+    {% for auto in ownedAutos %}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <div class="panel panel-default clickable">
+                <img class="img-responsive" src="{{ asset('uploads/foto/' ~ auto.foto) }}" />
+                <div class="panel-body ">
+
+                    <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
+
+                    <a  href="{{ path('selectedAuto', { 'id': auto.id }) }}"><span></span></a>
+                </div>
+
+            </div>
+            <div class="add-service-history">
+                <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Service
+                </a>
+            </div>
+            <div class="edit-car">
+                <a href="{{ path('editAuto', { 'id': auto.id }) }}" class="btn btn-default btn-sm ">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            </div>
+            <div class="add-post-button">
+                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Post
+                </a>
+            </div>
+            <div class="add-fuel-consumption">
+                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                    <span class="glyphicon glyphicon-road"></span>
+
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.collapse-btn').click(function(){
+            $(this).siblings('.carInfo').toggleClass('collapse');
+        });
+    </script>
+{% endblock %}

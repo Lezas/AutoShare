@@ -1,0 +1,146 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: "@MyAutoBundle/Resources/config/services.yml" }
+    - { resource: "@StackExchangeBundle/Resources/config/services.yml" }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    foto_directory: '%kernel.root_dir%/../web/uploads/foto'
+    website_url: 127.0.0.1:8000
+    locale: en
+
+framework:
+    translator: ~
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    globals:
+        my_auto_car: "@my_auto.car"
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/../var/data/data.sqlite"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: MyAutoBundle\Entity\User
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: MyAutoBundle\Entity\Comment
+            thread: MyAutoBundle\Entity\Thread
+
+assetic:
+    bundles: [ "FOSCommentBundle" ]
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+
+stfalcon_tinymce:
+    include_jquery: true
+    tinymce_jquery: true
+    selector: ".tinymce"
+    base_url: "%website_url%" # this parameter may be included if you need to override the assets_base_urls for your template engine (to override a CDN base url)
+    # Get current language from the parameters.ini
+    language: %locale%
+    # Custom buttons
+    tinymce_buttons:
+        stfalcon: # Id of the first button
+            title: "Stfalcon"
+            image: "http://stfalcon.com/favicon.ico"
+    theme:
+        # Simple theme: same as default theme
+        simple: ~
+        # StackExchange editor
+        stackExchange: ~
+        # Advanced theme with almost all enabled plugins
+        advanced:
+             plugins:
+                 - "advlist autolink lists link image charmap print preview hr anchor pagebreak"
+                 - "searchreplace wordcount visualblocks visualchars code fullscreen"
+                 - "insertdatetime media nonbreaking save contextmenu directionality"
+                 - "emoticons template paste textcolor"
+             toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link"
+             toolbar2: "print preview media | forecolor backcolor emoticons | stfalcon | example"
+             image_advtab: true
+             templates:
+                 - {title: 'Test template 1', content: 'Test 1'}
+                 - {title: 'Test template 2', content: 'Test 2'}
+        # BBCode tag compatible theme (see http://www.bbcode.org/reference.php)
+        bbcode:
+             plugins: ["bbcode, code, link, preview"]
+             menubar: false
+             toolbar1: "bold,italic,underline,undo,redo,link,unlink,removeformat,cleanup,code,preview"
+
+ongr_elasticsearch:
+    managers:
+        default:
+            index:
+                hosts:
+                    - 127.0.0.1:9200
+                index_name: acme
+            mappings:
+                - MyAutoBundle
+
+beelab_tag:
+    tag_class: StackExchangeBundle\Entity\Tag
+    purge:     false

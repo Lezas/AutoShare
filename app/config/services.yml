@@ -1,0 +1,11 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    app.form.profile:
+        class: MyAutoBundle\Form\Type\ProfileFormType
+        tags:
+            - { name: form.type, alias: app_user_profile }
+

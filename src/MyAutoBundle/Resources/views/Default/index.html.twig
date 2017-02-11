@@ -1,0 +1,82 @@
+{% extends 'MyAutoBundle:Default:base.html.twig'  %}
+
+{% block stylesheets %}
+    <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h2>All Cars!</h2>
+        <p>Check out all these cars</p>
+    </div>
+    <div class="row">
+        {% for auto in ownedAutos %}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <div class="panel panel-default clickable">
+                <img class="img-responsive" src="{{ asset('uploads/foto/' ~ auto.foto) }}" />
+                <div class="panel-body ">
+
+                        <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
+                        <p>by <b>{{ auto.getUser.getUsername |e }}</b></p>
+                        <a  href="{{ path('selectedAuto', { 'id': auto.id }) }}"><span></span></a>
+                </div>
+            </div>
+            {% if app.user %}
+                <div class="car-block-menu">
+                    {% if auto.autoFavorited(app.user) %}
+                        <div class="favorite-controller">
+                            <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                subscribed
+                            </div>
+                            <div class="favorite-btn favorite-add btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
+                                subscribe
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="favorite-controller">
+                            <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed hidden" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                subscribed
+                            </div>
+                            <div class="favorite-btn favorite-add btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
+                                subscribe
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if auto.autoLiked(app.user) %}
+                        <div class="like-controller">
+                            <div class="like-btn unlike btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('unlike_this') }}">
+                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up liked"></span>
+                            </div>
+                            <div class="like-btn like btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('like_this') }}">
+                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up"></span>
+
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="like-controller">
+                            <div class="like-btn unlike btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('unlike_this') }}">
+                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up liked"></span>
+                            </div>
+                            <div class="like-btn like btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('like_this') }}">
+                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up"></span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.collapse-btn').click(function(){
+            $(this).siblings('.carInfo').toggleClass('collapse');
+        });
+    </script>
+
+{% endblock %}
