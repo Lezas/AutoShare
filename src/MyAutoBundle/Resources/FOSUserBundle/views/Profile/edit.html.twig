@@ -1,7 +1,7 @@
-{% extends "@MyAuto/Default/base.html.twig" %}
+{% extends "base.html.twig" %}
 {% trans_default_domain 'FOSUserBundle' %}
 {% block body %}
-    HELLO
+
     {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
 
     {{ form_widget(form) }}

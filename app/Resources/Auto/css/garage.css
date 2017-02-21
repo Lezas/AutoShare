@@ -1,0 +1,35 @@
+.edit-car {
+    z-index:11;
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.add-post-button {
+    z-index:11;
+    position: absolute;
+    bottom: 20px;
+    right: 85px;
+    margin: 0;
+    padding: 0;
+}
+
+.add-service-history {
+    z-index:11;
+    position: absolute;
+    bottom: 20px;
+    right: 148px;
+    margin: 0;
+    padding: 0;
+}
+
+.add-fuel-consumption {
+    z-index:11;
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    margin: 0;
+    padding: 0;
+}

@@ -27,6 +27,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+
         $autoRepository = $this->getDoctrine()->getManager()->getRepository('MyAutoBundle:Auto');
 
         $cars = $autoRepository->findBy(['private' => 0]);

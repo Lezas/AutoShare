@@ -1,0 +1,16 @@
+services:
+    stack_exchange.form_type.question:
+        class: StackExchangeBundle\Form\QuestionType
+        arguments: ["@stack_exchange.model.question.class"]
+
+    stack_exchange.form_type.answer:
+        class: StackExchangeBundle\Form\AnswerType
+        arguments: ["@stack_exchange.model.question.class"]
+
+    stack_exchange.form_factory.question:
+        class: StackExchangeBundle\FormFactory\QuestionFormFactory
+        arguments: ["@form.factory", "@stack_exchange.form_type.question", "%%stack_exchange.form.question.name%%"]
+
+    stack_exchange.form_factory.answer:
+        class: StackExchangeBundle\FormFactory\AnswerFormFactory
+        arguments: ["@form.factory", "@stack_exchange.form_type.answer", "%%stack_exchange.form.answer.name%%"]

@@ -28,7 +28,8 @@
         "friendsofsymfony/rest-bundle": "^2.1",
         "stfalcon/tinymce-bundle": "2.0",
         "ongr/elasticsearch-bundle": "dev-master",
-        "beelab/tag-bundle": "^1.1"
+        "beelab/tag-bundle": "^1.1",
+        "symfony/event-dispatcher": "^3.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

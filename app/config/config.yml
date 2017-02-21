@@ -13,7 +13,7 @@ parameters:
     locale: en
 
 framework:
-    translator: ~
+    translator: { fallbacks: [en] }
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
@@ -99,7 +99,6 @@ stfalcon_tinymce:
     include_jquery: true
     tinymce_jquery: true
     selector: ".tinymce"
-    base_url: "%website_url%" # this parameter may be included if you need to override the assets_base_urls for your template engine (to override a CDN base url)
     # Get current language from the parameters.ini
     language: %locale%
     # Custom buttons
@@ -144,3 +143,9 @@ ongr_elasticsearch:
 beelab_tag:
     tag_class: StackExchangeBundle\Entity\Tag
     purge:     false
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~

@@ -1,4 +1,31 @@
+parameters:
+    stack_exchange.form.question.name: stack_exchange_question
+
+imports:
+    - { resource: listeners.yml }
+    - { resource: forms.yml }
+
 services:
 #    stack_exchange.example:
 #        class: StackExchangeBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+    stack_exchange.model.question.class:
+        class: StackExchangeBundle\Entity\Question
+
+    stack_exchange.model.answer.class:
+        class: StackExchangeBundle\Entity\Answer
+
+    stack_exchange.manager.question:
+        class: StackExchangeBundle\Entity\QuestionManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+    stack_exchange.manager.answer:
+        class: StackExchangeBundle\Entity\AnswerManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+    stack_exchange.manager.tag:
+        class: StackExchangeBundle\Entity\TagManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+

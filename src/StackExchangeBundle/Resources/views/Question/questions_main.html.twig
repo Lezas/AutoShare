@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+    {% for question in questions %}
+        <div class="row">
+            <a href="{{ path('question', {'id' : question.id}) }}">{{ question.title }}</a>
+        </div>
+    {% endfor %}
+
+{% endblock %}

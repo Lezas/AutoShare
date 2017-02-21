@@ -1,0 +1,37 @@
+services:
+    stack_exchange.listener.question_blamer:
+        class: StackExchangeBundle\EventListener\QuestionBlamerListener
+        arguments: ["@security.authorization_checker", "@security.token_storage"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.question_delete:
+        class: StackExchangeBundle\EventListener\QuestionDeleteListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.question_vote:
+        class: StackExchangeBundle\EventListener\QuestionVoteListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.answer_blamer:
+        class: StackExchangeBundle\EventListener\AnswerBlamerListener
+        arguments: ["@security.authorization_checker", "@security.token_storage"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.answer_delete:
+        class: StackExchangeBundle\EventListener\AnswerDeleteListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.answer_vote:
+        class: StackExchangeBundle\EventListener\AnswerVoteListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.tag_score:
+        class: StackExchangeBundle\EventListener\TagScoreListener
+        tags:
+            - { name: kernel.event_subscriber }
