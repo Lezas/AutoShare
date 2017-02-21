@@ -44,12 +44,17 @@ class QuestionController extends Controller
                 $question->addTag($tag);
                 $tagManager->saveTag($tag);
             }
-            $questionManager->saveQuestion($question);
-
-
-            //TODO: add counter to increment scores for tags
 
             $questionManager->saveQuestion($question);
+
+            foreach ($tags as $tag) {
+                /** @var Tag $tag */
+                $tag->addQuestion($question);
+                //TODO: fix tags usage count: move to proper listener!
+                $tag->incrementUsageCount();
+                $tagManager->saveTag($tag);
+            }
+
             return $this->redirectToRoute('question', ['id' => $question->getId()]);
         }
 
@@ -77,7 +82,6 @@ class QuestionController extends Controller
 
     /**
      * @Route("/questions", name="questions")
-     * @param $id
      * @param Request $request
      * @return Response
      */
@@ -85,7 +89,6 @@ class QuestionController extends Controller
     {
         $questionManager = $this->get('stack_exchange.manager.question');
         $question = $questionManager->findAllQuestion();
-
 
         return $this->render('StackExchangeBundle:Question:questions_main.html.twig',
             ['questions' => $question]
