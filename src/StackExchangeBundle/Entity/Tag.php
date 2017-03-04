@@ -36,7 +36,8 @@ class Tag implements TagInterface
 
     /**
      * Many Groups have Many Users.
-     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Question", mappedBy="tags")
+     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Question", inversedBy="tags")
+     * @ORM\JoinTable(name="question_tag")
      * @var Question[]|ArrayCollection
      */
     protected $questions;

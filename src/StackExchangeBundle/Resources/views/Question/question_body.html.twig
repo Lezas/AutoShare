@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-sm-1 se_question_vote_container">
+        <div class="row">
+            <div class="text-center ">
+                <a href="#" class="se_question_question_vote" data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id})}}" data-score="1">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center se_question_vote_score_holder">
+                {{ question.score }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="text-center">
+                <a href="#" class="se_question_question_vote" data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id})}}" data-score="-1">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-11">
+        <div class="row">
+            <h3>{{ question.title }}</h3>
+        </div>
+
+        <div class="row">
+            {{ question.text | raw}}
+        </div>
+        <div class="row">
+            {% for tag in question.tags %}
+                {{ tag.name }}
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="pull-left">
+                <a href="#">share</a>
+                <a href="{{ path('question_edit', {'id' : question.id}) }}">edit</a>
+            </div>
+            <div class="col-sm-4 pull-right">
+                {#TODO Posible to move to other controller. Answer also uses same type of showing owner of object #}
+                Asked: {{ question.createdAt | date('Y-m-d') }}<br>
+                <a href="#"> {{ question.author.foto }}</a>
+                <a href="#">{{ question.author }}</a>
+            </div>
+        </div>
+        <hr>
+        comments goes gere <br> <hr style="padding: 0; margin: 0">
+    </div>
+</div>

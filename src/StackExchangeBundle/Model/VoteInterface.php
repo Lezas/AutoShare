@@ -35,9 +35,10 @@ interface VoteInterface
     public function getObject();
 
     /**
-     * @param VotableInterface $comment
+     * @param VotableInterface $object
+     * @return
      */
-    public function setObject(VotableInterface $comment);
+    public function setObject(VotableInterface $object);
 
     /**
      * @return integer the modification applied to the comment by this vote

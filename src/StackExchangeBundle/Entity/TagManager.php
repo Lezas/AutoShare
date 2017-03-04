@@ -11,6 +11,7 @@ namespace StackExchangeBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use IteratorAggregate;
 use StackExchangeBundle\Model\TagManager as BaseTagManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -138,6 +139,18 @@ class TagManager extends BaseTagManager
                 $return->add($oTag);
             }
         }
+
+        return $return;
+    }
+
+    /**
+     * @param ArrayCollection $tags
+     * @param string $delimiter
+     * @return String
+     */
+    public function convertTagsToString(array $tags, $delimiter = ',')
+    {
+        $return = implode($delimiter,$tags);
 
         return $return;
     }

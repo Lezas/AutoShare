@@ -25,6 +25,8 @@ class AppKernel extends Kernel
             new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
             new StackExchangeBundle\StackExchangeBundle(),
             new Beelab\TagBundle\BeelabTagBundle(),
+            new BlogBundle\BlogBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

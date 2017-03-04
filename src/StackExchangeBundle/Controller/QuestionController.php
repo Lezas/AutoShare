@@ -38,22 +38,17 @@ class QuestionController extends Controller
             }
 
             $tags = $tagManager->createTagsFromString($form->get('tags')->getData());
-
+            $questionManager->saveQuestion($question);
             foreach ($tags as $tag) {
                 /** @var Tag $tag */
-                $question->addTag($tag);
+                $tag->addQuestion($question);
+                $tag->incrementUsageCount();
                 $tagManager->saveTag($tag);
+                $question->addTag($tag);
             }
 
             $questionManager->saveQuestion($question);
 
-            foreach ($tags as $tag) {
-                /** @var Tag $tag */
-                $tag->addQuestion($question);
-                //TODO: fix tags usage count: move to proper listener!
-                $tag->incrementUsageCount();
-                $tagManager->saveTag($tag);
-            }
 
             return $this->redirectToRoute('question', ['id' => $question->getId()]);
         }
@@ -90,8 +85,78 @@ class QuestionController extends Controller
         $questionManager = $this->get('stack_exchange.manager.question');
         $question = $questionManager->findAllQuestion();
 
+        $em = $this->get('doctrine.orm.entity_manager');
+        $dql = "SELECT q FROM StackExchangeBundle:Question q";
+        $query = $em->createQuery($dql);
+
+        $qb = $em->getRepository('StackExchangeBundle:Question')->createQueryBuilder('q')
+                ->addSelect('q.createdAt as HIDDEN time')
+                ->addSelect('q.title as HIDDEN title')
+                ->addSelect('q.score as HIDDEN score');
+        $query = $qb->getQuery();
+
+
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 10),/*limit per page*/
+            [
+                'p.createdAt' => 'time'
+            ]
+        );
+
         return $this->render('StackExchangeBundle:Question:questions_main.html.twig',
-            ['questions' => $question]
+            [
+                'questions' => $question,
+                'pagination' => $pagination,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/question/{id}/edit", name="question_edit")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editQuestionAction($id, Request $request)
+    {
+        $this->getUser();
+
+        $questionManager = $this->get('stack_exchange.manager.question');
+        $tagManager = $this->get('stack_exchange.manager.tag');
+        $question = $questionManager->findQuestionById($id);
+        if ($question == null) {
+            return new Response(sprintf("Cant find question with id '%s'.", $id), 400);
+        }
+
+        $tagsInString = $tagManager->convertTagsToString($question->getTags()->getValues());
+
+        $form = $this->get('stack_exchange.form_factory.question')->createForm();
+        $form->setData($question);
+        $form->get('tags')->setData($tagsInString);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $tags = $tagManager->createTagsFromString($form->get('tags')->getData());
+
+            foreach ($tags as $tag) {
+                /** @var Tag $tag */
+                $tag->addQuestion($question);
+                //TODO: fix tags usage count: move to proper listener!
+                $tag->incrementUsageCount();
+                $tagManager->saveTag($tag);
+                $question->addTag($tag);
+            }
+
+            $questionManager->saveQuestion($question);
+
+            return $this->redirectToRoute('question', ['id' => $question->getId()]);
+        }
+
+        return $this->render('StackExchangeBundle:Question:question_form.html.twig',
+            ['form' => $form->createView()]
         );
     }
 }

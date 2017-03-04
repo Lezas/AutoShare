@@ -4,6 +4,7 @@ imports:
     - { resource: services.yml }
     - { resource: "@MyAutoBundle/Resources/config/services.yml" }
     - { resource: "@StackExchangeBundle/Resources/config/services.yml" }
+    - { resource: "@BlogBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -149,3 +150,7 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+
+fos_rest:
+    service:
+        serializer: null

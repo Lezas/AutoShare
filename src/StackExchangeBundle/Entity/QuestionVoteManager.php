@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pkupe
+ * Created by Lezas
  * Date: 2017-02-14
  * Time: 19:03
  */
@@ -10,10 +9,11 @@ namespace StackExchangeBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use StackExchangeBundle\Model\QuestionManager as BaseQuestionManager;
+use StackExchangeBundle\Model\QuestionVoteManager as BaseVoteManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use StackExchangeBundle\Model\Vote as BaseVote;
 
-class QuestionManager extends BaseQuestionManager
+class QuestionVoteManager extends BaseVoteManager
 {
     /**
      * @var EntityManager
@@ -41,9 +41,9 @@ class QuestionManager extends BaseQuestionManager
         parent::__construct($dispatcher);
 
         $this->em = $em;
-        $this->repository = $em->getRepository(Question::class);
+        $this->repository = $em->getRepository(QuestionVote::class);
 
-        $metadata = $em->getClassMetadata(Question::class);
+        $metadata = $em->getClassMetadata(QuestionVote::class);
 
         $this->class = $metadata->name;
     }
@@ -54,7 +54,7 @@ class QuestionManager extends BaseQuestionManager
      * @param  array           $criteria
      * @return Question
      */
-    public function findQuestionBy(array $criteria)
+    public function findVoteBy(array $criteria)
     {
         return $this->repository->findOneBy($criteria);
     }
@@ -62,7 +62,7 @@ class QuestionManager extends BaseQuestionManager
     /**
      * {@inheritDoc}
      */
-    public function findQuestionsBy(array $criteria)
+    public function findVotesBy(array $criteria)
     {
         return $this->repository->findBy($criteria);
     }
@@ -72,9 +72,9 @@ class QuestionManager extends BaseQuestionManager
      * @return Question
      *
      */
-    public function findQuestionById($id)
+    public function findVoteById($id)
     {
-        return $this->findQuestionBy(array('id' => $id));
+        return $this->findVoteBy(array('id' => $id));
     }
 
     /**
@@ -82,7 +82,7 @@ class QuestionManager extends BaseQuestionManager
      *
      * @return array of Question
      */
-    public function findAllQuestion()
+    public function findAllVotes()
     {
         return $this->repository->findAll();
     }
@@ -90,9 +90,14 @@ class QuestionManager extends BaseQuestionManager
     /**
      * {@inheritDoc}
      */
-    public function isNewQuestion(Question $question)
+    public function isNewVote(BaseVote $vote)
     {
-        return !$this->em->getUnitOfWork()->isInIdentityMap($question);
+        return !$this->em->getUnitOfWork()->isInIdentityMap($vote);
+    }
+
+    public function doesUserVoted($user, $question)
+    {
+        return (bool) $this->repository->findBy(['object' => $question, 'user' => $user]);
     }
 
     /**
@@ -106,44 +111,15 @@ class QuestionManager extends BaseQuestionManager
     }
 
 
-
     /**
      * Saves Question
      *
-     * @param Question $question
+     * @param BaseVote $vote
      */
-    protected function doSaveQuestion(Question $question)
+    protected function doSaveVote(BaseVote $vote)
     {
-        $this->em->persist($question);
+        $this->em->persist($vote);
         $this->em->flush();
-    }
-
-    public function updateQuestionTags(Question $question, $tags)
-    {
-        //TODO
-
-        //get current tags
-        // make removed tags list
-        //make added tags list
-        //remove tags from Question
-        //Add tags to question
-    }
-
-    public function addTag(Question $question, Tag $tag)
-    {
-        //TODO
-
-        //check if tag is not already in list
-            //add it
-            //call tagManager to add question
-    }
-
-    public function removeTag(Question $question, Tag $tag)
-    {
-        //TODO
-        //check if tag is on the list
-            //remove it
-            //call TagManager to remove question from tag
     }
 
 }

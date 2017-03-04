@@ -51,6 +51,9 @@
 
                     <p>{{ post.text|length > 200 ? post.text|striptags|slice(0, 200)|convert_encoding('unicode', 'unicode')|raw ~ ' .......' : post.text }}</p>
                 </div>
+                <div class="panel-footer">
+                    Vieved: 522 time. {{ post.thread.id }} Comments
+                </div>
 
                 {% if app.user != null %}
                     {% if app.user.id == auto.user.id %}

@@ -28,4 +28,12 @@ services:
         class: StackExchangeBundle\Entity\TagManager
         arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
 
+    stack_exchange.manager.question_vote:
+        class: StackExchangeBundle\Entity\QuestionVoteManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+    stack_exchange.manager.answer_vote:
+        class: StackExchangeBundle\Entity\AnswerVoteManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
 

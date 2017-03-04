@@ -133,4 +133,84 @@ final class Events
      * @var string
      */
     const TAG_CREATE = 'stack_exchange.tag.create';
+
+    //VOTE
+
+    /**
+     * The PRE_PERSIST event occurs prior to the persistence backend
+     * persisting the Comment.
+     *
+     * This event allows you to modify the data in the Comment prior
+     * to persisting occuring. The listener receives a
+     * FOS\CommentBundle\Event\CommentPersistEvent instance.
+     *
+     * Persisting of the comment can be aborted by calling
+     * $event->abortPersist()
+     *
+     * @var string
+     */
+    const QUESTION_VOTE_PRE_PERSIST = 'stack_exchange.question.vote.pre_persist';
+
+    /**
+     * The POST_PERSIST event occurs after the persistence backend
+     * persisted the Comment.
+     *
+     * This event allows you to notify users or perform other actions
+     * that might require the Comment to be persisted before performing
+     * those actions. The listener receives a
+     * FOS\CommentBundle\Event\CommentEvent instance.
+     *
+     * @var string
+     */
+    const QUESTION_VOTE_POST_PERSIST = 'stack_exchange.question.vote.post_persist';
+
+    /**
+     * The CREATE event occurs when the manager is asked to create
+     * a new instance of a Comment.
+     *
+     * The listener receives a FOS\CommentBundle\Event\CommentEvent
+     * instance.
+     *
+     * @var string
+     */
+    const QUESTION_VOTE_CREATE = 'stack_exchange.question.vote.create';
+
+    /**
+     * The PRE_PERSIST event occurs prior to the persistence backend
+     * persisting the Comment.
+     *
+     * This event allows you to modify the data in the Comment prior
+     * to persisting occuring. The listener receives a
+     * FOS\CommentBundle\Event\CommentPersistEvent instance.
+     *
+     * Persisting of the comment can be aborted by calling
+     * $event->abortPersist()
+     *
+     * @var string
+     */
+    const ANSWER_VOTE_PRE_PERSIST = 'stack_exchange.answer.vote.pre_persist';
+
+    /**
+     * The POST_PERSIST event occurs after the persistence backend
+     * persisted the Comment.
+     *
+     * This event allows you to notify users or perform other actions
+     * that might require the Comment to be persisted before performing
+     * those actions. The listener receives a
+     * FOS\CommentBundle\Event\CommentEvent instance.
+     *
+     * @var string
+     */
+    const ANSWER_VOTE_POST_PERSIST = 'stack_exchange.answer.vote.post_persist';
+
+    /**
+     * The CREATE event occurs when the manager is asked to create
+     * a new instance of a Comment.
+     *
+     * The listener receives a FOS\CommentBundle\Event\CommentEvent
+     * instance.
+     *
+     * @var string
+     */
+    const ANSWER_VOTE_CREATE = 'stack_exchange.answer.vote.create';
 }

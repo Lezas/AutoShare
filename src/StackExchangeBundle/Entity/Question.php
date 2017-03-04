@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MyAutoBundle\Entity\Thread;
 use MyAutoBundle\Entity\User;
+use StackExchangeBundle\Model\CommentableInterfaces;
+use StackExchangeBundle\Model\CommentInterface;
 use StackExchangeBundle\Model\QuestionInterface;
 use StackExchangeBundle\Model\SignedInterface;
 use StackExchangeBundle\Model\VotableInterface;
@@ -17,10 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Answer
  *
  * @ORM\Table(name="question")
- * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class Question implements TaggableInterface, VotableInterface, SignedInterface
+class Question implements TaggableInterface, VotableInterface, SignedInterface, CommentableInterfaces
 {
     /**
      * @var int
@@ -41,9 +42,9 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="date")
+     * @ORM\Column(name="created_at", type="datetime")
      */
-    private $createAt;
+    private $createdAt;
 
     /**
      * @var string
@@ -61,8 +62,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
     /**
      *
      *
-     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Tag", inversedBy="questions", cascade={"persist"})
-     * @ORM\JoinTable(name="question_tag")
+     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Tag", mappedBy="questions")
      * @var Tag[]|ArrayCollection
      */
     protected $tags;
@@ -71,11 +71,10 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
     // to replace "Tag" with "TagInterface" where appropriate
 
     /**
-     * @ORM\OneToOne(targetEntity = "MyAutoBundle\Entity\Thread")
-     * @ORM\JoinColumn(name = "thread_id", referencedColumnName = "id")
-     * @var Thread
+     * @ORM\OneToMany(targetEntity = "StackExchangeBundle\Entity\QuestionComment", mappedBy="question")
+     * @var QuestionComment[]
      */
-    private $thread;
+    private $comments;
 
 
     /**
@@ -107,6 +106,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
     {
         $this->tags = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -164,7 +164,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
      */
     public function setCreatedAt($createAt)
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createAt;
 
         return $this;
     }
@@ -176,7 +176,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
      */
     public function getCreatedAt()
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
     /**
@@ -210,7 +210,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
      *
      * @return Question
      */
-    public function setDeleted( $deleted)
+    public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
 
@@ -266,32 +266,39 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
         return $this->author;
     }
 
-
     //------COMMENTING-----//
 
     /**
-     * Set thread
-     *
-     * @param \MyAutoBundle\Entity\Thread $thread
-     *
-     *
-     * @return Question
+     * {@inheritdoc}
      */
-    public function setThread(Thread $thread = null)
+    public function addComment(CommentInterface $comment)
     {
-        $this->thread = $thread;
+        $this->comments->add($comment);
+    }
 
-        return $this;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeComment(CommentInterface $comment)
+    {
+        $this->comments->removeElement($comment);
     }
 
     /**
-     * Get thread
-     *
-     * @return \MyAutoBundle\Entity\Thread
+     * {@inheritdoc}
      */
-    public function getThread()
+    public function hasComment(CommentInterface $comment)
     {
-        return $this->thread;
+        return $this->comments->contains($comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     //------SCORE----//
@@ -326,7 +333,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface
     /**
      * {@inheritdoc}
      */
-    public function addTag($tag)
+    public function addTag(TagInterface $tag)
     {
         $this->tags->add($tag);
     }

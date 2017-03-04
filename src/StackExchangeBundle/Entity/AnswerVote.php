@@ -1,16 +1,14 @@
 <?php
+
 namespace StackExchangeBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use StackExchangeBundle\Model\BaseVote;
-
-//use FOS\CommentBundle\Entity\Vote as BaseVote;
-
-
+use MyAutoBundle\Entity\User;
+use StackExchangeBundle\Model\Vote as BaseVote;
 
 /**
  * @ORM\Entity
- * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  */
 class AnswerVote extends BaseVote
 {
@@ -22,12 +20,31 @@ class AnswerVote extends BaseVote
     protected $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $value;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
      * Comment of this vote
      *
      * @var Answer
      * @ORM\ManyToOne(targetEntity="StackExchangeBundle\Entity\Answer")
      */
     protected $object;
+
+    /**
+     * Comment of this vote
+     *
+     * @var User
+     * @ORM\ManyToOne(targetEntity="MyAutoBundle\Entity\User")
+     */
+    protected $user;
 
     public function setAnswer(Answer $answer)
     {
@@ -37,6 +54,34 @@ class AnswerVote extends BaseVote
     public function getAnswer()
     {
         return $this->getObject();
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Checks if the value is an appropriate one.
+     *
+     * @param mixed $value
+     *
+     * @return boolean True, if the integer representation of the value is not null or 0.
+     */
+    protected function checkValue($value)
+    {
+        return null !== $value && intval($value);
     }
 
 }
