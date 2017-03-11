@@ -2,7 +2,7 @@
 
 namespace CarShowBundle\Service;
 use Doctrine\ORM\EntityManager;
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
 
 class CarService
@@ -18,7 +18,7 @@ class CarService
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('a')
-            ->from(Auto::class, 'a')
+            ->from(Car::class, 'a')
             ->leftJoin('a.favoritedUsers', 'j')
             ->where('j.id = :id')
             ->setParameter('id', $user->getId());

@@ -5,7 +5,7 @@
 namespace CarShowBundle\Entity\Listener;
 
 use CarShowBundle\Document\CarProfile;
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use ONGR\ElasticsearchBundle\Service\Manager;
 use Psr\Log\LoggerInterface;
@@ -26,12 +26,12 @@ class AutoListener
     }
 
 
-    public function postPersist(Auto $auto, LifecycleEventArgs $event)
+    public function postPersist(Car $auto, LifecycleEventArgs $event)
     {
         $this->saveSearch($auto);
     }
 
-    public function postRemove(Auto $auto, LifecycleEventArgs $event)
+    public function postRemove(Car $auto, LifecycleEventArgs $event)
     {
         $autoDoc = new CarProfile();
         $autoDoc->id = $auto->getId();
@@ -41,13 +41,13 @@ class AutoListener
         $this->ESManager->commit();
     }
 
-    public function postUpdate(Auto $auto, LifecycleEventArgs $event)
+    public function postUpdate(Car $auto, LifecycleEventArgs $event)
     {
         $this->saveSearch($auto);
     }
 
 
-    protected function saveSearch(Auto $auto)
+    protected function saveSearch(Car $auto)
     {
         $autoDoc = new CarProfile();
         $autoDoc->id = $auto->getId();

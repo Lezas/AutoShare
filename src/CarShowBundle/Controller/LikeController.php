@@ -2,6 +2,7 @@
 
 namespace CarShowBundle\Controller;
 
+use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,13 +27,13 @@ class LikeController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $carManager = $this->get('car_show.manager.car');
 
-        $car = $em->getRepository('CarShowBundle:Auto')->find($carId);
+        /** @var Car $car */
+        $car = $carManager->findCarById($carId);
 
         /** @var User $user */
         $user = $this->getUser();
-
 
         if (!$car || !$user || $car->isAutoLiked($user)) {
             throw new NotFoundHttpException("Page not found");
@@ -40,9 +41,7 @@ class LikeController extends Controller
 
         $car->addUserToLiked($user);
 
-
-        $em->persist($car);
-        $em->flush();
+        $carManager->saveCar($car);
 
         $response['count'] = $car->getLikedUsersCount();
         return new JsonResponse($response);
@@ -59,9 +58,10 @@ class LikeController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $carManager = $this->get('car_show.manager.car');
 
-        $car = $em->getRepository('CarShowBundle:Auto')->find($carId);
+        /** @var Car $car */
+        $car = $carManager->findCarById($carId);
 
         /** @var User $user */
         $user = $this->getUser();
@@ -72,8 +72,7 @@ class LikeController extends Controller
 
         $car->removeUserFromLiked($user);
 
-        $em->persist($car);
-        $em->flush();
+        $carManager->saveCar($car);
 
         $response['count'] = $car->getLikedUsersCount();
         return new JsonResponse($response);

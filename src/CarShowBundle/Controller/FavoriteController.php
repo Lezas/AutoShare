@@ -2,6 +2,7 @@
 
 namespace CarShowBundle\Controller;
 
+use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,9 +27,10 @@ class FavoriteController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $carManager = $this->get('car_show.manager.car');
 
-        $car = $em->getRepository('CarShowBundle:Auto')->find($carId);
+        /** @var Car $car */
+        $car = $carManager->findCarById($carId);
 
         /** @var User $user */
         $user = $this->getUser();
@@ -39,9 +41,7 @@ class FavoriteController extends Controller
         }
 
         $car->addUserToFavorites($user);
-
-        $em->persist($car);
-        $em->flush();
+        $carManager->saveCar($car);
 
         $response['success'] = true;
         return new JsonResponse($response);
@@ -58,9 +58,10 @@ class FavoriteController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $carManager = $this->get('car_show.manager.car');
 
-        $car = $em->getRepository('CarShowBundle:Auto')->find($carId);
+        /** @var Car $car */
+        $car = $carManager->findCarById($carId);
 
         /** @var User $user */
         $user = $this->getUser();
@@ -70,9 +71,7 @@ class FavoriteController extends Controller
         }
 
         $car->removeUserFromFavorites($user);
-
-        $em->persist($car);
-        $em->flush();
+        $carManager->saveCar($car);
 
         $response['success'] = true;
         return new JsonResponse($response);

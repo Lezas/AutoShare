@@ -2,7 +2,7 @@
 
 namespace CarShowBundle\Form\Type;
 
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -55,7 +55,7 @@ class AutoType extends AbstractType
     public function setDefaultOptions(OptionsResolver  $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Auto::class
+            'data_class' => Car::class
         ]);
     }
 

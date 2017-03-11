@@ -2,7 +2,7 @@
 
 namespace CarShowBundle\Controller;
 
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use CarShowBundle\Entity\Post;
 use CarShowBundle\Form\Type\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,8 +28,8 @@ class CarPostController extends Controller
     {
         $user = $this->getUser();
 
-        /** @var Auto $auto */
-        $auto = $this->getDoctrine()->getRepository('CarShowBundle:Auto')->find($carId);
+        /** @var Car $auto */
+        $auto = $this->getDoctrine()->getRepository('CarShowBundle:Car')->find($carId);
 
         $post = new Post();
         $form = $this->createForm(PostType::class, $post, ['auto' => $auto]);
@@ -85,7 +85,7 @@ class CarPostController extends Controller
     public function editCarPostAction($carId = null, $postId = null, Request $request)
     {
         $user = $this->getUser();
-        $auto = $this->getDoctrine()->getRepository('CarShowBundle:Auto')->find($carId);
+        $auto = $this->getDoctrine()->getRepository('CarShowBundle:Car')->find($carId);
 
         $post = $this->getDoctrine()->getRepository('CarShowBundle:Post')->find($postId);
         $form = $this->createForm(PostType::class, $post, ['auto' => $auto]);
@@ -143,7 +143,7 @@ class CarPostController extends Controller
     }
 
     /**
-     * @Route("/auto/post/{postId}", name="indexCarPost")
+     * @Route("/car/post/{postId}", name="car_show_get_car_post")
      * @param null $postId
      * @return Response
      */

@@ -2,7 +2,7 @@
 
 namespace MainBundle\Entity;
 
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,20 +28,20 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\Auto", mappedBy="user")
-     * @var Auto[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\Car", mappedBy="user")
+     * @var Car[]|ArrayCollection
      */
-    protected $Auto;
+    protected $car;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CarShowBundle\Entity\Auto", mappedBy="favoritedUsers")
-     * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="CarShowBundle\Entity\Car", mappedBy="favoritedUsers")
+     * @ORM\JoinColumn(name="car_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_favorites")
      */
     protected $favorites;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CarShowBundle\Entity\Auto", mappedBy="likedUsers")
+     * @ORM\ManyToMany(targetEntity="CarShowBundle\Entity\Car", mappedBy="likedUsers")
      * @ORM\JoinTable(name="user_likes")
      */
     protected $liked;
@@ -50,7 +50,7 @@ class User extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      *
      */
-    private $foto;
+    private $photo;
 
     /**
      * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\Question", mappedBy="author")
@@ -92,13 +92,13 @@ class User extends BaseUser
     /**
      * Add auto
      *
-     * @param \CarShowBundle\Entity\Auto $auto
+     * @param \CarShowBundle\Entity\Car $car
      *
      * @return User
      */
-    public function addAuto(Auto $auto)
+    public function addAuto(Car $car)
     {
-        $this->Auto[] = $auto;
+        $this->car[] = $car;
 
         return $this;
     }
@@ -106,52 +106,52 @@ class User extends BaseUser
     /**
      * Remove auto
      *
-     * @param \CarShowBundle\Entity\Auto $auto
+     * @param \CarShowBundle\Entity\Car $car
      */
-    public function removeAuto(Auto $auto)
+    public function removeAuto(Car $car)
     {
-        $this->Auto->removeElement($auto);
+        $this->car->removeElement($car);
     }
 
     /**
-     * Get auto
+     * Get all cars
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAuto()
+    public function getCars()
     {
-        return $this->Auto;
+        return $this->car;
     }
 
-    public function getFoto()
+    public function getPhoto()
     {
-        return $this->foto;
+        return $this->photo;
     }
 
-    public function setFoto($foto)
+    public function setPhoto($photo)
     {
-        $this->foto = $foto;
+        $this->photo = $photo;
 
         return $this;
     }
 
-    public function addAutoToFavorites(Auto $auto)
+    public function addAutoToFavorites(Car $auto)
     {
         $this->favorites[] = $auto;
     }
 
-    public function removeAutoFromFavorites(Auto $auto)
+    public function removeAutoFromFavorites(Car $auto)
     {
         $this->favorites->removeElement($auto);
     }
 
-    public function isAutoFavorited(Auto $auto)
+    public function isAutoFavorited(Car $auto)
     {
         return $this->favorites->contains($auto);
     }
 
 
-    public function addAutoToLiked(Auto $auto)
+    public function addAutoToLiked(Car $auto)
     {
         $this->liked[] = $auto;
     }
@@ -161,12 +161,12 @@ class User extends BaseUser
         return $this->liked;
     }
 
-    public function removeAutoFromLiked(Auto $auto)
+    public function removeAutoFromLiked(Car $auto)
     {
         $this->liked->removeElement($auto);
     }
 
-    public function isAutoLiked(Auto $auto)
+    public function isAutoLiked(Car $auto)
     {
         return $this->liked->contains($auto);
     }

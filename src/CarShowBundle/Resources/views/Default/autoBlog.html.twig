@@ -43,7 +43,7 @@
             <div class="panel panel-default blog-post">
                 <div class="panel-heading">
                     <h2 class="blog-post-title"><a
-                                href="{{ path('indexCarPost', {'postId' : post.id}) }}">{{ post.title }}</a></h2>
+                                href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a></h2>
 
                     <p class="blog-post-meta">{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km. </p>
                 </div>

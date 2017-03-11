@@ -2,6 +2,8 @@
 
 namespace CarShowBundle\Entity;
 
+use CarShowBundle\Model\Car as BaseCar;
+use CarShowBundle\Model\CarInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MainBundle\Entity\User;
@@ -9,11 +11,11 @@ use MainBundle\Entity\User;
 /**
  * Auto
  *
- * @ORM\Table(name="auto")
- * @ORM\Entity(repositoryClass="CarShowBundle\Repository\AutoRepository")
+ * @ORM\Table(name="cars")
+ * @ORM\Entity()
  * @ORM\EntityListeners({"CarShowBundle\Entity\Listener\AutoListener"})
  */
-class Auto
+class Car extends BaseCar
 {
 
     public function __construct()
@@ -31,79 +33,79 @@ class Auto
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="brand", type="string", length=255)
      */
-    private $brand;
+    protected $brand;
 
     /**
      * @var string
      *
      * @ORM\Column(name="model", type="string", length=255)
      */
-    private $model;
+    protected $model;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="year", type="date")
      */
-    private $year;
+    protected $year;
 
     /**
      * @var string
      *
      * @ORM\Column(name="bodyType", type="string", length=255)
      */
-    private $bodyType;
+    protected $bodyType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="powertrain", type="string", length=255)
      */
-    private $powerTrain;
+    protected $powerTrain;
 
     /**
      * @var string
      *
      * @ORM\Column(name="engineCapacity", type="string", length=255)
      */
-    private $engineCapacity;
+    protected $engineCapacity;
 
     /**
      * @var string
      *
      * @ORM\Column(name="fuelType", type="string", length=255, nullable=true)
      */
-    private $fuelType;
+    protected $fuelType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="additionalInfo", type="text", nullable=true)
      */
-    private $additionalInfo;
+    protected $additionalInfo;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MainBundle\Entity\User", inversedBy = "Auto")
+     * @ORM\ManyToOne(targetEntity = "MainBundle\Entity\User", inversedBy = "car")
      * @ORM\JoinColumn(name = "user_id", referencedColumnName = "id")
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\Post", mappedBy="auto")
+     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\Post", mappedBy="car")
      * @var Post[]|ArrayCollection
      */
     protected $posts;
 
     /**
-     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\ServiceHistory", mappedBy="auto")
+     * @ORM\OneToMany(targetEntity="CarShowBundle\Entity\ServiceHistory", mappedBy="car")
      * @var ServiceHistory[]|ArrayCollection
      */
     protected $serviceHistory;
@@ -112,29 +114,29 @@ class Auto
      * @ORM\Column(type="string")
      *
      */
-    private $foto;
+    protected $foto;
 
     /**
      * @ORM\Column(type="boolean")
      *
      */
-    private $private;
+    protected $private;
 
     /**
      * @ORM\ManyToMany(targetEntity="MainBundle\Entity\User", inversedBy="favorites")
-     * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="car_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_favorites")
      * @var User[]|ArrayCollection
      */
-    private $favoritedUsers;
+    protected $favoritedUsers;
 
     /**
      * @ORM\ManyToMany(targetEntity="MainBundle\Entity\User", inversedBy="liked")
-     * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="car_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_likes")
      * @var User[]|ArrayCollection
      */
-    private $likedUsers;
+    protected $likedUsers;
 
     /**
      * Get id
@@ -147,179 +149,11 @@ class Auto
     }
 
     /**
-     * Set brand
-     *
-     * @param string $brand
-     *
-     * @return Auto
-     */
-    public function setBrand($brand)
-    {
-        $this->brand = $brand;
-
-        return $this;
-    }
-
-    /**
-     * Get brand
-     *
-     * @return string
-     */
-    public function getBrand()
-    {
-        return $this->brand;
-    }
-
-    /**
-     * Set model
-     *
-     * @param string $model
-     *
-     * @return Auto
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
-    /**
-     * Get model
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set year
-     *
-     * @param \DateTime $year
-     *
-     * @return Auto
-     */
-    public function setYear($year)
-    {
-        $this->year = $year;
-
-        return $this;
-    }
-
-    /**
-     * Get year
-     *
-     * @return \DateTime
-     */
-    public function getYear()
-    {
-        return $this->year;
-    }
-
-    /**
-     * Set bodyType
-     *
-     * @param string $bodyType
-     *
-     * @return Auto
-     */
-    public function setBodyType($bodyType)
-    {
-        $this->bodyType = $bodyType;
-
-        return $this;
-    }
-
-    /**
-     * Get bodyType
-     *
-     * @return string
-     */
-    public function getBodyType()
-    {
-        return $this->bodyType;
-    }
-
-    /**
-     * Set powerTrain
-     *
-     * @param string $powerTrain
-     *
-     * @return Auto
-     */
-    public function setPowerTrain($powerTrain)
-    {
-        $this->powerTrain = $powerTrain;
-
-        return $this;
-    }
-
-    /**
-     * Get powerTrain
-     *
-     * @return string
-     */
-    public function getPowerTrain()
-    {
-        return $this->powerTrain;
-    }
-
-    /**
-     * Set engineCapacity
-     *
-     * @param string $engineCapacity
-     *
-     * @return Auto
-     */
-    public function setEngineCapacity($engineCapacity)
-    {
-        $this->engineCapacity = $engineCapacity;
-
-        return $this;
-    }
-
-    /**
-     * Get engineCapacity
-     *
-     * @return string
-     */
-    public function getEngineCapacity()
-    {
-        return $this->engineCapacity;
-    }
-
-    /**
-     * Set fuelType
-     *
-     * @param string $fuelType
-     *
-     * @return Auto
-     */
-    public function setFuelType($fuelType)
-    {
-        $this->fuelType = $fuelType;
-
-        return $this;
-    }
-
-    /**
-     * Get fuelType
-     *
-     * @return string
-     */
-    public function getFuelType()
-    {
-        return $this->fuelType;
-    }
-
-    /**
      * Set additionalInfo
      *
      * @param string $additionalInfo
      *
-     * @return Auto
+     * @return CarInterface
      */
     public function setAdditionalInfo($additionalInfo)
     {
@@ -343,7 +177,7 @@ class Auto
      *
      * @param \MainBundle\Entity\User $user
      *
-     * @return Auto
+     * @return CarInterface
      */
     public function setUser(User $user = null)
     {
@@ -367,7 +201,7 @@ class Auto
      *
      * @param \CarShowBundle\Entity\Post $post
      *
-     * @return Auto
+     * @return CarInterface
      */
     public function addPost(\CarShowBundle\Entity\Post $post)
     {
@@ -402,7 +236,7 @@ class Auto
      *
      * @param \CarShowBundle\Entity\ServiceHistory $serviceHistory
      *
-     * @return Auto
+     * @return CarInterface
      */
     public function addServiceHistory(\CarShowBundle\Entity\ServiceHistory $serviceHistory)
     {
@@ -449,7 +283,7 @@ class Auto
      *
      * @param boolean $private
      *
-     * @return Auto
+     * @return CarInterface
      */
     public function setPrivate($private)
     {

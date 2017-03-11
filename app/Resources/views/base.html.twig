@@ -114,7 +114,7 @@
 
                                             {% for car in my_auto_car.favorites(app.user) %}
                                                 <li role="presentation">
-                                                    <a href="{{ path('selectedAuto', { 'id': car.id }) }}">
+                                                    <a href="{{ path('car_show_get_car', { 'id': car.id }) }}">
 
                                                         <span>{{ car.user.username }} {{ car.year | date("Y") }} {{ car.brand|e }} {{ car.model|e }}</span>
                                                     </a>

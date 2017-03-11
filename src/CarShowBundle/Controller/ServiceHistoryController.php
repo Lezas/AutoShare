@@ -29,7 +29,7 @@ class ServiceHistoryController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $car = $em->getRepository('CarShowBundle:Auto')->find($id);
+        $car = $em->getRepository('CarShowBundle:Car')->find($id);
 
         if (!$car) {
             throw new NotFoundHttpException("Page not found");
@@ -86,7 +86,7 @@ class ServiceHistoryController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $car = $em->getRepository('CarShowBundle:Auto')->find($carId);
+        $car = $em->getRepository('CarShowBundle:Car')->find($carId);
         $SH = $em->getRepository('CarShowBundle:ServiceHistory')->find($serviceHistory);
 
         if (!$car || !$SH || !$user) {

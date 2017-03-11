@@ -17,9 +17,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $autoRepository = $this->getDoctrine()->getManager()->getRepository('CarShowBundle:Auto');
-
-        $cars = $autoRepository->findBy(['private' => 0]);
+        $cars = $this->get('car_show.manager.car')->findCarsBy(['private' => 0]);
 
         return $this->render('MainBundle:Default:index.html.twig', [
             'ownedAutos' => $cars,
@@ -37,7 +35,7 @@ class DefaultController extends Controller
          * @var $user User
          */
         $user = $this->getUser();
-        $cars = $user->getAuto();
+        $cars = $user->getCars();
 
         return $this->render('MainBundle:Default:garage.html.twig', [
             'ownedAutos' => $cars,

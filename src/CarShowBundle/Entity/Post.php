@@ -56,11 +56,11 @@ class Post
     private $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "CarShowBundle\Entity\Auto", inversedBy = "posts")
-     * @ORM\JoinColumn(name = "auto_id", referencedColumnName = "id")
-     * @var Auto
+     * @ORM\ManyToOne(targetEntity = "CarShowBundle\Entity\Car", inversedBy = "posts")
+     * @ORM\JoinColumn(name = "car_id", referencedColumnName = "id")
+     * @var Car
      */
-    private $auto;
+    private $car;
 
     /**
      * @ORM\OneToOne(targetEntity = "CarShowBundle\Entity\Thread")
@@ -176,27 +176,27 @@ class Post
     }
 
     /**
-     * Set auto
+     * Set car
      *
-     * @param \CarShowBundle\Entity\Auto $auto
+     * @param \CarShowBundle\Entity\Car car
      *
      * @return Post
      */
-    public function setAuto(Auto $auto = null)
+    public function setAuto(Car $car = null)
     {
-        $this->auto = $auto;
+        $this->car = $car;
 
         return $this;
     }
 
     /**
-     * Get auto
+     * Get car
      *
-     * @return \CarShowBundle\Entity\Auto
+     * @return \CarShowBundle\Entity\Car
      */
     public function getAuto()
     {
-        return $this->auto;
+        return $this->car;
     }
 
     /**

@@ -3,8 +3,12 @@ services:
         class: CarShowBundle\Service\CarService
         arguments: ['@doctrine.orm.entity_manager']
 
-    car_show.entity_listener:
+    car_show.car.entity_listener:
         arguments: ['@monolog.logger', '@es.manager']
         class: CarShowBundle\Entity\Listener\AutoListener
         tags:
             - { name: doctrine.orm.entity_listener }
+
+    car_show.manager.car:
+        class: CarShowBundle\Entity\CarManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]

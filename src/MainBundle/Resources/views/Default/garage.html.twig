@@ -19,7 +19,7 @@
 
                     <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
 
-                    <a  href="{{ path('selectedAuto', { 'id': auto.id }) }}"><span></span></a>
+                    <a  href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
                 </div>
 
             </div>

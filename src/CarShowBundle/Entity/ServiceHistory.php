@@ -49,11 +49,11 @@ class ServiceHistory
     private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "CarShowBundle\Entity\Auto", inversedBy = "serviceHistory")
-     * @ORM\JoinColumn(name = "auto_id", referencedColumnName = "id")
-     * @var Auto
+     * @ORM\ManyToOne(targetEntity = "CarShowBundle\Entity\Car", inversedBy = "serviceHistory")
+     * @ORM\JoinColumn(name = "car_id", referencedColumnName = "id")
+     * @var Car
      */
-    private $auto;
+    private $car;
 
     /**
      * Get id
@@ -140,13 +140,13 @@ class ServiceHistory
     /**
      * Set auto
      *
-     * @param \CarShowBundle\Entity\Auto $auto
+     * @param \CarShowBundle\Entity\Car $car
      *
      * @return ServiceHistory
      */
-    public function setAuto(Auto $auto = null)
+    public function setAuto(Car $car = null)
     {
-        $this->auto = $auto;
+        $this->car = $car;
 
         return $this;
     }
@@ -154,11 +154,11 @@ class ServiceHistory
     /**
      * Get auto
      *
-     * @return \CarShowBundle\Entity\Auto
+     * @return \CarShowBundle\Entity\Car
      */
     public function getAuto()
     {
-        return $this->auto;
+        return $this->car;
     }
 
 }
