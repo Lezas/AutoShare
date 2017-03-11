@@ -1,3 +1,12 @@
+main:
+    resource: "@MainBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+search:
+    resource: "@SearchBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
 
 stack_exchange:
@@ -6,12 +15,7 @@ stack_exchange:
     prefix:   /
 
 my_auto:
-    resource: "@MyAutoBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-blog:
-    resource: "@BlogBundle/Controller/"
+    resource: "@CarShowBundle/Controller/"
     type:     annotation
     prefix:   /
 

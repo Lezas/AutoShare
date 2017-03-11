@@ -1,0 +1,10 @@
+services:
+    car_show.car:
+        class: CarShowBundle\Service\CarService
+        arguments: ['@doctrine.orm.entity_manager']
+
+    car_show.entity_listener:
+        arguments: ['@monolog.logger', '@es.manager']
+        class: CarShowBundle\Entity\Listener\AutoListener
+        tags:
+            - { name: doctrine.orm.entity_listener }

@@ -6,7 +6,7 @@ use Beelab\TagBundle\Tag\TagInterface;
 use Beelab\TagBundle\Tag\TaggableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use MyAutoBundle\Entity\User;
+use MainBundle\Entity\User;
 use StackExchangeBundle\Model\CommentableInterface;
 use StackExchangeBundle\Model\CommentInterface;
 use StackExchangeBundle\Model\QuestionInterface;
@@ -75,7 +75,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
     protected $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "questions")
+     * @ORM\ManyToOne(targetEntity = "MainBundle\Entity\User", inversedBy = "questions")
      * @ORM\JoinColumn(name = "author_id", referencedColumnName = "id")
      * @var User
      */

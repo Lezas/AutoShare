@@ -2,9 +2,10 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: "@MyAutoBundle/Resources/config/services.yml" }
+    - { resource: "@CarShowBundle/Resources/config/services.yml" }
     - { resource: "@StackExchangeBundle/Resources/config/services.yml" }
-    - { resource: "@BlogBundle/Resources/config/services.yml" }
+    - { resource: "@SearchBundle/Resources/config/services.yml" }
+    - { resource: "@MainBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -42,7 +43,7 @@ framework:
 # Twig Configuration
 twig:
     globals:
-        my_auto_car: "@my_auto.car"
+        my_auto_car: "@car_show.car"
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
@@ -71,7 +72,7 @@ doctrine:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: MyAutoBundle\Entity\User
+    user_class: MainBundle\Entity\User
     from_email:
         address: you@example.com
         sender_name: You
@@ -80,8 +81,8 @@ fos_comment:
     db_driver: orm
     class:
         model:
-            comment: MyAutoBundle\Entity\Comment
-            thread: MyAutoBundle\Entity\Thread
+            comment: CarShowBundle\Entity\Comment
+            thread: CarShowBundle\Entity\Thread
 
 assetic:
     bundles: [ "FOSCommentBundle" ]
@@ -136,7 +137,7 @@ ongr_elasticsearch:
                     - 127.0.0.1:9200
                 index_name: atuo_knowledge
             mappings:
-                - MyAutoBundle
+                - CarShowBundle
                 - StackExchangeBundle
 
 beelab_tag:

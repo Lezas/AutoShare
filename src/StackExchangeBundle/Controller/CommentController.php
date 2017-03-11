@@ -30,7 +30,7 @@ class CommentController extends FOSRestController
     {
         $question = $this->get('stack_exchange.manager.question')->findQuestionById($id);
 
-        if (null === $question) {
+        if (null === $question || null == $this->getUser()) {
             throw new NotFoundHttpException(sprintf("No question with id '%s' found ", $question->getId()));
         }
 

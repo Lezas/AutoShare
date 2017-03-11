@@ -3,7 +3,7 @@
 namespace StackExchangeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use MyAutoBundle\Entity\User;
+use MainBundle\Entity\User;
 use StackExchangeBundle\Model\CommentInterface;
 use StackExchangeBundle\Model\Comment as BaseComment;
 
@@ -31,7 +31,7 @@ class QuestionComment extends BaseComment implements CommentInterface
     private $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy="questionsComments")
+     * @ORM\ManyToOne(targetEntity = "MainBundle\Entity\User", inversedBy="questionsComments")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      * @var User
      */

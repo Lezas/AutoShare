@@ -5,7 +5,7 @@ parameters:
 
 services:
     app.form.profile:
-        class: MyAutoBundle\Form\Type\ProfileFormType
+        class: MainBundle\Form\ProfileFormType
         tags:
             - { name: form.type, alias: app_user_profile }
 

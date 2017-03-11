@@ -4,7 +4,7 @@ namespace StackExchangeBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use MyAutoBundle\Entity\User;
+use MainBundle\Entity\User;
 use StackExchangeBundle\Model\Vote as BaseVote;
 
 /**
@@ -42,7 +42,7 @@ class QuestionVote extends BaseVote
      * Comment of this vote
      *
      * @var User
-     * @ORM\ManyToOne(targetEntity="MyAutoBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="MainBundle\Entity\User")
      */
     protected $user;
 

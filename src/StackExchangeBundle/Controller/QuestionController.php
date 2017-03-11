@@ -2,8 +2,7 @@
 
 namespace StackExchangeBundle\Controller;
 
-use FOS\RestBundle\View\View;
-use MyAutoBundle\Entity\User;
+use MainBundle\Entity\User;
 use StackExchangeBundle\Entity\Question;
 use StackExchangeBundle\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

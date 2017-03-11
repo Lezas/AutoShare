@@ -16,7 +16,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new \MyAutoBundle\MyAutoBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\CommentBundle\FOSCommentBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this),
@@ -25,8 +24,10 @@ class AppKernel extends Kernel
             new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
             new StackExchangeBundle\StackExchangeBundle(),
             new Beelab\TagBundle\BeelabTagBundle(),
-            new BlogBundle\BlogBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new CarShowBundle\CarShowBundle(),
+            new SearchBundle\SearchBundle(),
+            new MainBundle\MainBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
