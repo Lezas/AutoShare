@@ -35,3 +35,29 @@ services:
         class: StackExchangeBundle\EventListener\TagScoreListener
         tags:
             - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.question_comment:
+        class: StackExchangeBundle\EventListener\QuestionCommentListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.answer_comment:
+        class: StackExchangeBundle\EventListener\AnswerCommentListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.answer_accepted:
+        class: StackExchangeBundle\EventListener\AnswerAcceptedListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.question_answer_accepted:
+        class: StackExchangeBundle\EventListener\QuestionAcceptedAnswerListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    stack_exchange.listener.question.search:
+        arguments: ['@monolog.logger', '@es.manager']
+        class: StackExchangeBundle\EventListener\QuestionSearchListener
+        tags:
+            - { name: kernel.event_subscriber }

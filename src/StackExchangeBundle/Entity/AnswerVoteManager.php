@@ -10,8 +10,10 @@ namespace StackExchangeBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use StackExchangeBundle\Model\AnswerVoteManager as BaseVoteManager;
+use StackExchangeBundle\Model\VoteInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use StackExchangeBundle\Model\Vote as BaseVote;
+
 //TODO answerVoteManager and QuestionVoteManager share same logic - move to one abstract class on just class.
 class AnswerVoteManager extends BaseVoteManager
 {
@@ -51,8 +53,8 @@ class AnswerVoteManager extends BaseVoteManager
     /**
      * Finds one comment thread by the given criteria
      *
-     * @param  array           $criteria
-     * @return Question
+     * @param  array $criteria
+     * @return VoteInterface
      */
     public function findVoteBy(array $criteria)
     {
@@ -68,8 +70,8 @@ class AnswerVoteManager extends BaseVoteManager
     }
 
     /**
-     * @param  string          $id
-     * @return Question
+     * @param  string $id
+     * @return VoteInterface
      *
      */
     public function findVoteById($id)
@@ -97,7 +99,7 @@ class AnswerVoteManager extends BaseVoteManager
 
     public function doesUserVoted($user, $question)
     {
-        return (bool) $this->repository->findBy(['object' => $question, 'user' => $user]);
+        return (bool)$this->repository->findBy(['object' => $question, 'user' => $user]);
     }
 
     /**

@@ -64,6 +64,10 @@ class QuestionBlamerListener implements EventSubscriberInterface
         $question = $event->getQuestion();
         $question->setAuthor($this->tokenStorage->getToken()->getUser());
 
+        if (null == $question->isAnswered()) {
+            $question->setAnswered(false);
+        }
+
         if (!$question instanceof SignedInterface) {
             if ($this->logger) {
                 $this->logger->debug("Comment does not implement SignedInterface, skipping");

@@ -51,7 +51,7 @@ class QuestionVoteManager extends BaseVoteManager
     /**
      * Finds one comment thread by the given criteria
      *
-     * @param  array           $criteria
+     * @param  array $criteria
      * @return Question
      */
     public function findVoteBy(array $criteria)
@@ -68,7 +68,7 @@ class QuestionVoteManager extends BaseVoteManager
     }
 
     /**
-     * @param  string          $id
+     * @param  string $id
      * @return Question
      *
      */
@@ -97,7 +97,7 @@ class QuestionVoteManager extends BaseVoteManager
 
     public function doesUserVoted($user, $question)
     {
-        return (bool) $this->repository->findBy(['object' => $question, 'user' => $user]);
+        return (bool)$this->repository->findBy(['object' => $question, 'user' => $user]);
     }
 
     /**

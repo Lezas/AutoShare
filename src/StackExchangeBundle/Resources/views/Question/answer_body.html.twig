@@ -2,24 +2,47 @@
     <div class="col-sm-1 se_answer_vote_container">
         <div class="row">
             <div class="text-center">
-                <a href="#" class="se_answer_answer_vote" data-url="{{ url('stack_exchange_new_answer_vote', {'id' : answer.id})}}" data-score="1">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+                <a href="#" class="se_answer_answer_vote "
+                   data-url="{{ url('stack_exchange_new_answer_vote', {'id' : answer.id}) }}" data-score="1">
+                    <span class="glyphicon glyphicon-chevron-up glyphicon-large"></span>
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="text-center se_answer_vote_score_holder">
+            <div class="text-center se_answer_vote_score_holder glyphicon-large">
                 {{ answer.score }}
             </div>
         </div>
 
         <div class="row">
             <div class="text-center">
-                <a href="#" class="se_answer_answer_vote" data-url="{{ url('stack_exchange_new_answer_vote', {'id' : answer.id})}}" data-score="-1">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
+                <a href="#" class="se_answer_answer_vote"
+                   data-url="{{ url('stack_exchange_new_answer_vote', {'id' : answer.id}) }}" data-score="-1">
+                    <span class="glyphicon glyphicon-chevron-down glyphicon-large"></span>
                 </a>
             </div>
         </div>
+        {% if  app.user  %}
+            {% if (answer.author.id == app.user.id and question.answered == false) %}
+            <div class="row">
+                <div class="text-center ">
+                    <a href="{{ url('set_question_answered', {'questionId' : question.id, 'answerId' : answer.id}) }}">
+                        <span class="glyphicon glyphicon-ok glyphicon-large" title="{% trans %}se_set_answer_accepted{% endtrans %}"></span>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        {% if answer.accepted %}
+        <div class="row">
+            <div class="text-center">
+            <span class="glyphicon glyphicon-ok glyphicon-large" title="{% trans %}se_this_answer_is_approved{% endtrans %}"
+                style="color: #6b9311"
+            ></span>
+            </div>
+        </div>
+        {% endif %}
     </div>
     <div class="col-sm-11">
 
@@ -30,12 +53,40 @@
         <div class="row">
             <div class="pull-left">
                 <a href="#">share</a>
-                <a href="#">edit</a>
+                <a href="{{ url('answer_edit', {'id' : answer.id}) }}">edit</a>
             </div>
             <div class="col-sm-4 pull-right">
                 Created: {{ answer.createdAt | date('Y-m-d') }}<br>
                 <a href="#"> {{ answer.author.foto }}</a>
                 <a href="#">{{ answer.author }}</a>
+            </div>
+        </div>
+
+        <hr style="padding-bottom: 0;margin-bottom: 0;">
+        <div class="se_comment">
+            <div class="se_comment_holder">
+                {% for comment in answer.comments %}
+                    {% include '@StackExchange/Question/comment_body.html.twig' with {'comment' : comment, 'object' : answer} %}
+                    {% if  app.user  %}
+                        {% if (comment.author.id == app.user.id) %}
+                            <a class="stack_exchange_comment_edit" data-commentid="{{ comment.id }}"
+                               data-url="{{ url('stack_exchange_edit_answer_comment', {'commentId' : comment.id, 'answerId' : answer.id}) }}"
+                               data-target="#se_comment_text_editor_{{ answer.id }}_answer"
+                            >
+                                {% trans %}edit{% endtrans %}
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    <hr style="margin-top:3px; margin-bottom: 5px;">
+                {% endfor %}
+            </div>
+            <div class="se_comment_editor">
+                <a class="se_answer_comment_add_comment"
+                   data-url="{{ url('stack_exchange_new_answer_comment', {'id' : answer.id}) }}"
+                   data-target="#se_comment_text_editor_{{ answer.id }}_answer">Add comment</a>
+                <div id="se_comment_text_editor_{{ answer.id }}_answer" class="se_comment_text_editor ">
+
+                </div>
             </div>
         </div>
     </div>

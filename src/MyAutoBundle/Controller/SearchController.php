@@ -8,11 +8,13 @@
 
 namespace MyAutoBundle\Controller;
 
-use MyAutoBundle\Document\CarProfile;
-use MyAutoBundle\Entity\Auto;
+use Doctrine\Common\Collections\ArrayCollection;
 use MyAutoBundle\Form\Type\SearchFieldType;
 use ONGR\ElasticsearchDSL\Query\FullText\QueryStringQuery;
-use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
+use StackExchangeBundle\Document\QuestionDocument;
+use StackExchangeBundle\Document\TagDocument;
+use StackExchangeBundle\Entity\Question;
+use StackExchangeBundle\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,15 +35,16 @@ class SearchController extends Controller
         $form = $this->createForm(SearchFieldType::class);
 
         $form->handleRequest($request);
+        $questions = new ArrayCollection();
+
+        $mana = $this->get('es.manager')->getClient()->ping();
 
         if ($form->isValid()) {
-            dump($form);
-            dump($form->getData()['Search']);
 
-            $keyword = $form->getData()['Search']  ;
+            $keyword = $form->getData()['Search'];
 
             $manager = $this->get('es.manager');
-            $repo = $manager->getRepository('MyAutoBundle:CarProfile');
+            $repo = $manager->getRepository('StackExchangeBundle:QuestionDocument');
             $search = $repo->createSearch();
 
             $queryStringQuery = new QueryStringQuery($keyword);
@@ -49,50 +52,78 @@ class SearchController extends Controller
 
             $results = $repo->findDocuments($search);
 
-            dump($results);
+            for ($i = 1; $i <= $results->count(); $i++) {
+                $qId = $results->current()->question_id;
+                $question = $this->get('stack_exchange.manager.question')->findQuestionById($qId);
+                $questions->add($question);
+                $results->next();
+            }
 
-            exit;
         }
 
-        return $this->render('@MyAuto/Default/searchField.html.twig',[
+        return $this->render('@MyAuto/Default/search.html.twig', [
+            'questions' => $questions,
+        ]);
+
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/search/new", name="new_search")
+     * @return Response
+     *
+     */
+    public function newSearchAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
+
+        return $this->render('@MyAuto/Default/searchField.html.twig', [
             'form' => $form->createView(),
             'title' => 'Edit post',
         ]);
-/*
-        $manager = $this->get('es.manager');
-        $repo = $manager->getRepository('MyAutoBundle:CarProfile');
-        $content = $repo->find(1);
+    }
 
-        $search = $repo->createSearch();
+    /**
+     * @param Request $request
+     * @Route("/update/everything", name="update_everything")
+     * @return Response
+     *
+     */
+    public function updateEverythingAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
 
-        $auto = new Auto();
-        $auto->setUser($this->getUser());
+        $questions = $this->get('stack_exchange.manager.question')->findAllQuestion();
 
+        $es = $this->get('es.manager');
 
+        /** @var Question $question */
+        foreach ($questions as $question) {
+            $qDoc = new QuestionDocument();
+            $qDoc->id = $question->getId();
+            $qDoc->setQuestionId($question->getId());
+            $qDoc->setTitle($question->getTitle());
+            $qDoc->setBody($question->getText());
 
-        $result = $repo->findDocuments($search);
-        $auto = $result->current()->id;
+            /** @var Tag $tag */
+            foreach ($question->getTags()->toArray() as $tag) {
+                $tDoc = new TagDocument();
+                $tDoc->setTitle($tag->getName());
+                $qDoc->addTag($tDoc);
+            }
 
-        dump($result->current());
+            $es->persist($qDoc);
+        }
 
-        dump($result->count());
-        $result->next();
-        dump($result->current());
-        $result->next();
+        $es->commit();
 
-        $auto = $this->getDoctrine()->getManager()->getRepository('MyAutoBundle:Auto')->find($auto);
+        dump("success");
+        exit;
 
-        dump($auto);
-
-        $carProfile = new CarProfile();
-        $carProfile->id = 1;
-        $carProfile->name = "something";
-
-        $manager->remove($carProfile);
-        $manager->commit();
-
-        dump($content);
-*/
+        return $this->render('@MyAuto/Default/searchField.html.twig', [
+            'form' => $form->createView(),
+            'title' => 'Edit post',
+        ]);
     }
 
 }

@@ -9,8 +9,11 @@
 namespace StackExchangeBundle\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use MyAutoBundle\Entity\Thread;
 use MyAutoBundle\Entity\User;
+use StackExchangeBundle\Model\CommentableInterface;
+use StackExchangeBundle\Model\CommentInterface;
 use StackExchangeBundle\Model\SignedInterface;
 use StackExchangeBundle\Model\VotableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class Answer implements VotableInterface, SignedInterface
+class Answer implements VotableInterface, SignedInterface, CommentableInterface
 {
 
     /**
@@ -56,6 +59,12 @@ class Answer implements VotableInterface, SignedInterface
     private $deleted;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" = false})
+     *
+     */
+    private $accepted;
+
+    /**
      * @var int
      *
      * @ORM\Column(type="integer")
@@ -70,21 +79,28 @@ class Answer implements VotableInterface, SignedInterface
     private $thread;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "Answer")
+     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "answers")
      * @ORM\JoinColumn(name = "author_id", referencedColumnName = "id")
      * @var User
      */
     private $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "StackExchangeBundle\Entity\Question")
+     * @ORM\ManyToOne(targetEntity = "StackExchangeBundle\Entity\Question", inversedBy="answers")
      * @ORM\JoinColumn(name = "question_id", referencedColumnName = "id")
-     * @var User
+     * @var Question
      */
     private $question;
 
-    //------Base class functions----//
+    /**
+     * @ORM\OneToMany(targetEntity = "StackExchangeBundle\Entity\AnswerComment", mappedBy="answer")
+     * @var AnswerComment[]|ArrayCollection
+     */
+    protected $comments;
 
+
+
+    //------Base class functions----//
     /**
      *
      * @ORM\PrePersist
@@ -95,6 +111,14 @@ class Answer implements VotableInterface, SignedInterface
             $this->setCreatedAt(new \DateTime('now'));
         }
 
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -181,6 +205,30 @@ class Answer implements VotableInterface, SignedInterface
     }
 
     /**
+     * Set deleted
+     *
+     * @param bool $accepted
+     * @return Answer
+     *
+     */
+    public function setAccepted( $accepted)
+    {
+        $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    /**
+     * Is private
+     *
+     * @return boolean
+     */
+    public function isAccepted()
+    {
+        return $this->accepted;
+    }
+
+    /**
      * @param Question $question
      * @return $this
      */
@@ -192,7 +240,7 @@ class Answer implements VotableInterface, SignedInterface
     }
 
     /**
-     * @return User
+     * @return Question
      */
     public function getQuestion()
     {
@@ -259,6 +307,41 @@ class Answer implements VotableInterface, SignedInterface
     public function incrementScore($by = 1)
     {
         $this->score = $this->score + $by;
+    }
+
+    //------COMMENT----//
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addComment(CommentInterface $comment)
+    {
+        $this->comments->add($comment);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeComment(CommentInterface $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasComment(CommentInterface $comment)
+    {
+        return $this->comments->contains($comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
 

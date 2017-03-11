@@ -52,7 +52,7 @@ class AnswerManager extends BaseAnswerManager
      * Finds one comment thread by the given criteria
      *
      * @param  array           $criteria
-     * @return Question
+     * @return Answer
      */
     public function findAnswerBy(array $criteria)
     {
@@ -69,7 +69,7 @@ class AnswerManager extends BaseAnswerManager
 
     /**
      * @param  string          $id
-     * @return Question
+     * @return Answer
      *
      */
     public function findAnswerById($id)

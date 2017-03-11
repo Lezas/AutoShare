@@ -10,6 +10,9 @@ services:
     stack_exchange.form_type.vote:
         class: StackExchangeBundle\Form\VoteType
 
+    stack_exchange.form_type.comment:
+        class: StackExchangeBundle\Form\CommentType
+
     stack_exchange.form_factory.question:
         class: StackExchangeBundle\FormFactory\QuestionFormFactory
         arguments: ["@form.factory", "@stack_exchange.form_type.question", "%%stack_exchange.form.question.name%%"]
@@ -21,3 +24,7 @@ services:
     stack_exchange.form_factory.vote:
         class: StackExchangeBundle\FormFactory\VoteFormFactory
         arguments: ["@form.factory", "@stack_exchange.form_type.vote", "%%stack_exchange.form.vote.name%%"]
+
+    stack_exchange.form_factory.comment:
+        class: StackExchangeBundle\FormFactory\CommentFormFactory
+        arguments: ["@form.factory", "@stack_exchange.form_type.comment", "%%stack_exchange.form.comment.name%%"]

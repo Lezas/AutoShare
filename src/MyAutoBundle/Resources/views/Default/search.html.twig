@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+    QUESTION RESULTS
+
+    {% for question in questions %}
+        {% include 'StackExchangeBundle:Question:question_row.html.twig' with {'question' : question} %}
+        <hr>
+    {% endfor %}
+
+
+{% endblock %}

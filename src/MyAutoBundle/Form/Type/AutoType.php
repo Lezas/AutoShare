@@ -1,26 +1,19 @@
 <?php
 
-
 namespace MyAutoBundle\Form\Type;
 
-
-use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\ORM\EntityRepository;
+use MyAutoBundle\Entity\Auto;
 use MyAutoBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
 
 class AutoType extends AbstractType
 {
@@ -38,7 +31,6 @@ class AutoType extends AbstractType
     {
 
         $this->user = $options['user'];
-        $user = $this->user;
 
         $builder->add('brand', TextType::class, ['label' => 'Brand'])
             ->add('model', TextType::class, ['label' => 'Model'])
@@ -63,7 +55,7 @@ class AutoType extends AbstractType
     public function setDefaultOptions(OptionsResolver  $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'MyAutoBundle/Entity/Auto'
+            'data_class' => Auto::class
         ]);
     }
 

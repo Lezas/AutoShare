@@ -57,8 +57,6 @@ abstract class QuestionManager implements QuestionManagerInterface
         $event = new QuestionPersistEvent($question);
         $this->dispatcher->dispatch(Events::QUESTION_PRE_PERSIST, $event);
 
-
-
         if ($event->isPersistenceAborted()) {
             return false;
         }
@@ -67,6 +65,26 @@ abstract class QuestionManager implements QuestionManagerInterface
 
         $event = new QuestionEvent($question);
         $this->dispatcher->dispatch(Events::QUESTION_POST_PERSIST, $event);
+
+        return true;
+    }
+
+    /**
+     * Persists Question.
+     *
+     * @param Question $question
+     * @return bool
+     */
+    public function updateQuestion(Question $question)
+    {
+
+        $event = new QuestionEvent($question);
+        $this->dispatcher->dispatch(Events::QUESTION_PRE_UPDATE, $event);
+
+        $this->doSaveQuestion($question);
+
+        $event = new QuestionEvent($question);
+        $this->dispatcher->dispatch(Events::QUESTION_POST_UPDATE, $event);
 
         return true;
     }

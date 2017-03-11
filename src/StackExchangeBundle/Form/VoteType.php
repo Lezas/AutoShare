@@ -25,11 +25,11 @@ class VoteType extends AbstractType
      * Configures a Thread form.
      *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('value',TextType::class);
+        $builder->add('value', TextType::class);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -122,7 +122,7 @@ class Auto
     private $private;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\User", inversedBy="user_favorites")
+     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\User", inversedBy="favorites")
      * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_favorites")
      * @var User[]|ArrayCollection
@@ -130,7 +130,7 @@ class Auto
     private $favoritedUsers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\User", inversedBy="user_like")
+     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\User", inversedBy="liked")
      * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_likes")
      * @var User[]|ArrayCollection

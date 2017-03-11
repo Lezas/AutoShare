@@ -10,3 +10,8 @@ stack_exchange_api:
     type: rest
     resource: StackExchangeBundle\Controller\VoteController
     name_prefix: stack_exchange_
+
+stack_exchange_comment_api:
+    type: rest
+    resource: StackExchangeBundle\Controller\CommentController
+    name_prefix: stack_exchange_

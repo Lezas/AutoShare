@@ -10,7 +10,7 @@ namespace StackExchangeBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-interface CommentableInterfaces
+interface CommentableInterface
 {
     /**
      * @param CommentInterface $comment

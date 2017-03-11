@@ -1,32 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: pkupe
- * Date: 2017-02-25
- * Time: 20:35
- */
 
 namespace StackExchangeBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
-
 class VoteController extends FOSRestController
 {
 
     /**
-     * Presents the form to use to create a new Vote for a Comment.
+     * Presents the form to use to create a new Vote for a Question.
      *
-     * @param Request $request   Current request
-     * @param string  $id        Id of the Question
+     * @param Request $request Current request
+     * @param string $id Id of the Question
      *
      * @return View|Response
      */
@@ -56,10 +47,10 @@ class VoteController extends FOSRestController
 
 
     /**
-     * Creates a new Vote for the Comment from the submitted data.
+     * Creates a new Vote for the Question from the submitted data.
      *
-     * @param Request $request   Current request
-     * @param string  $id        Id of the thread
+     * @param Request $request Current request
+     * @param string $id Id of the question
      *
      * @return View
      */
@@ -110,9 +101,9 @@ class VoteController extends FOSRestController
     }
 
     /**
-     * Get the votes of a comment.
+     * Get the votes of a Question.
      *
-     * @param string $id        Id of the question
+     * @param string $id Id of the question
      *
      * @return View
      */
@@ -134,10 +125,10 @@ class VoteController extends FOSRestController
     }
 
     /**
-     * Presents the form to use to create a new Vote for a Comment.
+     * Presents the form to use to create a new Vote for a Answer.
      *
-     * @param Request $request   Current request
-     * @param string  $id        Id of the Answer
+     * @param Request $request Current request
+     * @param string $id Id of the Answer
      *
      * @return View|Response
      */
@@ -166,8 +157,8 @@ class VoteController extends FOSRestController
     }
 
     /**
-     * @param Request $request   Current request
-     * @param string  $id        Id of an answer
+     * @param Request $request Current request
+     * @param string $id Id of an answer
      *
      * @return View
      */
@@ -220,7 +211,7 @@ class VoteController extends FOSRestController
     /**
      * Get the votes of a comment.
      *
-     * @param string $id        Id of the question
+     * @param string $id Id of the question
      *
      * @return View
      */
@@ -242,12 +233,11 @@ class VoteController extends FOSRestController
     }
 
 
-
     /**
      * Action executed when a vote was succesfully created.
      *
-     * @param FormInterface $form      Form with the error
-     * @param string        $id        Id of the thread
+     * @param FormInterface $form Form with the error
+     * @param string $id Id of the thread
      *
      * @return View
      * @todo Think about what to show. For now the new score of the comment.
@@ -261,8 +251,8 @@ class VoteController extends FOSRestController
     /**
      * Returns a HTTP_BAD_REQUEST response when the form submission fails.
      *
-     * @param FormInterface $form      Form with the error
-     * @param string        $id        Id of the thread
+     * @param FormInterface $form Form with the error
+     * @param string $id Id of the thread
      *
      * @return View
      */

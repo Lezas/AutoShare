@@ -8,7 +8,6 @@ use StackExchangeBundle\Entity\Question;
 use StackExchangeBundle\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,17 +37,13 @@ class QuestionController extends Controller
             }
 
             $tags = $tagManager->createTagsFromString($form->get('tags')->getData());
-            $questionManager->saveQuestion($question);
             foreach ($tags as $tag) {
                 /** @var Tag $tag */
-                $tag->addQuestion($question);
                 $tag->incrementUsageCount();
-                $tagManager->saveTag($tag);
                 $question->addTag($tag);
             }
 
             $questionManager->saveQuestion($question);
-
 
             return $this->redirectToRoute('question', ['id' => $question->getId()]);
         }
@@ -69,7 +64,6 @@ class QuestionController extends Controller
         $questionManager = $this->get('stack_exchange.manager.question');
         $question = $questionManager->findQuestionById($id);
 
-
         return $this->render('StackExchangeBundle:Question:question_page.html.twig',
             ['question' => $question]
         );
@@ -86,15 +80,13 @@ class QuestionController extends Controller
         $question = $questionManager->findAllQuestion();
 
         $em = $this->get('doctrine.orm.entity_manager');
-        $dql = "SELECT q FROM StackExchangeBundle:Question q";
-        $query = $em->createQuery($dql);
 
         $qb = $em->getRepository('StackExchangeBundle:Question')->createQueryBuilder('q')
-                ->addSelect('q.createdAt as HIDDEN time')
-                ->addSelect('q.title as HIDDEN title')
-                ->addSelect('q.score as HIDDEN score');
+            ->addSelect('q.createdAt as HIDDEN time')
+            ->addSelect('q.title as HIDDEN title')
+            ->addSelect('q.score as HIDDEN score')
+            ->addOrderBy('q.answered');
         $query = $qb->getQuery();
-
 
 
         $paginator = $this->get('knp_paginator');
@@ -141,16 +133,25 @@ class QuestionController extends Controller
         if ($form->isValid()) {
             $tags = $tagManager->createTagsFromString($form->get('tags')->getData());
 
-            foreach ($tags as $tag) {
-                /** @var Tag $tag */
-                $tag->addQuestion($question);
-                //TODO: fix tags usage count: move to proper listener!
-                $tag->incrementUsageCount();
-                $tagManager->saveTag($tag);
-                $question->addTag($tag);
+            $oldTags = $question->getTags();
+            foreach ($oldTags as $oldTag) {
+                if (!$tags->contains($oldTag)) {
+                    $question->removeTag($oldTag);
+                    $oldTag->removeQuestion($question);
+                    $oldTag->incrementUsageCount(-1);
+                }
             }
 
-            $questionManager->saveQuestion($question);
+            foreach ($tags as $tag) {
+                /** @var Tag $tag */
+                if (!$oldTags->contains($tag)) {
+                    //TODO: fix tags usage count: move to proper listener!
+                    $tag->incrementUsageCount();
+                    $question->addTag($tag);
+                }
+            }
+
+            $questionManager->updateQuestion($question);
 
             return $this->redirectToRoute('question', ['id' => $question->getId()]);
         }
@@ -159,4 +160,37 @@ class QuestionController extends Controller
             ['form' => $form->createView()]
         );
     }
+
+    /**
+     * @Route("/question/{questionId}/answered/{answerId}", name="set_question_answered")
+     * @param $questionId
+     * @param $answerId
+     * @return Response
+     */
+    public function setQuestionAnsweredAction($questionId, $answerId)
+    {
+        $questionManager = $this->get('stack_exchange.manager.question');
+        $answerManager = $this->get('stack_exchange.manager.answer');
+
+        $question = $questionManager->findQuestionById($questionId);
+        $answer = $answerManager->findAnswerById($answerId);
+
+        if (null == $question or null == $answer) {
+            return new Response(sprintf("Cant find entities with ids: '%s' '%d'.", $questionId, $answerId), 400);
+        }
+
+        $result = $questionManager->setQuestionToAnswered($question, $answer);
+
+        if (true !== $result) {
+            //TODO add dome kind of error reporting for user
+            return new Response("Something wen't wrong!", 400);
+        }
+        $questionManager->saveQuestion($question);
+
+        return $this->redirectToRoute('question', ['id' => $question->getId()]);
+    }
+
+    //need set answered
+    //need to remove answered
+    //edit get functionas - need first check if there is answered. because answered must be first in the row. then next one's
 }

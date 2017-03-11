@@ -30,7 +30,8 @@
         "ongr/elasticsearch-bundle": "dev-master",
         "beelab/tag-bundle": "^1.1",
         "symfony/event-dispatcher": "^3.2",
-        "knplabs/knp-paginator-bundle": "^2.5"
+        "knplabs/knp-paginator-bundle": "^2.5",
+        "besimple/i18n-routing-bundle": "^2.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

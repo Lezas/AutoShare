@@ -73,6 +73,11 @@
 {% endblock %}
 
 {% block javascripts %}
+
+    <script src="{{ asset('bundles/Auto/js/like.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/Auto/js/favorite.js') }}" type="text/javascript"></script>
+
+
     <script type="text/javascript">
         $('.collapse-btn').click(function(){
             $(this).siblings('.carInfo').toggleClass('collapse');

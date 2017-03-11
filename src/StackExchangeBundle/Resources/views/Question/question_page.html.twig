@@ -5,7 +5,7 @@
     <hr>
     <h3>Answers</h3>
     {% for answer in question.answers %}
-        {% include '@StackExchange/Question/answer_body.html.twig' with {'answer' : answer} %}
+        {% include '@StackExchange/Question/answer_body.html.twig' with {'answer' : answer, 'question' : question} %}
         <hr>
     {% endfor %}
 
@@ -20,4 +20,5 @@
 
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset('bundles/stackexchange/js/se_vote.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/stackexchange/js/se_comment.js') }}"></script>
 {% endblock %}

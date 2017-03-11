@@ -1,0 +1,2 @@
+
+{{ comment.body | striptags('<strong><em><span><sup><sub><a>') | raw}} - <a href="#">{{ comment.author.username }}</a> {{ comment.createdAt | date('Y-m-d H:i:s') }}

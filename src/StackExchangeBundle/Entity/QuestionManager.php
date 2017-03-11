@@ -10,6 +10,9 @@ namespace StackExchangeBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use StackExchangeBundle\Event\AnswerEvent;
+use StackExchangeBundle\Event\QuestionEvent;
+use StackExchangeBundle\Events;
 use StackExchangeBundle\Model\QuestionManager as BaseQuestionManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -116,6 +119,30 @@ class QuestionManager extends BaseQuestionManager
     {
         $this->em->persist($question);
         $this->em->flush();
+    }
+
+    public function setQuestionToAnswered(Question $question, Answer $answer)
+    {
+        try {
+            if ($question->getAcceptedAnswer() != null) {
+                throw new \Exception('Question already has accepted answer');
+            }
+            if ($question->isAnswered() != false) {
+                throw new \Exception('Question already is answered');
+            }
+
+            $question->setAcceptedAnswer($answer);
+
+            $Qevent = new QuestionEvent($question);
+            $this->dispatcher->dispatch(Events::QUESTION_ANSWER_ACCEPTED, $Qevent);
+
+            $Aevent = new AnswerEvent($answer);
+            $this->dispatcher->dispatch(Events::ANSWER_ACCEPTED, $Aevent);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        return true;
+
     }
 
     public function updateQuestionTags(Question $question, $tags)

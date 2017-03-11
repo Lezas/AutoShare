@@ -5,7 +5,10 @@ namespace MyAutoBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use StackExchangeBundle\Entity\Answer;
+use StackExchangeBundle\Entity\AnswerComment;
 use StackExchangeBundle\Entity\Question;
+use StackExchangeBundle\Entity\QuestionComment;
 
 
 /**
@@ -30,14 +33,14 @@ class User extends BaseUser
     protected $Auto;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\Auto", mappedBy="user_favorite")
+     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\Auto", mappedBy="favoritedUsers")
      * @ORM\JoinColumn(name="auto_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_favorites")
      */
     protected $favorites;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\Auto", mappedBy="user_like")
+     * @ORM\ManyToMany(targetEntity="MyAutoBundle\Entity\Auto", mappedBy="likedUsers")
      * @ORM\JoinTable(name="user_likes")
      */
     protected $liked;
@@ -49,10 +52,29 @@ class User extends BaseUser
     private $foto;
 
     /**
-     * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\Question", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\Question", mappedBy="author")
      * @var Question[]|ArrayCollection
      */
     protected $questions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\QuestionComment", mappedBy="user")
+     * @var QuestionComment[]|ArrayCollection
+     */
+    protected $questionsComments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\Answer", mappedBy="author")
+     * @var Answer[]|ArrayCollection
+     */
+    protected $answers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\AnswerComment", mappedBy="user")
+     * @var AnswerComment[]|ArrayCollection
+     */
+    protected $answersComments;
+
 
     public function __construct()
     {
@@ -61,6 +83,10 @@ class User extends BaseUser
         $this->Auto = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->liked = new ArrayCollection();
+        $this->questionsComments = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->answersComments = new ArrayCollection();
+        $this->answers = new ArrayCollection();
         parent::__construct();
     }
 
@@ -144,5 +170,50 @@ class User extends BaseUser
     public function isAutoLiked(Auto $auto)
     {
         return $this->liked->contains($auto);
+    }
+
+    public function addQuestionComment($comment)
+    {
+        $this->questionsComments[] = $comment;
+
+        return $this;
+    }
+
+    public function removeQuestionComment( $comment)
+    {
+        $this->questionsComments->removeElement($comment);
+    }
+
+    /**
+     * Get auto
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestionComments()
+    {
+        return $this->questionsComments;
+    }
+
+
+    public function addAnswerComment($comment)
+    {
+        $this->answersComments[] = $comment;
+
+        return $this;
+    }
+
+    public function removeAnswerComment( $comment)
+    {
+        $this->answersComments->removeElement($comment);
+    }
+
+    /**
+     * Get auto
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnswerComments()
+    {
+        return $this->answersComments;
     }
 }

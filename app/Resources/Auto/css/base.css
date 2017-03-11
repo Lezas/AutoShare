@@ -5,3 +5,7 @@
 .side-bar {
     min-height: 900px;
 }
+
+.glyphicon-large {
+    font-size: 50px;
+}

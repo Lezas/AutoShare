@@ -27,7 +27,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-
         $autoRepository = $this->getDoctrine()->getManager()->getRepository('MyAutoBundle:Auto');
 
         $cars = $autoRepository->findBy(['private' => 0]);
@@ -51,7 +50,7 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
 
             $auto->setUser($user);
@@ -78,7 +77,6 @@ class DefaultController extends Controller
                 'notice',
                 'Your expense has been saved!'
             );
-
 
         }
 

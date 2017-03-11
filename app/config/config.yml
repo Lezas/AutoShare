@@ -16,7 +16,6 @@ parameters:
 framework:
     translator: { fallbacks: [en] }
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -73,6 +72,9 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: MyAutoBundle\Entity\User
+    from_email:
+        address: you@example.com
+        sender_name: You
 
 fos_comment:
     db_driver: orm
@@ -97,21 +99,16 @@ swiftmailer:
     spool:     { type: memory }
 
 stfalcon_tinymce:
-    include_jquery: true
-    tinymce_jquery: true
     selector: ".tinymce"
-    # Get current language from the parameters.ini
-    language: %locale%
-    # Custom buttons
-    tinymce_buttons:
-        stfalcon: # Id of the first button
-            title: "Stfalcon"
-            image: "http://stfalcon.com/favicon.ico"
     theme:
         # Simple theme: same as default theme
         simple: ~
         # StackExchange editor
         stackExchange: ~
+        stackExchange_comment:
+            menubar: false
+            statusbar: false
+            toolbar1: "undo redo | bold italic underline strikethrough superscript subscript | link"
         # Advanced theme with almost all enabled plugins
         advanced:
              plugins:
@@ -137,9 +134,10 @@ ongr_elasticsearch:
             index:
                 hosts:
                     - 127.0.0.1:9200
-                index_name: acme
+                index_name: atuo_knowledge
             mappings:
                 - MyAutoBundle
+                - StackExchangeBundle
 
 beelab_tag:
     tag_class: StackExchangeBundle\Entity\Tag

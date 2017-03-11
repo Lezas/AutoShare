@@ -49,7 +49,7 @@ class ServiceHistory
     private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\Auto", inversedBy = "posts")
+     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\Auto", inversedBy = "serviceHistory")
      * @ORM\JoinColumn(name = "auto_id", referencedColumnName = "id")
      * @var Auto
      */

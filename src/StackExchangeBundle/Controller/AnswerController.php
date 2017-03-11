@@ -67,7 +67,41 @@ class AnswerController extends Controller
             }
         }
 
+        //TODO move to normal method
         dump($form->getErrors());
         exit;
+    }
+
+    /**
+     * @Route("/answer/{id}/edit", name="answer_edit")
+     * @param $id
+     * @param Request $request
+     * @return Response
+     */
+    public function editAnswerAction($id, Request $request)
+    {
+        $this->getUser();
+
+        $answerManager = $this->get('stack_exchange.manager.answer');
+        $answer = $answerManager->findAnswerById($id);
+        if ($answer == null) {
+            return new Response(sprintf("Cant find question with id '%s'.", $id), 400);
+        }
+
+
+        $form = $this->get('stack_exchange.form_factory.answer')->createForm();
+        $form->setData($answer);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $answerManager->saveAnswer($answer);
+
+            return $this->redirectToRoute('question', ['id' => $answer->getQuestion()->getId()]);
+        }
+
+        return $this->render('@StackExchange/Answer/answer_edit.html.twig',
+            ['form' => $form->createView()]
+        );
     }
 }

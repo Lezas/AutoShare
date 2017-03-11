@@ -53,7 +53,9 @@ class AutoListener
         $autoDoc->id = $auto->getId();
         $autoDoc->name = $auto->getBrand() . ' ' . $auto->getModel() . ' ';
 
+        /*
         $this->ESManager->persist($autoDoc);
         $this->ESManager->commit();
+        */
     }
 }

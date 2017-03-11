@@ -13,8 +13,9 @@ class SearchFieldType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Search', TextType::class)
-            ->add('submit', SubmitType::class, ['label' => 'search']);
+            ->add('Search', TextType::class, [
+                'label' => false
+            ]);
     }
 
 

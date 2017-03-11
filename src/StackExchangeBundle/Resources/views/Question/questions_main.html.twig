@@ -1,10 +1,32 @@
 {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/stackexchange/css/questions.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block sidepanel %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <ul class="nav nav-pills  nav-stacked">
+                <li role="presentation">
+                    Total {{ pagination.getTotalItemCount }} questions
+                </li>
+                <li role="presentation">
+                    <a href="{{ url('question_new') }}">{% trans %}se_create_new_question{% endtrans %}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
 
     <div class="row">
         <ul class="nav nav-tabs">
-            <li {% if pagination.isSorted('time') %}  class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Release', 'time') }}</li>
-            <li {% if pagination.isSorted('score') %}  class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'votes', 'score') }}</li>
+            <li {% if pagination.isSorted('time') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Release', 'time') }}</li>
+            <li {% if pagination.isSorted('score') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'votes', 'score') }}</li>
         </ul>
         <div class="pull-right">{{ pagination.getTotalItemCount }} questions</div>
 

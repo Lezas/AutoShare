@@ -1,0 +1,18 @@
+<div class="stack_exchange_comment_form_holder">
+    {{ form_start(form,  { 'attr': {'class': 'stackExchange_comment_form'} }) }}
+
+    {% block stack_exchange_form_fields %}
+        {{ form_errors(form) }}
+        {{ form_errors(form.Body) }}
+        {{ form_widget(form.Body, { 'id': id }) }}
+        {{ form_rest(form) }}
+    {% endblock %}
+
+    <div class="stack_exchange_submit">
+        {% block stac_exchange_form_submit %}
+            <input type="submit"/>
+        {% endblock %}
+    </div>
+
+    {{ form_end(form) }}
+</div>

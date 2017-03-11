@@ -6,9 +6,8 @@ use Beelab\TagBundle\Tag\TagInterface;
 use Beelab\TagBundle\Tag\TaggableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use MyAutoBundle\Entity\Thread;
 use MyAutoBundle\Entity\User;
-use StackExchangeBundle\Model\CommentableInterfaces;
+use StackExchangeBundle\Model\CommentableInterface;
 use StackExchangeBundle\Model\CommentInterface;
 use StackExchangeBundle\Model\QuestionInterface;
 use StackExchangeBundle\Model\SignedInterface;
@@ -17,11 +16,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Answer
- *
+ * @ORM\Entity()
  * @ORM\Table(name="question")
  * @ORM\HasLifecycleCallbacks
  */
-class Question implements TaggableInterface, VotableInterface, SignedInterface, CommentableInterfaces
+class Question implements TaggableInterface, VotableInterface, SignedInterface, CommentableInterface
 {
     /**
      * @var int
@@ -61,8 +60,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
 
     /**
      *
-     *
-     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Tag", mappedBy="questions")
+     * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Tag", mappedBy="questions", cascade={"persist"})
      * @var Tag[]|ArrayCollection
      */
     protected $tags;
@@ -72,13 +70,12 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
 
     /**
      * @ORM\OneToMany(targetEntity = "StackExchangeBundle\Entity\QuestionComment", mappedBy="question")
-     * @var QuestionComment[]
+     * @var QuestionComment[]|ArrayCollection
      */
-    private $comments;
-
+    protected $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "Question")
+     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "questions")
      * @ORM\JoinColumn(name = "author_id", referencedColumnName = "id")
      * @var User
      */
@@ -95,7 +92,22 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
      * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\Answer", mappedBy="question")
      * @var Answer[]|ArrayCollection
      */
-    private $answers;
+    protected $answers;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default" : false})
+     *
+     */
+    protected $answered;
+
+    /**
+     * One Product has One Shipping.
+     * @ORM\OneToOne(targetEntity="StackExchangeBundle\Entity\Answer")
+     * @ORM\JoinColumn(name="accepted_answer_id", referencedColumnName="id")
+     * @var Answer
+     */
+    protected $acceptedAnswer;
+
 
     //-----Base Class functions-----//
 
@@ -248,6 +260,49 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
         return $this->answers;
     }
 
+    /**
+     * Set deleted
+     *
+     * @param bool $answered
+     * @return Question
+     *
+     */
+    public function setAnswered($answered)
+    {
+        $this->answered = $answered;
+
+        return $this;
+    }
+
+    /**
+     * Is private
+     *
+     * @return boolean
+     */
+    public function isAnswered()
+    {
+        return $this->answered;
+    }
+
+    /**
+     * @param Answer $answer
+     * @return $this
+     */
+    public function setAcceptedAnswer(Answer $answer)
+    {
+        $this->acceptedAnswer = $answer;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAcceptedAnswer()
+    {
+        return $this->acceptedAnswer;
+    }
+
     //------Author Functions----//
 
     /**
@@ -336,6 +391,7 @@ class Question implements TaggableInterface, VotableInterface, SignedInterface, 
     public function addTag(TagInterface $tag)
     {
         $this->tags->add($tag);
+        $tag->addQuestion($this);
     }
 
     /**

@@ -2,8 +2,9 @@
     <div class="col-sm-1 se_question_vote_container">
         <div class="row">
             <div class="text-center ">
-                <a href="#" class="se_question_question_vote" data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id})}}" data-score="1">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+                <a href="#" class="se_question_question_vote"
+                   data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id}) }}" data-score="1">
+                    <span class="glyphicon glyphicon-chevron-up glyphicon-large"></span>
                 </a>
             </div>
         </div>
@@ -15,7 +16,8 @@
 
         <div class="row">
             <div class="text-center">
-                <a href="#" class="se_question_question_vote" data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id})}}" data-score="-1">
+                <a href="#" class="se_question_question_vote glyphicon-large"
+                   data-url="{{ url('stack_exchange_new_question_vote', {'id' : question.id}) }}" data-score="-1">
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </a>
             </div>
@@ -27,7 +29,7 @@
         </div>
 
         <div class="row">
-            {{ question.text | raw}}
+            {{ question.text | raw }}
         </div>
         <div class="row">
             {% for tag in question.tags %}
@@ -47,7 +49,20 @@
                 <a href="#">{{ question.author }}</a>
             </div>
         </div>
-        <hr>
-        comments goes gere <br> <hr style="padding: 0; margin: 0">
+        <hr style="padding-bottom: 0;margin-bottom: 0;">
+        <div class="se_comment">
+            <div class="se_comment_holder">
+                {% for comment in question.comments %}
+                    {% include '@StackExchange/Question/comment_body.html.twig' with {'comment' : comment} %}
+                    <hr style="margin-top:3px; margin-bottom: 5px;">
+                {% endfor %}
+            </div>
+            <a class="se_answer_comment_add_comment"
+               data-url="{{ url('stack_exchange_new_question_comment', {'id' : question.id}) }}"
+               data-target="#se_comment_text_editor_{{ question.id }}_answer">Add comment</a>
+            <div id="se_comment_text_editor_{{ question.id }}_answer" class="se_comment_text_editor ">
+
+            </div>
+        </div>
     </div>
 </div>

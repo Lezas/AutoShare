@@ -5,6 +5,7 @@ namespace StackExchangeBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use MyAutoBundle\Entity\User;
 use StackExchangeBundle\Model\CommentInterface;
+use StackExchangeBundle\Model\Comment as BaseComment;
 
 /**
  * QuestionComment
@@ -12,7 +13,7 @@ use StackExchangeBundle\Model\CommentInterface;
  * @ORM\Table(name="question_comment")
  * @ORM\Entity(repositoryClass="StackExchangeBundle\Repository\QuestionCommentRepository")
  */
-class QuestionComment implements CommentInterface
+class QuestionComment extends BaseComment implements CommentInterface
 {
     /**
      * @var int
@@ -24,17 +25,24 @@ class QuestionComment implements CommentInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "StackExchangeBundle\Entity\Question")
+     * @ORM\ManyToOne(targetEntity = "StackExchangeBundle\Entity\Question", inversedBy="comments")
      * @var Question
      */
     private $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy = "QuestionComment")
-     * @ORM\JoinColumn(name = "author_id", referencedColumnName = "id")
+     * @ORM\ManyToOne(targetEntity = "MyAutoBundle\Entity\User", inversedBy="questionsComments")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      * @var User
      */
-    private $author;
+    private $user;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="text", type="text")
+     */
+    private $body;
 
     /**
      * @var \DateTime
@@ -75,7 +83,7 @@ class QuestionComment implements CommentInterface
     /**
      * Get question
      *
-     * @return int
+     * @return Question
      */
     public function getQuestion()
     {
@@ -87,7 +95,9 @@ class QuestionComment implements CommentInterface
      */
     public function setAuthor($author)
     {
-        $this->author = $author;
+        $this->user = $author;
+        /** @var User $author */
+        $author->addQuestionComment($this);
 
         return $this;
     }
@@ -97,7 +107,25 @@ class QuestionComment implements CommentInterface
      */
     public function getAuthor()
     {
-        return $this->author;
+        return $this->user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUser($author)
+    {
+        $this->user = $author;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -134,6 +162,22 @@ class QuestionComment implements CommentInterface
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * @param string $body
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
     }
 }
 

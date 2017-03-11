@@ -36,4 +36,10 @@ services:
         class: StackExchangeBundle\Entity\AnswerVoteManager
         arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
 
+    stack_exchange.manager.question_comment:
+        class: StackExchangeBundle\Entity\QuestionCommentManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
 
+    stack_exchange.manager.answer_comment:
+        class: StackExchangeBundle\Entity\AnswerCommentManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
