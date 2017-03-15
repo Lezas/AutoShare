@@ -6,6 +6,7 @@ imports:
     - { resource: "@StackExchangeBundle/Resources/config/services.yml" }
     - { resource: "@SearchBundle/Resources/config/services.yml" }
     - { resource: "@MainBundle/Resources/config/services.yml" }
+    - { resource: "@MultiBlogBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -57,12 +58,6 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/../var/data/data.sqlite"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #path:     "%database_path%"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -112,12 +107,14 @@ stfalcon_tinymce:
             toolbar1: "undo redo | bold italic underline strikethrough superscript subscript | link"
         # Advanced theme with almost all enabled plugins
         advanced:
+             height : 600
+             file_browser_callback : elFinderBrowser
              plugins:
                  - "advlist autolink lists link image charmap print preview hr anchor pagebreak"
                  - "searchreplace wordcount visualblocks visualchars code fullscreen"
                  - "insertdatetime media nonbreaking save contextmenu directionality"
                  - "emoticons template paste textcolor"
-             toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link"
+             toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
              toolbar2: "print preview media | forecolor backcolor emoticons | stfalcon | example"
              image_advtab: true
              templates:
@@ -153,3 +150,28 @@ assetic:
 fos_rest:
     service:
         serializer: null
+
+fm_elfinder:
+    #assets_path: / # default is /assets, this is where css/js elfinder files are
+    instances:
+        default:
+            locale: %locale% # defaults to current request locale
+            editor: tinymce4 # other options are tinymce, tinymce4, fm_tinymce, form, simple, custom
+            #editor_template: custom template for your editor # default null
+            #path_prefix: / # for setting custom assets path prefix, useful for non vhost configurations, i.e. http://127.0.0.1/mysite/
+            #fullscreen: true|false # default is true, applies to simple and ckeditor editors
+            #theme: smoothness # jquery theme, default is 'smoothness'
+            include_assets: true # disable if you want to manage loading of javascript and css assets manually
+            #visible_mime_types: ['image/png', 'image/jpg', 'image/jpeg'] # only show these mime types, defaults to show all
+            connector:
+                #debug: true|false # defaults to false
+                roots:       # at least one root must be defined, defines root filemanager directories
+                    uploads:
+                        #show_hidden: true|false # defaults to false, hides dotfiles
+                        driver: LocalFileSystem
+                        path: uploads
+                        upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
+                        upload_deny: ['all']
+                        upload_max_size: 2M # also file upload sizes restricted in php.ini
+                        #attributes: example of setting attributes permission
+                        #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }

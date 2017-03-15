@@ -31,7 +31,8 @@
         "beelab/tag-bundle": "^1.1",
         "symfony/event-dispatcher": "^3.2",
         "knplabs/knp-paginator-bundle": "^2.5",
-        "besimple/i18n-routing-bundle": "^2.4"
+        "besimple/i18n-routing-bundle": "^2.4",
+        "helios-ag/fm-elfinder-bundle": "~6"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -54,6 +55,7 @@
         ]
     },
     "config": {
+        "component-dir": "web/assets",
         "platform": {
             "php": "5.6.28"
         }

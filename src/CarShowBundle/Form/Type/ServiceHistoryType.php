@@ -2,7 +2,7 @@
 // DAWeldonExampleBundle/Form/Type/ProfileFormType.php
 namespace CarShowBundle\Form\Type;
 
-use CarShowBundle\Entity\Auto;
+use CarShowBundle\Entity\Car;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -15,11 +15,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ServiceHistoryType extends AbstractType
 {
     /**
-     * @var Auto
+     * @var Car
      */
     private $auto;
 
-    public function __construct(Auto $auto = null)
+    public function __construct(Car $auto = null)
     {
         $this->auto = $auto;
     }

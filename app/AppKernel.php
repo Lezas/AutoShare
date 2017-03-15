@@ -28,6 +28,8 @@ class AppKernel extends Kernel
             new CarShowBundle\CarShowBundle(),
             new SearchBundle\SearchBundle(),
             new MainBundle\MainBundle(),
+            new MultiBlogBundle\MultiBlogBundle(),
+            new FM\ElfinderBundle\FMElfinderBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

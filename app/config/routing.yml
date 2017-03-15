@@ -19,6 +19,11 @@ my_auto:
     type:     annotation
     prefix:   /
 
+multi_blog:
+    resource: "@MultiBlogBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -49,3 +54,6 @@ stack_exchange_api:
     resource: "@StackExchangeBundle/Resources/config/routing.yml"
     prefix: /api
     defaults: { _format: html }
+
+elfinder:
+     resource: "@FMElfinderBundle/Resources/config/routing.yml"
