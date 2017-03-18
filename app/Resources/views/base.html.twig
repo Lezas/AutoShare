@@ -48,16 +48,24 @@
                                 <a href="{{ path('questions') }}"> {% trans %}se_question_name{% endtrans %}</a>
                             </li>
                             <li>
-                                <a href="{{ path('Dashboard') }}">{% trans %}main_page{% endtrans %}</a>
+                                <a href="{{ path('multi_blog_all_pages') }}"> {% trans %}multi_blog_pages{% endtrans %}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('Dashboard') }}">
+                                    <span class="glyphicon glyphicon-home" title="Go To Hom Page"></span>
+                                </a>
                             </li>
                             {% if app.user %}
                                 <li>
-                                    <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a>
+                                    <a href="{{ path('fos_user_profile_show') }}">
+                                        <span class="glyphicon glyphicon-user" title="You Profile"></span>
+                                    </a>
                                 </li>
 
                                 <li>
-                                    <a href="{{ path('fos_user_security_logout') }}">{% trans %}
-                                        logout {% endtrans %}</a>
+                                    <a href="{{ path('fos_user_security_logout') }}">
+                                    <span class="glyphicon glyphicon-off" title="Logout"></span>
+                                    </a>
                                 </li>
                             {% else %}
                                 <li>

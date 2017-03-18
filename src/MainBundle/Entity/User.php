@@ -6,6 +6,7 @@ use CarShowBundle\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use MultiBlogBundle\Entity\Page;
 use StackExchangeBundle\Entity\Answer;
 use StackExchangeBundle\Entity\AnswerComment;
 use StackExchangeBundle\Entity\Question;
@@ -59,6 +60,12 @@ class User extends BaseUser
     protected $questions;
 
     /**
+     * @ORM\OneToMany(targetEntity="MultiBlogBundle\Entity\Page", mappedBy="author")
+     * @var Page[]|ArrayCollection
+     */
+    protected $pages;
+
+    /**
      * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\QuestionComment", mappedBy="user")
      * @var QuestionComment[]|ArrayCollection
      */
@@ -84,6 +91,7 @@ class User extends BaseUser
         $this->liked = new ArrayCollection();
         $this->questionsComments = new ArrayCollection();
         $this->questions = new ArrayCollection();
+        $this->pages = new ArrayCollection();
         $this->answersComments = new ArrayCollection();
         $this->answers = new ArrayCollection();
         parent::__construct();

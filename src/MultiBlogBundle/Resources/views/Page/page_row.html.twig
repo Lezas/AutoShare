@@ -1,0 +1,23 @@
+<div class="row">
+
+        <div class="row">
+            <h3 ><a href="{{ path('multi_blog_get_page', {'id' : page.id}) }}">{{ page.title }}</a></h3>
+        </div>
+
+        <div class="row">
+            {{ page.body|length > 200 ? page.body | slice(0, 200)  | striptags ~ '...' : page.body | striptags}}
+        </div>
+        <div class="row">
+            {% for tag in page.tags %}
+                {% include 'StackExchangeBundle:Tag:tag_wrap.html.twig' with {'tag' : tag } %}
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-sm-4 pull-right">
+                Created: {{ page.createdAt | date('Y-m-d H:i') }}<br>
+                <a href="#"> {{ page.author.photo }}</a>
+                <a href="#">{{ page.author }}</a>
+            </div>
+        </div>
+
+</div>

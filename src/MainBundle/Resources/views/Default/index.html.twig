@@ -8,7 +8,6 @@
 
     <div class="jumbotron">
         <h2>All Cars!</h2>
-        <p>Check out all these cars</p>
     </div>
     <div class="row">
         {% for auto in ownedAutos %}
@@ -27,19 +26,19 @@
                     {% if auto.autoFavorited(app.user) %}
                         <div class="favorite-controller">
                             <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
-                                subscribed
+                                <span class="glyphicon glyphicon-star"></span>
                             </div>
                             <div class="favorite-btn favorite-add btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
-                                subscribe
+                                <span class="glyphicon glyphicon-star-empty"></span>
                             </div>
                         </div>
                     {% else %}
                         <div class="favorite-controller">
                             <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed hidden" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
-                                subscribed
+                                <span class="glyphicon glyphicon-star"></span>
                             </div>
                             <div class="favorite-btn favorite-add btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
-                                subscribe
+                                <span class="glyphicon glyphicon-star-empty"></span>
                             </div>
                         </div>
                     {% endif %}

@@ -2,7 +2,7 @@
 
 namespace MultiBlogBundle\Model;
 
-interface PostInterface
+interface PageInterface
 {
       /**
      * Get id
@@ -44,17 +44,17 @@ interface PostInterface
     public function getBody();
 
     /**
-     * Set user
+     * Set date
      *
-     * @param $author
+     * @param \DateTime $createAt
      *
-     * @return Post
      */
-    public function setAuthor($author);
+    public function setCreatedAt($createAt);
+
     /**
-     * Get user
+     * Get date
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getAuthor();
+    public function getCreatedAt();
 }

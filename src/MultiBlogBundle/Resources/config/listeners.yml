@@ -1,0 +1,11 @@
+services:
+    stack_exchange.listener.question_blamer:
+        class: MultiBlogBundle\EventListener\PageBlamerListener
+        arguments: ["@security.authorization_checker", "@security.token_storage"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    multi_blog.listener.tag_score:
+        class: MultiBlogBundle\EventListener\TagScoreListener
+        tags:
+            - { name: kernel.event_subscriber }

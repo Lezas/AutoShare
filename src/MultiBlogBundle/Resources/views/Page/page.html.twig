@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <h3>{{ page.title }}</h3>
+    {{ page.body | raw }}
+    <div class="row">
+        {% for tag in page.tags %}
+            <span class="label label-info">{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+{% endblock %}
+

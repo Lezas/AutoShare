@@ -32,7 +32,8 @@
         "symfony/event-dispatcher": "^3.2",
         "knplabs/knp-paginator-bundle": "^2.5",
         "besimple/i18n-routing-bundle": "^2.4",
-        "helios-ag/fm-elfinder-bundle": "~6"
+        "helios-ag/fm-elfinder-bundle": "~6",
+        "comur/image-bundle": "1.0.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

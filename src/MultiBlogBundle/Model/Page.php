@@ -2,7 +2,10 @@
 
 namespace MultiBlogBundle\Model;
 
-abstract class Post implements PostInterface
+use StackExchangeBundle\Model\SignedInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+abstract class Page implements PageInterface, SignedInterface
 {
     /**
      * {@inheritdoc}
@@ -23,6 +26,11 @@ abstract class Post implements PostInterface
      * {@inheritdoc}
      */
     protected $author;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $createdAt;
 
 
     /**
@@ -80,8 +88,32 @@ abstract class Post implements PostInterface
     /**
      * {@inheritdoc}
      */
-    public function setAuthor($author)
+    public function setAuthor(UserInterface $author)
     {
         $this->author = $author;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $createAt
+     *
+     * @return PageInterface
+     */
+    public function setCreatedAt($createAt)
+    {
+        $this->createdAt = $createAt;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

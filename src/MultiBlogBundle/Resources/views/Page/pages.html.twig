@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block sidepanel %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <ul class="nav nav-pills  nav-stacked">
+                <li role="presentation">
+                    Total FIX THIS pages
+                </li>
+                <li role="presentation">
+                    <a href="{{ url('multi_blog_new_page') }}">{% trans %}mb_create_new_page{% endtrans %}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    {% for page in pages %}
+        {% include '@MultiBlog/Page/page_row.html.twig' with {'page' : page} %}
+        <hr>
+    {% endfor %}
+
+{% endblock %}
