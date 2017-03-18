@@ -48,7 +48,7 @@
             <p >{{ post.text | raw }}</p>
         </div>
         <div class="panel-footer">
-            {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': post.thread} %}
+            {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': post.thread.id} %}
         </div>
         {% if app.user != null %}
             {% if app.user.id == auto.user.id %}

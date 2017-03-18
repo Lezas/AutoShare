@@ -15,11 +15,11 @@
 
         <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
             <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
+            <p style="color: white; padding: 0; margin: 1px">By {{ auto.user.username }}</p>
         </div>
-
     </div>
     <div>
-        <div class="panel panel-default blog-post">
+        <div class="panel panel-default blog-post" style="padding-top: 0; margin-top: 0">
             <div class="panel-body">
                 {{ auto.additionalInfo | raw }}
             </div>
@@ -40,38 +40,68 @@
     {% endif %}
     {% for post in posts %}
         {% if post.deleted == false %}
-            <div class="panel panel-default blog-post">
-                <div class="panel-heading">
-                    <h2 class="blog-post-title"><a
-                                href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a></h2>
-
-                    <p class="blog-post-meta">{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km. </p>
-                </div>
-                <div class="panel-body">
-
-                    <p>{{ post.text|length > 200 ? post.text|striptags|slice(0, 200)|convert_encoding('unicode', 'unicode')|raw ~ ' .......' : post.text }}</p>
-                </div>
-                <div class="panel-footer">
-                    Vieved: 522 time. {{ post.thread.id }} Comments
-                </div>
-
-                {% if app.user != null %}
-                    {% if app.user.id == auto.user.id %}
-                        <div class="edit-car">
+            <div class="blogShort">
+                <h1 ><a href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a>
+                    {% if app.user != null %}
+                        {% if app.user.id == auto.user.id %}
                             <a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"
                                class="btn btn-default btn-sm ">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                        </div>
-                        <div class="remove-post">
                             <a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"
                                class="btn btn-default btn-sm ">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
-                        </div>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </h1>
+
+                <em>{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km.
+                    {% transchoice post.thread.numComments %}
+                    {0} There are no Comments|{1} One Comment|]1,Inf[ %count% Comment
+                    {% endtranschoice %}
+                </em>
+
+                <article><p>
+                        {{ post.text|length > 200 ? post.text | slice(0, 200)  | striptags ~ 'Continue reading..' : post.text | striptags}}
+                    </p>
+                    <p></p>
+                </article>
+                <hr>
+
             </div>
+            {#<div class="panel panel-default blog-post">#}
+                {#<div class="panel-heading">#}
+                    {#<h2 class="blog-post-title"><a#}
+                                {#href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a></h2>#}
+
+                    {#<p class="blog-post-meta">{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km. </p>#}
+                {#</div>#}
+                {#<div class="panel-body">#}
+
+                    {#<p>{{ post.text|length > 200 ? post.text|striptags|slice(0, 200)|convert_encoding('unicode', 'unicode')|raw ~ ' .......' : post.text }}</p>#}
+                {#</div>#}
+                {#<div class="panel-footer">#}
+                    {#Vieved: 522 time. {{ post.thread.id }} Comments#}
+                {#</div>#}
+
+                {#{% if app.user != null %}#}
+                    {#{% if app.user.id == auto.user.id %}#}
+                        {#<div class="edit-car">#}
+                            {#<a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"#}
+                               {#class="btn btn-default btn-sm ">#}
+                                {#<span class="glyphicon glyphicon-pencil"></span>#}
+                            {#</a>#}
+                        {#</div>#}
+                        {#<div class="remove-post">#}
+                            {#<a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"#}
+                               {#class="btn btn-default btn-sm ">#}
+                                {#<span class="glyphicon glyphicon-remove"></span>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#{% endif %}#}
+                {#{% endif %}#}
+            {#</div>#}
         {% endif %}
     {% endfor %}
     {# End of blog posts#}
