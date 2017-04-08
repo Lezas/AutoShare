@@ -1,8 +1,37 @@
-{% extends 'base.html.twig'  %}
+{% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link href="{{asset('bundles/main/css/index.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('bundles/main/css/garage.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/main/css/index.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/main/css/garage.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block sidepanel %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            {% if app.user %}
+
+                <ul class="nav nav-pills  nav-stacked">
+                    <li role="presentation">
+                        <a href="{{ path('auto_new_car') }}">
+                            {% trans %}car_show_add_car{% endtrans %}
+                        </a>
+                    </li>
+                </ul>
+
+
+            {% else %}
+                <li class="list-group-item">
+                    <a href="{{ path('fos_user_security_login') }}">Sign up</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{{ path('fos_user_registration_register') }}">Registration</a>
+                </li>
+            {% endif %}
+        </div>
+    </div>
+
+    {{ parent() }}
 {% endblock %}
 
 {% block body %}
@@ -12,12 +41,12 @@
     {% for auto in ownedAutos %}
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <div class="panel panel-default clickable">
-                <img class="img-responsive" src="{{ asset('uploads/foto/' ~ auto.foto) }}" />
+                <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}"/>
                 <div class="panel-body ">
 
                     <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
 
-                    <a  href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+                    <a href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
                 </div>
 
             </div>
@@ -51,7 +80,7 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('.collapse-btn').click(function(){
+        $('.collapse-btn').click(function () {
             $(this).siblings('.carInfo').toggleClass('collapse');
         });
     </script>

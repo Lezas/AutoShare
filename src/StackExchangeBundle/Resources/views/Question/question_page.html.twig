@@ -15,10 +15,11 @@
     { 'questionId': question.id }
     )) }}
 
-    {{ tinymce_init() }}
+
 {% endblock %}
 
 {% block javascripts %}
+    {{ tinymce_init() }}
     <script type="text/javascript" src="{{ asset('bundles/stackexchange/js/se_vote.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/stackexchange/js/se_comment.js') }}"></script>
 {% endblock %}

@@ -54,15 +54,34 @@ class BlogController extends Controller
 
     /**
      * @Route("/pages/", name="multi_blog_all_pages")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return Response
      */
-    public function getPagesAction()
+    public function getPagesAction(Request $request)
     {
         $postManager = $this->get('multi_blog.manager.page');
         $posts = $postManager->findAllPages();
 
+        $em = $this->get('doctrine.orm.entity_manager');
+        $qb = $em->getRepository('MultiBlogBundle:Page')->createQueryBuilder('q')
+            ->addSelect('q.createdAt as HIDDEN time')
+            ->addSelect('q.title as HIDDEN title')
+            ->addOrderBy('q.createdAt');
+        $query = $qb->getQuery();
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 20),/*limit per page*/
+            [
+                'p.createdAt' => 'time'
+            ]
+        );
+
         return $this->render('@MultiBlog/Page/pages.html.twig',[
-                'pages' => $posts
+                'pages' => $posts,
+                'pagination' => $pagination,
             ]
         );
     }

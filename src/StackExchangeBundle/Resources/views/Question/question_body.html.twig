@@ -45,8 +45,15 @@
             <div class="col-sm-4 pull-right">
                 {#TODO Posible to move to other controller. Answer also uses same type of showing owner of object #}
                 Asked: {{ question.createdAt | date('Y-m-d') }}<br>
-                <a href="#"> {{ question.author.photo }}</a>
-                <a href="#">{{ question.author }}</a>
+                {% if question.author.photo == "" %}
+                    <img width="30" height="30" src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460"
+                         alt="{{ question.author.username }}"
+                    >
+                {% else %}
+                    <img width="30" height="30" src="{{ question.author.photo }}" alt="{{ question.author.username }}"
+                    >
+                {% endif %}
+                <a href="{{ path('user_profile_main', {'username' : question.author}) }}">{{ question.author }}</a>
             </div>
         </div>
         <hr style="padding-bottom: 0;margin-bottom: 0;">

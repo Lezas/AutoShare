@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use MultiBlogBundle\Model\PageInterface;
 
 /**
- * @ORM\Table(name="mb_tag")
+ * @ORM\Table(name="mb__tag")
  * @ORM\Entity()
  */
 class Tag implements TagInterface
@@ -32,7 +32,7 @@ class Tag implements TagInterface
     /**
      * Many Groups have Many Users.
      * @ORM\ManyToMany(targetEntity="MultiBlogBundle\Entity\Page", inversedBy="tags")
-     * @ORM\JoinTable(name="mb_page_tag")
+     * @ORM\JoinTable(name="mb__page_tag")
      * @var Page[]|ArrayCollection
      */
     protected $pages;

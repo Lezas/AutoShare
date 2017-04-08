@@ -81,6 +81,10 @@
             {{ form_label(form.submit) }}
             {{ form_widget(form.submit, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
         </div>
+        {{ form_row(form.images.vars.prototype) }}
+        {{ form_errors(form.images) }}
+        {{ form_label(form.images) }}
+        {{ form_widget(form.images) }}
         {{ form_end(form) }}
     </div>
 {% endblock body %}

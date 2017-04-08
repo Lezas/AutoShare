@@ -80,6 +80,7 @@ class QuestionController extends Controller
 
         $em = $this->get('doctrine.orm.entity_manager');
 
+        //TODO move to manager
         $qb = $em->getRepository('StackExchangeBundle:Question')->createQueryBuilder('q')
             ->addSelect('q.createdAt as HIDDEN time')
             ->addSelect('q.title as HIDDEN title')

@@ -1,6 +1,12 @@
 {% extends 'base.html.twig'  %}
 
+{% block sidepanel %}
 
+
+    {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : auto } %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
@@ -45,8 +51,6 @@
             {{ form_end(form) }}
         </div>
     </div>
-    {{ elfinder_tinymce_init4('default') }}
-    {{ tinymce_init() }}
 {% endblock body %}
 
 

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig'  %}
+
+{% block sidepanel %}
+
+
+    {% include '@Main/widgets/carInfoWidget.html.twig' %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="h2">ADD PICTURES </div>
+        {% for image in images %}
+            {% media image, 'small' %}
+        {% endfor %}
+        {{ form_start(form, { 'attr' : {'class' : 'form-horizontal'}}) }}
+
+
+        {{ form_widget(form.images) }}
+
+        {{ form_widget(form.submit) }}
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+
+{% endblock %}

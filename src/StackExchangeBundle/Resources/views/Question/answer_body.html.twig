@@ -57,8 +57,17 @@
             </div>
             <div class="col-sm-4 pull-right">
                 Created: {{ answer.createdAt | date('Y-m-d') }}<br>
-                <a href="#"> {{ answer.author.photo }}</a>
-                <a href="#">{{ answer.author }}</a>
+
+
+                {% if answer.author.photo == "" %}
+                    <img width="30" height="30" src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460" alt="{{ answer.author.username }}"
+                         >
+                {% else %}
+                    <img src="{{ answer.author.photo }}" alt="{{ answer.author.username }}"
+                         style="width:100%">
+                {% endif %}
+
+                <a href="{{ path('user_profile_main', {'username' : answer.author.username}) }}">{{ answer.author }}</a>
             </div>
         </div>
 

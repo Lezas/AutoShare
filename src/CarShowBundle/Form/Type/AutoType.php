@@ -4,8 +4,10 @@ namespace CarShowBundle\Form\Type;
 
 use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
+use Sonata\MediaBundle\Form\Type\MediaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -34,7 +36,7 @@ class AutoType extends AbstractType
 
         $builder->add('brand', TextType::class, ['label' => 'Brand'])
             ->add('model', TextType::class, ['label' => 'Model'])
-            ->add('year', DateType::class , [
+            ->add('year', DateType::class, [
                     'widget' => 'single_text',
                 ]
             )
@@ -42,17 +44,31 @@ class AutoType extends AbstractType
             ->add('powertrain', TextType::class, ['label' => 'Power train'])
             ->add('engineCapacity', NumberType::class, ['label' => 'engine capacity'])
             ->add('fuelType', TextType::class, ['label' => 'fuel Type'])
-            ->add('foto', FileType::class, array('label' => 'Your car foto', 'required' => false))
+            ->add('foto', FileType::class, [
+                'label' => 'Your car foto', 'required' => false, 'mapped' => false
+                ]
+            )
+            ->add('images', CollectionType::class, [
+                    'entry_type' => MediaType::class,
+                    'entry_options' => array(
+                        'provider' => 'sonata.media.provider.image',
+                        'context' => 'default'
+                    ),
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                ]
+            )
             ->add('private', CheckboxType::class, array('required' => false))
             ->add('additionalInfo', TextareaType::class, ['label' => 'Additional Info', 'required' => false])
             ->add('submit', SubmitType::class, ['label' => 'Save']);
-
     }
+
     public function getName()
     {
         return 'auto';
     }
-    public function setDefaultOptions(OptionsResolver  $resolver)
+
+    public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Car::class

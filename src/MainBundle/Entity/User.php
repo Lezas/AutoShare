@@ -11,6 +11,7 @@ use StackExchangeBundle\Entity\Answer;
 use StackExchangeBundle\Entity\AnswerComment;
 use StackExchangeBundle\Entity\Question;
 use StackExchangeBundle\Entity\QuestionComment;
+use FOS\MessageBundle\Model\ParticipantInterface;
 
 
 /**
@@ -18,7 +19,7 @@ use StackExchangeBundle\Entity\QuestionComment;
  * @ORM\Table(name="fos_user")
  * @ORM\Entity()
  */
-class User extends BaseUser
+class User extends BaseUser implements ParticipantInterface
 {
 
     /**
@@ -222,5 +223,26 @@ class User extends BaseUser
     public function getAnswerComments()
     {
         return $this->answersComments;
+    }
+
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @return ArrayCollection|Page[]
+     */
+    public function getPages()
+    {
+        return $this->pages;
+    }
+
+    /**
+     * @param ArrayCollection|Page[] $pages
+     */
+    public function setPages($pages)
+    {
+        $this->pages = $pages;
     }
 }

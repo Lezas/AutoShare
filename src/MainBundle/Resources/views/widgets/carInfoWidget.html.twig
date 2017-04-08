@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <img class="img-responsive" src="{% path car.mainPhoto, 'big' %}"/>
+        <h4>{{ car.brand|e }} {{ car.model|e }}</h4>
+        Owner: <a href="{{ path('user_profile_main', {'username' :  car.user.username }) }}">{{ car.user.username }}</a>
+        <li class="list-group-item">
+            <a href="{{ path('car_show_get_car', {'id' : car.id}) }}">
+                <span>{{ car.user.username }} {{ car.year | date("Y") }} {{ car.brand|e }} {{ car.model|e }}</span>
+
+            </a>
+        </li>
+    </div>
+</div>

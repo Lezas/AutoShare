@@ -9,6 +9,7 @@ use StackExchangeBundle\Model\Vote as BaseVote;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="se__question_vote")
  */
 class QuestionVote extends BaseVote
 {

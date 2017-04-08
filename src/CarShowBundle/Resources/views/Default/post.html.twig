@@ -1,5 +1,12 @@
 {% extends 'base.html.twig'  %}
 
+{% block sidepanel %}
+
+
+    {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : auto} %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block stylesheets %}
     <link href="{{asset('bundles/Auto/css/autoblog.css')}}" rel="stylesheet" type="text/css"/>
@@ -9,34 +16,7 @@
 
 {% block body %}
 
-    {# Blog head#}
-    <div class="header-bg" style="background: url({{ asset('uploads/foto/' ~ auto.foto) }}); background-size: cover; background-position: center">
 
-        <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
-            <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
-        </div>
-
-    </div>
-    <div>
-        <div class="panel panel-default blog-post">
-            <div class="panel-body">
-                {{ auto.additionalInfo | raw }}
-            </div>
-        </div>
-    </div>
-    {#Blog posts#}
-    {% if app.user != null %}
-        {% if app.user.id == auto.user.id %}
-            <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Service History
-            </a>
-            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Post
-            </a>
-        {% endif %}
-    {% endif %}
 
     <div class="panel panel-default blog-post">
         <div class="panel-heading">

@@ -1,0 +1,86 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#cars" data-toggle="tab">Cars</a>
+        </li>
+        <li><a href="#questions" data-toggle="tab">Questions</a>
+        </li>
+        <li><a href="#pages" data-toggle="tab">Pages</a>
+        </li>
+    </ul>
+
+    <div class="tab-content ">
+        <div class="tab-pane active" id="cars">
+            {% for auto in user.cars %}
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="panel panel-default clickable">
+                        <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}"/>
+                        <div class="panel-body ">
+
+                            <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
+
+                            <a href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+                        </div>
+
+                    </div>
+                    {% if app.user.id == user.id %}
+
+
+                        <div class="add-service-history">
+                            <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Service
+                            </a>
+                        </div>
+                        <div class="edit-car">
+                            <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}"
+                               class="btn btn-default btn-sm ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                        </div>
+                        <div class="add-post-button">
+                            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Post
+                            </a>
+                        </div>
+                        <div class="add-fuel-consumption">
+                            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                <span class="glyphicon glyphicon-road"></span>
+
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane" id="questions">
+            {% if user.questions|length == 0 %}
+                There are no questions
+            {% else %}
+                {% for question in user.questions %}
+                    <div class="row">
+                        <div class="col-xs-1">
+                            {{ question.score }}<br>
+                            Votes
+                        </div>
+                        <div class="col-xs-1">
+                            {{ question.answers | length }}<br>
+                            Answers
+                        </div>
+                        <div class="col-xs-10">
+                            <a href="{{ path('question', { 'id' : question.id}) }}"> {{ question.title }}</a>
+                        </div>
+
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="tab-pane" id="pages">
+            {% for page in user.pages %}
+                {{ page.id }}
+            {% endfor %}
+        </div>
+    </div>
+</div>

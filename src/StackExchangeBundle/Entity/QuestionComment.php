@@ -10,7 +10,7 @@ use StackExchangeBundle\Model\Comment as BaseComment;
 /**
  * QuestionComment
  *
- * @ORM\Table(name="question_comment")
+ * @ORM\Table(name="se__question_comment")
  * @ORM\Entity(repositoryClass="StackExchangeBundle\Repository\QuestionCommentRepository")
  */
 class QuestionComment extends BaseComment implements CommentInterface

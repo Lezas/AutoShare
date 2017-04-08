@@ -1,0 +1,7 @@
+services:
+    car_show.form_type.picture_select:
+        class: CarShowBundle\Form\Type\PictureSelectType
+
+    car_show.form_factory.picture_select:
+        class: CarShowBundle\FormFactory\PictureSelectFormFactory
+        arguments: ["@form.factory", "@car_show.form_type.picture_select", "%%car_show.form.picture_select.name%%", "@service_container"]

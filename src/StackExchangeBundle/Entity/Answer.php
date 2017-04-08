@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Answer
  *
- * @ORM\Table(name="answer")
+ * @ORM\Table(name="se__answer")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */

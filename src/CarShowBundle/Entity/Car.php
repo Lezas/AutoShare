@@ -2,6 +2,8 @@
 
 namespace CarShowBundle\Entity;
 
+use Application\Sonata\MediaBundle\Entity\Gallery;
+use Application\Sonata\MediaBundle\Entity\Media;
 use CarShowBundle\Model\Car as BaseCar;
 use CarShowBundle\Model\CarInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,6 +26,7 @@ class Car extends BaseCar
         $this->serviceHistory = new ArrayCollection();
         $this->favoritedUsers = new ArrayCollection();
         $this->likedUsers = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -110,11 +113,12 @@ class Car extends BaseCar
      */
     protected $serviceHistory;
 
+
     /**
-     * @ORM\Column(type="string")
-     *
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\JoinColumn(name="main_photo_id", referencedColumnName="id")
      */
-    protected $foto;
+    protected $mainPhoto;
 
     /**
      * @ORM\Column(type="boolean")
@@ -137,6 +141,22 @@ class Car extends BaseCar
      * @var User[]|ArrayCollection
      */
     protected $likedUsers;
+
+    /**
+     * @var Media[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="car")
+     * @ORM\JoinColumn(name="images", referencedColumnName="id")
+     */
+    private $images;
+
+    /**
+     * @var Gallery[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", mappedBy="car")
+     * @ORM\JoinColumn(name="gallery", referencedColumnName="id")
+     */
+    private $galleries;
 
     /**
      * Get id
@@ -265,19 +285,6 @@ class Car extends BaseCar
         return $this->serviceHistory;
     }
 
-
-    public function getFoto()
-    {
-        return $this->foto;
-    }
-
-    public function setFoto($foto)
-    {
-        $this->foto = $foto;
-
-        return $this;
-    }
-
     /**
      * Set private
      *
@@ -345,6 +352,71 @@ class Car extends BaseCar
     public function removeUserFromLiked(User $user)
     {
         $this->likedUsers->removeElement($user);
+    }
+
+
+    /**
+     * @return Gallery[]|ArrayCollection
+     */
+    public function getGallery()
+    {
+        return $this->galleries;
+    }
+
+    /**
+     * @param Gallery[]|ArrayCollection $gallery
+     */
+    public function setGallery($gallery)
+    {
+        $this->galleries = $gallery;
+    }
+
+    /**
+     * @param Gallery $gallery
+     */
+    public function addGallery($gallery)
+    {
+        $this->galleries[] = $gallery;
+    }
+
+    /**
+     * @return Media[]|ArrayCollection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param Media[]|ArrayCollection $images
+     */
+    public function setImages($images)
+    {
+        $this->images = $images;
+    }
+
+    /**
+     * @param Media $image
+     */
+    public function addImage($image)
+    {
+        $this->images[] = $image;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMainPhoto()
+    {
+        return $this->mainPhoto;
+    }
+
+    /**
+     * @param mixed $mainPhoto
+     */
+    public function setMainPhoto($mainPhoto)
+    {
+        $this->mainPhoto = $mainPhoto;
     }
 }
 

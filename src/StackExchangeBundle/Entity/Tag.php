@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table()
  * @ORM\Entity()
+ * @ORM\Table(name="se__tag")
  */
 class Tag implements TagInterface
 {
@@ -37,7 +38,7 @@ class Tag implements TagInterface
     /**
      * Many Groups have Many Users.
      * @ORM\ManyToMany(targetEntity="StackExchangeBundle\Entity\Question", inversedBy="tags")
-     * @ORM\JoinTable(name="question_tag")
+     * @ORM\JoinTable(name="se__question_tag")
      * @var Question[]|ArrayCollection
      */
     protected $questions;

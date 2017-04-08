@@ -1,0 +1,53 @@
+{% extends 'FOSMessageBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/Auto/css/messages.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block fos_message_content %}
+
+    <h2>{{ thread.subject }}</h2>
+    <div class="msg-wrap">
+    {% for message in thread.messages %}
+
+            <div class="media msg">
+                <a class="pull-left" href="{{ path('user_profile_main', { 'username' : message.sender.username}) }}">
+
+                    {% if message.sender.photo == "" %}
+                        <img class="media-object" data-src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460"
+                             alt="{{ message.sender.username }}" style="width: 32px; height: 32px;"
+                             src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460">
+                    {% else %}
+                        <img class="media-object" data-src="{{ message.sender.photo }}"
+                             alt="{{ message.sender.username }}" style="width: 32px; height: 32px;"
+                             src="{{ message.sender.photo }}">
+                    {% endif %}
+                </a>
+                <div class="media-body">
+                    <small class="pull-right time"><i class="fa fa-clock-o"></i> {{ message.createdAt|date }}</small>
+
+                    <h5 class="media-heading"><a href="{{ path('user_profile_main', { 'username' : message.sender.username}) }}">{{ message.sender.username }}</a></h5>
+                    <small class="col-lg-10">
+                        {{ message.body }}
+                    </small>
+                </div>
+            </div>
+
+
+    {% endfor %}
+    </div>
+    <hr>
+
+    <h3>{% trans from 'FOSMessageBundle' %}reply{% endtrans %}</h3>
+
+    <form class="form-horizontal" action="{{ url('fos_message_thread_view', {'threadId': thread.id}) }}" method="post">
+        <div class="form-group">
+            {{ form_errors(form) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.body, { 'attr' : { 'class' : 'form-control'}  }) }}
+            </div>
+        </div>
+        <input class="btn btn-success" type="submit"/>
+    </form>
+
+{% endblock %}

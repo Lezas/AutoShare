@@ -28,7 +28,6 @@
             <li {% if pagination.isSorted('time') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Release', 'time') }}</li>
             <li {% if pagination.isSorted('score') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'votes', 'score') }}</li>
         </ul>
-        <div class="pull-right">{{ pagination.getTotalItemCount }} questions</div>
 
     </div><br>
 

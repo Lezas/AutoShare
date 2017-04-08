@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Post
  *
- * @ORM\Table(name="mb_page")
+ * @ORM\Table(name="mb__page")
  * @ORM\Entity()
  */
 class Page extends BasePage implements TaggableInterface

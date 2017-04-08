@@ -3,7 +3,10 @@
 
 namespace MultiBlogBundle\Form;
 
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use MultiBlogBundle\Entity\Page;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\MediaBundle\Form\Type\MediaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,13 +22,7 @@ class PageType extends AbstractType
     {
 
         $builder->add('title', TextType::class, ['label' => 'Title'])
-            ->add('body', TextareaType::class, [
-                'label' => 'Page body',
-                'required' => true,
-                'attr' => [
-                    'class' => 'tinymce',
-                    'data-theme' => 'advanced'
-                ]
+            ->add('body', CKEditorType::class, [
 
             ])
             ->add('tags', TextType::class, [
@@ -35,7 +32,8 @@ class PageType extends AbstractType
                     'class' => 'tag_field'
                 ]
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Save']);
+
+        ->add('submit', SubmitType::class, ['label' => 'Save']);
 
     }
     public function getName()

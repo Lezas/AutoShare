@@ -4,6 +4,7 @@
 namespace CarShowBundle\Form\Type;
 
 use CarShowBundle\Entity\Car;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -28,7 +29,6 @@ class PostType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $this->auto = $options['auto'];
         $auto = $this->auto;
 
@@ -37,14 +37,11 @@ class PostType extends AbstractType
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('text', TextareaType::class, [
-                'label' => 'Additional Info',
-                'required' => false,
-                'attr' => [
-                    'class' => 'tinymce',
-                    'data-theme' => 'advanced'
+            ->add('text', CKEditorType::class, [
+                'config' => [
+                    'filebrowserImageBrowseRoute' => 'admin_sonata_media_media_browser',
+                    'filebrowserImageBrowseRouteParameters' => ['car_id' => $auto->getId()]
                 ]
-
             ])
             ->add('submit', SubmitType::class, ['label' => 'Save']);
 

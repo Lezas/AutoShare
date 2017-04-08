@@ -1,3 +1,9 @@
+parameters:
+    car_show.form.picture_select.name: car_show_picture_select
+
+imports:
+    - { resource: forms.yml }
+
 services:
     car_show.car:
         class: CarShowBundle\Service\CarService

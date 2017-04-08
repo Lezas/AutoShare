@@ -6,18 +6,15 @@
 
 {% block body %}
 
-    <div class="jumbotron">
-        <h2>All Cars!</h2>
-    </div>
     <div class="row">
         {% for auto in ownedAutos %}
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <div class="panel panel-default clickable">
-                <img class="img-responsive" src="{{ asset('uploads/foto/' ~ auto.foto) }}" />
+                <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}" />
                 <div class="panel-body ">
 
                         <h4>{{ auto.year | date("Y") }} {{ auto.brand }} {{ auto.model|e }}</h4>
-                        <p>by <b>{{ auto.getUser.getUsername |e }}</b></p>
+                        <p>by <b><a href="{{ path('user_profile_main', {'username' : auto.getUser.getUsername}) }}"></a>{{ auto.getUser.getUsername |e }}</b></p>
                         <a  href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
                 </div>
             </div>

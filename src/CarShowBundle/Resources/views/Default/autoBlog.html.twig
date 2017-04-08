@@ -1,21 +1,32 @@
 {% extends 'base.html.twig' %}
 
+{% block sidepanel %}
+
+
+    {% include '@Main/widgets/carDetailedInfoWidget.html.twig' with {'car' : auto} %}
+    {% include '@Main/widgets/ImageSliderWidget.html.twig' with {'images' : auto.images} %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('bundles/Auto/css/autoblog.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('bundles/Comments/css/comments.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/jgallery.min.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block body %}
 
     {# Blog head#}
     <div class="header-bg"
-         style="background: url({{ asset('uploads/foto/' ~ auto.foto) }}); background-size: cover; background-position: center">
+         style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
 
         <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
             <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
-            <p style="color: white; padding: 0; margin: 1px">By {{ auto.user.username }}</p>
+            <p style="color: white; padding: 0; margin: 1px">By <a style="color: white;" href="{{ path('user_profile_main', {'username' : auto.user.username}) }}">{{ auto.user.username }}</a></p>
         </div>
     </div>
     <div>
@@ -36,8 +47,17 @@
                 <span class="glyphicon glyphicon-plus"></span>
                 Post
             </a>
+            <a href="{{ path('car_show_add_pictures', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                <span class="glyphicon glyphicon-plus"></span>
+                Picture
+            </a>
+            <a href="{{ path('car_show_change_main_picture', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                <span class="glyphicon glyphicon-plus"></span>
+                Change Main Picture
+            </a>
         {% endif %}
     {% endif %}
+
     {% for post in posts %}
         {% if post.deleted == false %}
             <div class="blogShort">
@@ -110,8 +130,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
 
+    <script type="text/javascript">
 
         $('.collapse-btn').click(function () {
             $(this).siblings('.carInfo').toggleClass('collapse');

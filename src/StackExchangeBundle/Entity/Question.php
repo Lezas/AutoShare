@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Answer
  * @ORM\Entity()
- * @ORM\Table(name="question")
+ * @ORM\Table(name="se__question")
  * @ORM\HasLifecycleCallbacks
  */
 class Question implements TaggableInterface, VotableInterface, SignedInterface, CommentableInterface

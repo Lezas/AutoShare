@@ -58,11 +58,15 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
+        types:
+            json: Sonata\Doctrine\Types\JsonType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        resolve_target_entities:
+            Symfony\Component\Security\Core\User\UserInterface:  MainBundle\Entity\User
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
@@ -78,6 +82,11 @@ fos_comment:
         model:
             comment: CarShowBundle\Entity\Comment
             thread: CarShowBundle\Entity\Thread
+
+fos_message:
+    db_driver: orm
+    thread_class: MainBundle\Entity\MessageThread
+    message_class: MainBundle\Entity\Message
 
 assetic:
     bundles: [ "FOSCommentBundle" ]
@@ -108,7 +117,6 @@ stfalcon_tinymce:
         # Advanced theme with almost all enabled plugins
         advanced:
              height : 600
-             file_browser_callback : elFinderBrowser
              plugins:
                  - "advlist autolink lists link image charmap print preview hr anchor pagebreak"
                  - "searchreplace wordcount visualblocks visualchars code fullscreen"
@@ -175,3 +183,91 @@ fm_elfinder:
                         upload_max_size: 2M # also file upload sizes restricted in php.ini
                         #attributes: example of setting attributes permission
                         #    - { pattern: '/(.*?)/', read: true, write: false, locked: true }
+
+sonata_core: ~
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+
+sonata_media:
+    # if you don't use default namespace configuration
+    #class:
+    #    media: MyVendor\MediaBundle\Entity\Media
+    #    gallery: MyVendor\MediaBundle\Entity\Gallery
+    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 1920 , quality: 100}
+        user_profile:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 1920 , quality: 100}
+
+    cdn:
+        server:
+            path: /uploads/media # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  "%kernel.root_dir%/../web/uploads/media"
+            create:     false
+
+ivory_ck_editor:
+    default_config: default
+    configs:
+        default:
+            filebrowserBrowseRoute: admin_sonata_media_media_browser
+            filebrowserImageBrowseRoute: admin_sonata_media_media_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+            filebrowserUploadRoute: admin_sonata_media_media_upload
+            filebrowserUploadRouteParameters:
+                provider: sonata.media.provider.file
+            # Upload file as image when sending a file from the image dialog
+            filebrowserImageUploadRoute: admin_sonata_media_media_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+
+# Stof Doctrine Extensions
+stof_doctrine_extensions:
+    orm:
+        default:
+            sluggable: true
+
+# Configuration for knp paginator: don't forget to customize page_name
+knp_paginator:
+    page_range: 3
+    default_options:
+        page_name: p
+        sort_field_name: sort
+        sort_direction_name: direction
+        distinct: true
+    template:
+        pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig
+
+# Configuration for discutea forum
+discutea_forum:
+    preview:
+        enabled: true
+    knp_paginator:
+        page_name: p  #see knp_paginator.default_option.page_name
+        topics:
+            enabled: true
+            per_page: 10
+        posts:
+            enabled: true
+            per_page: 10

@@ -1,2 +1,2 @@
 
-{{ comment.body | striptags('<strong><em><span><sup><sub><a>') | raw}} - <a href="#">{{ comment.author.username }}</a> {{ comment.createdAt | date('Y-m-d H:i:s') }}
+{{ comment.body | striptags('<strong><em><span><sup><sub><a>') | raw}} - <a href="{{ path('user_profile_main', {'username' : comment.author.username}) }}">{{ comment.author.username }}</a> {{ comment.createdAt | date('Y-m-d H:i:s') }}

@@ -50,12 +50,24 @@
                             <li>
                                 <a href="{{ path('multi_blog_all_pages') }}"> {% trans %}multi_blog_pages{% endtrans %}</a>
                             </li>
-                            <li>
-                                <a href="{{ path('Dashboard') }}">
-                                    <span class="glyphicon glyphicon-home" title="Go To Hom Page"></span>
-                                </a>
-                            </li>
+
                             {% if app.user %}
+                                <li>
+                                    <a href="{{ path('garage') }}">
+                                        <span class="glyphicon glyphicon-home" title="Garage"></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('fos_message_inbox') }}">
+                                        <span class="glyphicon glyphicon-comment" title="Massages" >
+
+                                        </span>
+                                        {% if  fos_message_nb_unread()  > 0 %}
+                                            <b>{{ fos_message_nb_unread() }}</b>
+                                        {% endif %}
+
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ path('fos_user_profile_show') }}">
                                         <span class="glyphicon glyphicon-user" title="You Profile"></span>
@@ -102,19 +114,6 @@
                             <div class="panel-body">
 
                                 {% if app.user %}
-
-                                    <ul class="nav nav-pills  nav-stacked">
-                                        <li role="presentation">
-                                            <a href="{{ path('auto_new_car') }}">
-                                                New auto
-                                            </a>
-                                        </li>
-                                        <li role="presentation">
-                                            <a href="{{ path('garage') }}">
-                                                My Garage
-                                            </a>
-                                        </li>
-                                    </ul>
 
                                     {% if my_auto_car.favorites(app.user)| length > 0 %}
                                         <h4>Your favorited cars</h4>

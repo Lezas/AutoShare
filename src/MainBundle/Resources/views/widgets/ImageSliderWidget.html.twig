@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h4>Gallery</h4>
+        <div id="gallery">
+            {% for image in images %}
+                <a href="{% path image, 'big' %}">{% media image, 'small' %}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('bundles/jGallery-1.6.1/js/jquery-2.0.3.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/jGallery-1.6.1/js/jgallery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/jGallery-1.6.1/js/touchswipe.js') }}" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#gallery').jGallery({
+            textColor: '#ff9d00',
+            height: '275px',
+            canChangeMode: true,
+            tooltipFullScreen: 'Full screen',
+            title: false,
+            slideshow: false,
+            thumbnails: false,
+            hideThumbnailsOnInit: true,
+            thumbnailsFullScreen: true,
+            tooltips: false,
+            canZoom: false
+        });
+    });
+
+    $('.collapse-btn').click(function () {
+        $(this).siblings('.carInfo').toggleClass('collapse');
+    });
+
+    $('.pull-down').each(function () {
+        var $this = $(this);
+        $this.css('margin-top', $this.parent().height() - $this.height() * 2)
+    });
+</script>
