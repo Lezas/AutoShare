@@ -1,0 +1,5 @@
+services:
+    car_show.listener.car_update:
+        class: CarShowBundle\EventListener\CarUpdatedListener
+        tags:
+            - { name: kernel.event_subscriber }

@@ -61,13 +61,9 @@ class QuestionBlamerListener implements EventSubscriberInterface
      */
     public function blame(QuestionEvent $event)
     {
+
         $question = $event->getQuestion();
-        $question->setAuthor($this->tokenStorage->getToken()->getUser());
-
-        if (null == $question->isAnswered()) {
-            $question->setAnswered(false);
-        }
-
+        
         if (!$question instanceof SignedInterface) {
             if ($this->logger) {
                 $this->logger->debug("Comment does not implement SignedInterface, skipping");
@@ -84,9 +80,14 @@ class QuestionBlamerListener implements EventSubscriberInterface
             return;
         }
 
+        if (null === $question->isAnswered()) {
+            $question->setAnswered(false);
+        }
+
         if (null === $question->getAuthor() && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $question->setAuthor($this->tokenStorage->getToken()->getUser());
         }
+
     }
 
     /**

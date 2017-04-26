@@ -1,12 +1,12 @@
 services:
-    stack_exchange.listener.question_blamer:
-        class: StackExchangeBundle\EventListener\QuestionBlamerListener
-        arguments: ["@security.authorization_checker", "@security.token_storage"]
+    stack_exchange.listener.question_delete:
+        class: StackExchangeBundle\EventListener\QuestionDeleteListener
         tags:
             - { name: kernel.event_subscriber }
 
-    stack_exchange.listener.question_delete:
-        class: StackExchangeBundle\EventListener\QuestionDeleteListener
+    stack_exchange.listener.question_blamer:
+        class: StackExchangeBundle\EventListener\QuestionBlamerListener
+        arguments: ["@security.authorization_checker", "@security.token_storage"]
         tags:
             - { name: kernel.event_subscriber }
 

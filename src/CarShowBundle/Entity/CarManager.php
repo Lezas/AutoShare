@@ -88,6 +88,35 @@ class CarManager extends BaseCarManager
         return $this->repository->findAll();
     }
 
+    public function findMostPopularCars($amount = 10)
+    {
+        $query = $this->repository->createQueryBuilder('c')
+            ->addSelect('COUNT(lu.id) as HIDDEN amount')
+            ->innerJoin('c.likedUsers','lu')
+            ->where('c.deleted != 1')
+            ->andWhere('c.private != 1')
+            ->orderBy('amount','DESC')
+            ->groupBy('c.id')
+            ->setMaxResults($amount)
+            ->getQuery();
+
+        return $query->getResult();
+
+    }
+
+    public function findNewestCarts($amount)
+    {
+        $query = $this->repository->createQueryBuilder('c')
+            ->where('c.deleted != 1')
+            ->andWhere('c.private != 1')
+            ->orderBy('c.createdAt','DESC')
+            ->groupBy('c.id')
+            ->setMaxResults($amount)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
     /**
      * {@inheritDoc}
      */

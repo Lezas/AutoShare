@@ -49,8 +49,8 @@ class User extends BaseUser implements ParticipantInterface
     protected $liked;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\JoinColumn(name="main_photo", referencedColumnName="id")
      */
     private $photo;
 
@@ -84,6 +84,12 @@ class User extends BaseUser implements ParticipantInterface
      */
     protected $answersComments;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
 
     public function __construct()
     {
@@ -244,5 +250,21 @@ class User extends BaseUser implements ParticipantInterface
     public function setPages($pages)
     {
         $this->pages = $pages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }

@@ -43,19 +43,10 @@ class AutoType extends AbstractType
             ->add('bodyType', TextType::class, ['label' => 'Body type'])
             ->add('powertrain', TextType::class, ['label' => 'Power train'])
             ->add('engineCapacity', NumberType::class, ['label' => 'engine capacity'])
+            ->add('power', NumberType::class, ['label' => 'Power in kilowatts'])
             ->add('fuelType', TextType::class, ['label' => 'fuel Type'])
             ->add('foto', FileType::class, [
                 'label' => 'Your car foto', 'required' => false, 'mapped' => false
-                ]
-            )
-            ->add('images', CollectionType::class, [
-                    'entry_type' => MediaType::class,
-                    'entry_options' => array(
-                        'provider' => 'sonata.media.provider.image',
-                        'context' => 'default'
-                    ),
-                    'allow_add' => true,
-                    'allow_delete' => true,
                 ]
             )
             ->add('private', CheckboxType::class, array('required' => false))

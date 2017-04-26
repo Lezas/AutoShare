@@ -3,3 +3,8 @@
     margin-left: 3px;
     margin-right: 3px;
 }
+
+.force-to-bottom {
+    padding-top: 30px;
+    width: 100%;
+}

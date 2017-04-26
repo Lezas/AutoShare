@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Sonata\MediaBundle\Entity\MediaManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class CarController extends Controller
 {
     /**
      * @param Request $request
-     * @Route("/car/new", name="auto_new_car")
+     * @Route   ("/car/new", name="auto_new_car")
      * @return Response
      */
     public function newAutoAction(Request $request)
@@ -92,6 +93,11 @@ class CarController extends Controller
             throw new NotFoundHttpException(sprintf("Sorry, no car was found"));
         }
 
+        if ($user != $car->getUser() && !$car->getDeleted()) {
+            throw new NotFoundHttpException();
+
+        }
+
         $form = $this->createForm(AutoType::class, $car, ['user' => $user]);
 
         $form->handleRequest($request);
@@ -111,7 +117,8 @@ class CarController extends Controller
 
         return $this->render('@CarShow/Default/newAuto.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Edit Auto Information'
+            'title' => 'Edit Auto Information',
+            'car' => $car
         ]);
     }
 
@@ -127,6 +134,14 @@ class CarController extends Controller
         /** @var Car $car */
         $car = $this->get('car_show.manager.car')->findCarById($id);
         $posts = $car->getPosts();
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
 
         return $this->render('@CarShow/Default/autoBlog.html.twig', [
             'posts' => $posts,
@@ -145,7 +160,14 @@ class CarController extends Controller
     {
         /** @var Car $car */
         $car = $this->get('car_show.manager.car')->findCarById($id);
-        $posts = $car->getPosts();
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($this->getUser() != $car->getUser()  && !$car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
 
         $pictures = new ArrayCollection();
 
@@ -160,13 +182,16 @@ class CarController extends Controller
             $mediaManager = $this->get('sonata.media.manager.media');
 
             $data = $form->get('images')->getData();
-            $ImagemimeTypes = array('image/jpeg', 'image/png');
+
+            $ImagemimeTypes = array('image/jpeg', 'image/png', 'image/jpg');
 
             foreach ($data as $datum) {
+
                 $media = new Media();
                 $media->setContext('default');
                 $media->setBinaryContent($datum);
-                if (in_array($data[0]->getMimeType(), $ImagemimeTypes)) {
+
+                if (in_array($datum->getMimeType(), $ImagemimeTypes)) {
                     $media->setProviderName('sonata.media.provider.image');
                     $car->addImage($media);
                     $media->setCar($car);
@@ -197,6 +222,15 @@ class CarController extends Controller
     {
         /** @var Car $car */
         $car = $this->get('car_show.manager.car')->findCarById($id);
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($this->getUser() != $car->getUser()  && !$car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
+
         $posts = $car->getPosts();
 
         $pictures = $car->getImages();
@@ -218,6 +252,163 @@ class CarController extends Controller
         $carImages = $car->getImages();
         return $this->render('@CarShow/Default/selectPicture.html.twig', [
             'images' => $carImages,
+            'form' => $form->createView(),
+            'car' => $car,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return Response
+     * @Route   ("/car/{id}/delete", name="car_show_delete_car")
+     */
+    public function deleteCarAction($id, Request $request)
+    {
+        $carManager = $this->get('car_show.manager.car');
+
+        /** @var Car $car */
+        $car = $carManager->findCarById($id);
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = $this->getUser();
+        $form = $this->createFormBuilder()
+            ->add('yes', SubmitType::class, array('label' => 'Yes'))
+            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            if ($form->get('yes')->isClicked()) {
+                $car->setDeleted(true);
+                $carManager->saveCar($car);
+                $this->addFlash(
+                    'notice',
+                    'Your car has been deleted!'
+                );
+            } elseif ($form->get('no')->isClicked()) {
+                $this->addFlash(
+                    'notice',
+                    'You have canceled car deletion!'
+                );
+            }
+
+            return $this->redirectToRoute('garage');
+        }
+
+        return $this->render('@CarShow/Default/deleteCar.html.twig', [
+            'form' => $form->createView(),
+            'car' => $car,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return Response
+     * @Route   ("/car/{id}/makePrivate", name="car_show_make_private_car")
+     */
+    public function privateCarAction($id, Request $request)
+    {
+        $carManager = $this->get('car_show.manager.car');
+
+        /** @var Car $car */
+        $car = $carManager->findCarById($id);
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = $this->getUser();
+        $form = $this->createFormBuilder()
+            ->add('yes', SubmitType::class, array('label' => 'Yes'))
+            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            if ($form->get('yes')->isClicked()) {
+                $car->setPrivate(true);
+                $carManager->saveCar($car);
+                $this->addFlash(
+                    'notice',
+                    'Your car has been made private!'
+                );
+            } elseif ($form->get('no')->isClicked()) {
+                return $this->redirectToRoute('car_show_get_car', ['id' => $car->getId()]);
+            }
+
+            return $this->redirectToRoute('garage');
+        }
+
+        return $this->render('@CarShow/Default/privateCar.html.twig', [
+            'form' => $form->createView(),
+            'car' => $car,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return Response
+     * @Route   ("/car/{id}/makePublic", name="car_show_make_public_car")
+     */
+    public function publicCarAction($id, Request $request)
+    {
+        $carManager = $this->get('car_show.manager.car');
+
+        /** @var Car $car */
+        $car = $carManager->findCarById($id);
+
+        if (null == $car) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($car->getDeleted()) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = $this->getUser();
+        $form = $this->createFormBuilder()
+            ->add('yes', SubmitType::class, array('label' => 'Yes'))
+            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            if ($form->get('yes')->isClicked()) {
+                $car->setPrivate(false);
+                $carManager->saveCar($car);
+                $this->addFlash(
+                    'notice',
+                    'Your car has been made public!'
+                );
+            }
+
+            return $this->redirectToRoute('car_show_get_car', ['id' => $car->getId()]);
+        }
+
+        return $this->render('@CarShow/Default/publicCar.html.twig', [
             'form' => $form->createView(),
             'car' => $car,
         ]);

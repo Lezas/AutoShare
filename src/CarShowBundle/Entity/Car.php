@@ -15,7 +15,6 @@ use MainBundle\Entity\User;
  *
  * @ORM\Table(name="cars")
  * @ORM\Entity()
- * @ORM\EntityListeners({"CarShowBundle\Entity\Listener\AutoListener"})
  */
 class Car extends BaseCar
 {
@@ -83,6 +82,13 @@ class Car extends BaseCar
     /**
      * @var string
      *
+     * @ORM\Column(name="power", type="string", length=255)
+     */
+    protected $power;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="fuelType", type="string", length=255, nullable=true)
      */
     protected $fuelType;
@@ -127,6 +133,12 @@ class Car extends BaseCar
     protected $private;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     */
+    protected $deleted;
+
+    /**
      * @ORM\ManyToMany(targetEntity="MainBundle\Entity\User", inversedBy="favorites")
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id")
      * @ORM\JoinTable(name="user_favorites")
@@ -157,6 +169,21 @@ class Car extends BaseCar
      * @ORM\JoinColumn(name="gallery", referencedColumnName="id")
      */
     private $galleries;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
 
     /**
      * Get id
@@ -319,6 +346,11 @@ class Car extends BaseCar
         return $this->favoritedUsers;
     }
 
+    public function getFavoritedUsersCount()
+    {
+        return $this->favoritedUsers->count();
+    }
+
     public function isAutoFavorited(User $user)
     {
         return $this->favoritedUsers->contains($user);
@@ -417,6 +449,70 @@ class Car extends BaseCar
     public function setMainPhoto($mainPhoto)
     {
         $this->mainPhoto = $mainPhoto;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param mixed $deleted
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPower()
+    {
+        return $this->power;
+    }
+
+    /**
+     * @param string $power
+     */
+    public function setPower($power)
+    {
+        $this->power = $power;
     }
 }
 

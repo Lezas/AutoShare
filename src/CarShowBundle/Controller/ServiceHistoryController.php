@@ -31,7 +31,7 @@ class ServiceHistoryController extends Controller
         $user = $this->getUser();
         $car = $em->getRepository('CarShowBundle:Car')->find($id);
 
-        if (!$car) {
+        if (!$car || $user != $car->getUser()) {
             throw new NotFoundHttpException("Page not found");
         }
 
@@ -111,6 +111,8 @@ class ServiceHistoryController extends Controller
                 'notice',
                 'Your service has been saved!'
             );
+
+            return $this->redirectToRoute('car_history', ['id' => $car->getId()]);
 
         }
 

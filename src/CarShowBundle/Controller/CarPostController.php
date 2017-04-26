@@ -31,12 +31,23 @@ class CarPostController extends Controller
         /** @var Car $auto */
         $auto = $this->getDoctrine()->getRepository('CarShowBundle:Car')->find($carId);
 
-        $post = new Post();
+        if (null == $auto) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($this->getUser() != $auto->getUser()) {
+            throw new NotFoundHttpException();
+        }
+
+        $postManager = $this->get('car_show.manager.post');
+
+        $post = $postManager->createPost();
+
         $form = $this->createForm(PostType::class, $post, ['auto' => $auto]);
 
         $form->handleRequest($request);
 
-        if($form->isValid()){
+        if ($form->isValid()) {
             $id = random_bytes(10);
 
             $thread = $this->get('fos_comment.manager.thread')->findThreadById($id);
@@ -59,18 +70,19 @@ class CarPostController extends Controller
                 $post->setDeleted(false);
             }
 
-            $em->persist($post);
-            $em->flush();
+            $postManager->savePost($post);
             $this->addFlash(
                 'notice',
                 'Your post has been saved!'
             );
 
+            return $this->redirectToRoute('car_show_get_car_post', ['postId' => $post->getId()]);
+
         }
 
-        return $this->render('@CarShow/Default/newPost.html.twig',[
+        return $this->render('@CarShow/Default/newPost.html.twig', [
             'form' => $form->createView(),
-            'auto' => $auto,
+            'car' => $auto,
             'title' => 'New Post',
         ]);
     }
@@ -87,12 +99,20 @@ class CarPostController extends Controller
         $user = $this->getUser();
         $auto = $this->getDoctrine()->getRepository('CarShowBundle:Car')->find($carId);
 
+        if (null == $auto) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($this->getUser() != $auto->getUser()) {
+            throw new NotFoundHttpException();
+        }
+
         $post = $this->getDoctrine()->getRepository('CarShowBundle:Post')->find($postId);
         $form = $this->createForm(PostType::class, $post, ['auto' => $auto]);
 
         $form->handleRequest($request);
 
-        if($form->isValid()){
+        if ($form->isValid()) {
             $post->setAuto($auto);
 
             $em = $this->getDoctrine()->getManager();
@@ -106,7 +126,8 @@ class CarPostController extends Controller
 
         }
 
-        return $this->render('@CarShow/Default/newPost.html.twig',[
+        return $this->render('@CarShow/Default/newPost.html.twig', [
+            'car' => $auto,
             'form' => $form->createView(),
             'title' => 'Edit post',
         ]);
@@ -122,14 +143,23 @@ class CarPostController extends Controller
     public function removeCarPostAction($carId = null, $postId = null, Request $request)
     {
 
-        $post = $this->getDoctrine()->getRepository('CarShowBundle:Post')->find($postId);
+        $postManager = $this->get('car_show.manager.post');
+
+        $post = $postManager->findPostById($postId);
+
+        if (null == $post) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($this->getUser() != $post->getAuto()->getUser()) {
+            throw new NotFoundHttpException();
+        }
 
         if ($post->getAuto()->getId() == $carId) {
-            $post->setDeleted(true);
 
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($post);
-            $em->flush();
+            $postManager->deletePost($post);
+            $postManager->savePost($post);
+
             $this->addFlash(
                 'notice',
                 'Your post has been deleted!'
@@ -137,7 +167,7 @@ class CarPostController extends Controller
 
         }
 
-        return $this->redirectToRoute('selectedAuto', ['id' => $carId]);
+        return $this->redirectToRoute('car_show_get_car', ['id' => $carId]);
 
 
     }
@@ -160,7 +190,7 @@ class CarPostController extends Controller
 
 
         /** @var Post $post */
-        if (!$post ) {
+        if (!$post) {
             throw new NotFoundHttpException("Page not found");
         }
 
@@ -168,11 +198,22 @@ class CarPostController extends Controller
             throw new NotFoundHttpException("Page not found");
         }
 
+        $sidePosts = $em->getRepository('CarShowBundle:Post')->createQueryBuilder('p')
+        ->where('p.id != :np')
+            ->andWhere('p.car = :car')
+            ->andWhere('p.deleted != 1')
+            ->addOrderBy('p.date','DESC')
+        ->setParameter('np', $post->getId())
+            ->setParameter('car',$post->getAuto())
+
+            ->getQuery()->getResult();
+
         $car = $post->getAuto();
 
-        return $this->render('@CarShow/Default/post.html.twig',[
+        return $this->render('@CarShow/Default/post.html.twig', [
             'auto' => $car,
             'post' => $post,
+            'sidePosts' => $sidePosts
         ]);
 
     }

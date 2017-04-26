@@ -18,9 +18,9 @@
                              alt="{{ message.sender.username }}" style="width: 32px; height: 32px;"
                              src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460">
                     {% else %}
-                        <img class="media-object" data-src="{{ message.sender.photo }}"
+                        <img class="media-object" data-src="{% path message.sender.photo, 'big' %}"
                              alt="{{ message.sender.username }}" style="width: 32px; height: 32px;"
-                             src="{{ message.sender.photo }}">
+                             src="{% path message.sender.photo, 'big' %}">
                     {% endif %}
                 </a>
                 <div class="media-body">
@@ -46,6 +46,7 @@
             <div class="col-sm-10">
                 {{ form_widget(form.body, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
+            {{ form_rest(form) }}
         </div>
         <input class="btn btn-success" type="submit"/>
     </form>

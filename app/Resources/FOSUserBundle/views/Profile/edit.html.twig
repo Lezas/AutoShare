@@ -1,0 +1,9 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/carshow/css/addPictures.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block fos_user_content %}
+{% include "@FOSUser/Profile/edit_content.html.twig" %}
+{% endblock fos_user_content %}

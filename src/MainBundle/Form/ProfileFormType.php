@@ -1,8 +1,10 @@
 <?php
+
 namespace MainBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ProfileFormType extends AbstractType
@@ -11,7 +13,9 @@ class ProfileFormType extends AbstractType
     {
         // add your custom field
         $builder
-            ->add('foto', FileType::class, array('label' => 'Your car foto', 'required' => false));
+            ->add('photo', FileType::class, array('label' => 'Your Foto', 'mapped' => false, 'required' => false))
+            ->add('description', TextType::class, array('label' => 'Description', 'required' => false));
+
     }
 
     public function getParent()
@@ -24,6 +28,11 @@ class ProfileFormType extends AbstractType
 
     public function getName()
     {
-        return 'readypeeps_user_profile';
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'main_user_profile';
     }
 }

@@ -1,28 +1,63 @@
-{% extends 'base.html.twig'  %}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/carshow/css/addPictures.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
 
 {% block sidepanel %}
-
-
+    <br>
+    {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : car} %}
+    <hr>
     {% include '@Main/widgets/carInfoWidget.html.twig' %}
 
     {{ parent() }}
 {% endblock %}
 
 {% block body %}
+
     <div class="container-fluid">
-        <div class="h2">ADD PICTURES </div>
-        {% for image in images %}
-            {% media image, 'small' %}
-        {% endfor %}
+        <div class="h2">Add pictures</div>
         {{ form_start(form, { 'attr' : {'class' : 'form-horizontal'}}) }}
-
-
-        {{ form_widget(form.images) }}
+        {{ form_widget(form.images, { 'attr' : {'id' : 'files_input'}}) }}
+        <output id="list"></output>
 
         {{ form_widget(form.submit) }}
     </div>
 {% endblock body %}
 
 {% block javascripts %}
+    <script>
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
 
+            // Loop through the FileList and render image files as thumbnails.
+            for (var i = 0, f; f = files[i]; i++) {
+
+                // Only process image files.
+                if (!f.type.match('image.*')) {
+                    continue;
+                }
+
+                var reader = new FileReader();
+
+                // Closure to capture the file information.
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        // Render thumbnail.
+                        var span = document.createElement('span');
+                        span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+                        document.getElementById('list').insertBefore(span, null);
+                    };
+                })(f);
+
+                // Read in the image file as a data URL.
+                reader.readAsDataURL(f);
+            }
+        }
+
+        document.getElementById('pictures_images').addEventListener('change', handleFileSelect, false);
+    </script>
 {% endblock %}

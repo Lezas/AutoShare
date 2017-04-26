@@ -40,7 +40,7 @@
                          alt="{{ question.author.username }}"
                     >
                 {% else %}
-                    <img width="30" height="30" src="{{ question.author.photo }}" alt="{{ question.author.username }}"
+                    <img width="30" height="30" src="{% path question.author.photo, 'big' %}" alt="{{ question.author.username }}"
                     >
                 {% endif %}
                 <a href="{{ path('user_profile_main', {'username' : question.author}) }}">{{ question.author }}</a>

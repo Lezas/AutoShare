@@ -2,12 +2,14 @@
 
 {% block stylesheets %}
     <link href="{{asset('bundles/imagePicker/css/image-picker.css')}}" rel="stylesheet" type="text/css"/>
-
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block sidepanel %}
 
-
+    <br>
+    {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : car} %}
+    <hr>
     {% include '@Main/widgets/carInfoWidget.html.twig' %}
 
     {{ parent() }}
@@ -16,8 +18,9 @@
 {% block body %}
     <div class="container-fluid">
 
+        <h2>Select new main picture</h2>
+        <p>Select picture you want to be your car amin picture and press "save" button</p>
         {{ form_start(form, { 'attr' : {'class' : 'form-horizontal'}}) }}
-
 
         {{ form_widget(form.mainPhoto) }}
 

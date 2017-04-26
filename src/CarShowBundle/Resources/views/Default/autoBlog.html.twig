@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block sidepanel %}
+    {% if auto.private %}
+        <h2>Private Mode</h2>
+        <hr>
+    {% endif %}
 
-
-    {% include '@Main/widgets/carDetailedInfoWidget.html.twig' with {'car' : auto} %}
+    {% include '@CarShow/widget/carMenu.html.twig' with {'car' : auto} %}
+    <hr>
     {% include '@Main/widgets/ImageSliderWidget.html.twig' with {'images' : auto.images} %}
+    <hr>
 
     {{ parent() }}
 {% endblock %}
@@ -21,110 +26,96 @@
 {% block body %}
 
     {# Blog head#}
-    <div class="header-bg"
-         style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
+    {% include '@CarShow/car/carHeader.html.twig' with {'auto' : auto } %}
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Description</a></li>
+        <li><a data-toggle="tab" href="#menu1">Detailed info</a></li>
+        <li><a data-toggle="tab" href="#menu2">Posts</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            {{ auto.additionalInfo | raw }}
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Brand</td>
+                    <td>{{ auto.brand }}</td>
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <td>{{ auto.model }}</td>
+                </tr>
+                <tr>
+                    <td>Year</td>
+                    <td>{{ auto.year | date("Y-d-m") }}</td>
+                </tr>
+                <tr>
+                    <td>Engine</td>
+                    <td>{{ auto.engineCapacity }}</td>
+                </tr>
 
-        <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
-            <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
-            <p style="color: white; padding: 0; margin: 1px">By <a style="color: white;" href="{{ path('user_profile_main', {'username' : auto.user.username}) }}">{{ auto.user.username }}</a></p>
+                <tr>
+                    <td>Power</td>
+                    <td>{{ auto.power }} kw</td>
+                </tr>
+                <tr>
+                    <td>Fuel Type</td>
+                    <td>{{ auto.fuelType }}</td>
+                </tr>
+                <tr>
+                    <td>Powertrain</td>
+                    <td>{{ auto.powerTrain }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            {% for post in posts %}
+                {% if post.deleted == false %}
+                    <div class="blogShort">
+                        <h1><a href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a>
+                            {% if app.user != null %}
+                                {% if app.user.id == auto.user.id %}
+                                    <div class="dropdown inline">
+                                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                           id="dropdownMenuButton">
+                                            <span class="glyphicon glyphicon-cog"></span>
+                                            Edit
+                                            <span class="caret"></span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a href="{{ path('editCarPost', {'carId' : auto.id, 'postId' : post.id}) }}">Edit Post</a></li>
+                                            <li><a href="{{ path('deleteCarPost', {'carId' : auto.id, 'postId' : post.id}) }}">Delete Post</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </h1>
+
+                        <em>{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km.
+                            {% transchoice post.thread.numComments %}
+                            {0} There are no Comments|{1} One Comment|]1,Inf[ %count% Comment
+                            {% endtranschoice %}
+                        </em>
+
+                        <article><p>
+                                {{ post.text|length > 200 ? post.text | slice(0, 200)  | striptags ~ 'Continue reading..' : post.text | striptags }}
+                            </p>
+                            <p></p>
+                        </article>
+                        <hr>
+
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
-    <div>
-        <div class="panel panel-default blog-post" style="padding-top: 0; margin-top: 0">
-            <div class="panel-body">
-                {{ auto.additionalInfo | raw }}
-            </div>
-        </div>
-    </div>
-    {#Blog posts#}
-    {% if app.user != null %}
-        {% if app.user.id == auto.user.id %}
-            <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Service History
-            </a>
-            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Post
-            </a>
-            <a href="{{ path('car_show_add_pictures', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Picture
-            </a>
-            <a href="{{ path('car_show_change_main_picture', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                <span class="glyphicon glyphicon-plus"></span>
-                Change Main Picture
-            </a>
-        {% endif %}
-    {% endif %}
 
-    {% for post in posts %}
-        {% if post.deleted == false %}
-            <div class="blogShort">
-                <h1 ><a href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a>
-                    {% if app.user != null %}
-                        {% if app.user.id == auto.user.id %}
-                            <a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"
-                               class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-                            <a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"
-                               class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </h1>
+    <hr>
 
-                <em>{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km.
-                    {% transchoice post.thread.numComments %}
-                    {0} There are no Comments|{1} One Comment|]1,Inf[ %count% Comment
-                    {% endtranschoice %}
-                </em>
-
-                <article><p>
-                        {{ post.text|length > 200 ? post.text | slice(0, 200)  | striptags ~ 'Continue reading..' : post.text | striptags}}
-                    </p>
-                    <p></p>
-                </article>
-                <hr>
-
-            </div>
-            {#<div class="panel panel-default blog-post">#}
-                {#<div class="panel-heading">#}
-                    {#<h2 class="blog-post-title"><a#}
-                                {#href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">{{ post.title }}</a></h2>#}
-
-                    {#<p class="blog-post-meta">{{ post.date | date("Y-m-d") }} {{ post.mileage }} Km. </p>#}
-                {#</div>#}
-                {#<div class="panel-body">#}
-
-                    {#<p>{{ post.text|length > 200 ? post.text|striptags|slice(0, 200)|convert_encoding('unicode', 'unicode')|raw ~ ' .......' : post.text }}</p>#}
-                {#</div>#}
-                {#<div class="panel-footer">#}
-                    {#Vieved: 522 time. {{ post.thread.id }} Comments#}
-                {#</div>#}
-
-                {#{% if app.user != null %}#}
-                    {#{% if app.user.id == auto.user.id %}#}
-                        {#<div class="edit-car">#}
-                            {#<a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"#}
-                               {#class="btn btn-default btn-sm ">#}
-                                {#<span class="glyphicon glyphicon-pencil"></span>#}
-                            {#</a>#}
-                        {#</div>#}
-                        {#<div class="remove-post">#}
-                            {#<a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}"#}
-                               {#class="btn btn-default btn-sm ">#}
-                                {#<span class="glyphicon glyphicon-remove"></span>#}
-                            {#</a>#}
-                        {#</div>#}
-                    {#{% endif %}#}
-                {#{% endif %}#}
-            {#</div>#}
-        {% endif %}
-    {% endfor %}
-    {# End of blog posts#}
 
 
 {% endblock %}

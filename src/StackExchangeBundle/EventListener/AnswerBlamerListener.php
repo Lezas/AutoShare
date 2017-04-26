@@ -3,6 +3,7 @@
 namespace StackExchangeBundle\EventListener;
 
 use Psr\Log\LoggerInterface;
+use StackExchangeBundle\Entity\Answer;
 use StackExchangeBundle\Event\AnswerEvent;
 use StackExchangeBundle\Events;
 use StackExchangeBundle\Model\SignedInterface;
@@ -61,9 +62,10 @@ class AnswerBlamerListener implements EventSubscriberInterface
      */
     public function blame(AnswerEvent $event)
     {
-        $question = $event->getAnswer();
+        /** @var Answer $answer */
+        $answer = $event->getAnswer();
 
-        if (!$question instanceof SignedInterface) {
+        if (!$answer instanceof SignedInterface) {
             if ($this->logger) {
                 $this->logger->debug("Comment does not implement SignedInterface, skipping");
             }
@@ -79,9 +81,13 @@ class AnswerBlamerListener implements EventSubscriberInterface
             return;
         }
 
-        if (null === $question->getAuthor() && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $question->setAuthor($this->tokenStorage->getToken()->getUser());
+        if (null === $answer->getAuthor() && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $answer->setAuthor($this->tokenStorage->getToken()->getUser());
         }
+        if (null === $answer->isAccepted()) {
+            $answer->setAccepted(false);
+        }
+
     }
 
     /**

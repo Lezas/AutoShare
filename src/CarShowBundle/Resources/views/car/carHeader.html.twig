@@ -1,0 +1,10 @@
+<div class="header-bg"
+     style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
+
+    <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
+        <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
+        <p style="color: white; padding: 0; margin: 1px">By <a style="color: white;"
+                                                               href="{{ path('user_profile_main', {'username' : auto.user.username}) }}">{{ auto.user.username }}</a>
+        </p>
+    </div>
+</div>

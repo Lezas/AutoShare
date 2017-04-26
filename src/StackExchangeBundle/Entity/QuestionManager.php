@@ -15,6 +15,7 @@ use StackExchangeBundle\Event\QuestionEvent;
 use StackExchangeBundle\Events;
 use StackExchangeBundle\Model\QuestionManager as BaseQuestionManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class QuestionManager extends BaseQuestionManager
 {
@@ -52,17 +53,6 @@ class QuestionManager extends BaseQuestionManager
     }
 
     /**
-     * Finds one comment thread by the given criteria
-     *
-     * @param  array           $criteria
-     * @return Question
-     */
-    public function findQuestionBy(array $criteria)
-    {
-        return $this->repository->findOneBy($criteria);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function findQuestionsBy(array $criteria)
@@ -71,13 +61,43 @@ class QuestionManager extends BaseQuestionManager
     }
 
     /**
-     * @param  string          $id
+     * @param  string $id
      * @return Question
      *
      */
     public function findQuestionById($id)
     {
         return $this->findQuestionBy(array('id' => $id));
+    }
+
+    /**
+     * Finds one comment thread by the given criteria
+     *
+     * @param  array $criteria
+     * @return Question
+     */
+    public function findQuestionBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
+    }
+
+    public function findOneWeekQuestions($amount = null)
+    {
+        $date = (new \DateTime())->modify('-7 day');
+        $qb = $this->repository->createQueryBuilder('q')
+            ->addSelect('q.createdAt as HIDDEN time')
+            ->addSelect('q.title as HIDDEN title')
+            ->addSelect('q.score as HIDDEN score')
+            ->where($this->repository->createQueryBuilder('q')->expr()->gte('q.createdAt', ':date_from'))
+            ->setParameter('date_from',$date)
+            ->addOrderBy('q.score');
+
+        if (null != $amount && is_int($amount)) {
+            $qb->setMaxResults($amount);
+        }
+
+        return $qb->getQuery()->getResult();
+
     }
 
     /**
@@ -106,19 +126,6 @@ class QuestionManager extends BaseQuestionManager
     public function getClass()
     {
         return $this->class;
-    }
-
-
-
-    /**
-     * Saves Question
-     *
-     * @param Question $question
-     */
-    protected function doSaveQuestion(Question $question)
-    {
-        $this->em->persist($question);
-        $this->em->flush();
     }
 
     public function setQuestionToAnswered(Question $question, Answer $answer)
@@ -161,16 +168,50 @@ class QuestionManager extends BaseQuestionManager
         //TODO
 
         //check if tag is not already in list
-            //add it
-            //call tagManager to add question
+        //add it
+        //call tagManager to add question
     }
 
     public function removeTag(Question $question, Tag $tag)
     {
         //TODO
         //check if tag is on the list
-            //remove it
-            //call TagManager to remove question from tag
+        //remove it
+        //call TagManager to remove question from tag
+    }
+
+    /**
+     * Saves Question
+     *
+     * @param Question $question
+     */
+    protected function doSaveQuestion(Question $question)
+    {
+        $this->em->persist($question);
+        $this->em->flush();
+    }
+
+    public function findSimilarQuestionsByTags(Question $question, $amount = null)
+    {
+        $tags = $question->getTags();
+        $qb = $this->repository->createQueryBuilder('q')
+            ->addSelect('q.createdAt as HIDDEN time')
+            ->addSelect('q.title as HIDDEN title')
+            ->addSelect('q.score as HIDDEN score')
+            ->join('q.tags', 't')
+            ->addSelect('t')
+            ->where("t in (:tags)")
+            ->andWhere('q.id != :id')
+            ->setParameter('id',$question->getId())
+            ->setParameter('tags',$tags)
+            ->addOrderBy('q.createdAt')
+        ;
+
+        if (null != $amount && is_int($amount)) {
+            $qb->setMaxResults($amount);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 }

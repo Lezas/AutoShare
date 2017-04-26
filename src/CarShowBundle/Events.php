@@ -80,5 +80,15 @@ final class Events
      */
     const CAR_CREATE = 'car_show.car.create';
 
+    const POST_CREATE = 'car_show.post.create';
+
+    const POST_PRE_PERSIST = 'car_show.post.pre_persist';
+
+    const POST_POST_PERSIST = 'car_show.post.post_persist';
+
+    const POST_DELETE = 'car_show.post.delete';
+
+
+
 
 }

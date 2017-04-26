@@ -4,6 +4,8 @@
 
 
     {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : auto} %}
+    <h3>Other Posts</h3>
+    {% include '@CarShow/widget/carPostsWidget.html.twig' with {'posts' : sidePosts} %}
 
     {{ parent() }}
 {% endblock %}

@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class UserProfileController extends Controller
 {
     /**
-     * @Route("/profile/{username}", name="user_profile_main")
+     * @Route("/user/{username}", name="user_profile_main")
      * @param null $username
      * @return \Symfony\Component\HttpFoundation\Response
      */

@@ -18,7 +18,10 @@ class QuestionDeleteListener implements EventSubscriberInterface
 
     public function setDeleted(QuestionEvent $event)
     {
+
         $question = $event->getQuestion();
+
+
 
         if ($question->isDeleted() == null) {
             $question->setDeleted(false);

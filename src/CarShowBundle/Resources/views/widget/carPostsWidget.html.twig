@@ -1,0 +1,11 @@
+<ul class="list-group">
+{% for post in posts %}
+
+            <li class="list-group-item"><a href="{{ path('car_show_get_car_post', {'postId' : post.id}) }}">
+                    {{ post.title }}
+                </a>
+                <p class="blog-post-meta">{{ post.date | date("Y-m-d") }}</p>
+            </li>
+
+{% endfor %}
+</ul>

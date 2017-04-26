@@ -63,8 +63,13 @@ class QuestionController extends Controller
         $questionManager = $this->get('stack_exchange.manager.question');
         $question = $questionManager->findQuestionById($id);
 
-        return $this->render('StackExchangeBundle:Question:question_page.html.twig',
-            ['question' => $question]
+        $relatedQuestions = $questionManager->findSimilarQuestionsByTags($question);
+
+
+        return $this->render('StackExchangeBundle:Question:question_page.html.twig', [
+                'question' => $question,
+                'relatedQuestions' => $relatedQuestions,
+            ]
         );
     }
 
@@ -77,6 +82,8 @@ class QuestionController extends Controller
     {
         $questionManager = $this->get('stack_exchange.manager.question');
         $question = $questionManager->findAllQuestion();
+
+        $thisWeekQuestions = $questionManager->findOneWeekQuestions(10);
 
         $em = $this->get('doctrine.orm.entity_manager');
 
@@ -94,13 +101,14 @@ class QuestionController extends Controller
             $query,
             $request->query->getInt('page', 1),
             $request->query->getInt('limit', 10),/*limit per page*/
-            [
-                'p.createdAt' => 'time'
-            ]
+
+            array('defaultSortFieldName' => 'time', 'defaultSortDirection' => 'desc')
+
         );
 
         return $this->render('StackExchangeBundle:Question:questions_main.html.twig',
             [
+                'weekQuestions' => $thisWeekQuestions,
                 'questions' => $question,
                 'pagination' => $pagination,
             ]

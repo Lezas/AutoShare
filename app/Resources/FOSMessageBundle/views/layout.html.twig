@@ -1,12 +1,27 @@
-{% extends '::base.html.twig'  %}
+{% extends '::base.html.twig' %}
+
+{% block sidepanel %}
+
+    <h1>{% trans from 'FOSMessageBundle' %}messenger{% endtrans %}</h1>
+
+    <ul class="list-group">
+        <a href="{{ url('fos_message_inbox') }}"
+           class="list-group-item{% if app.request.requestUri == path('fos_message_inbox') %} active {% endif %}">
+            {% trans from 'FOSMessageBundle' %}inbox{% endtrans %}
+        </a>
+        <a href="{{ url('fos_message_sent') }}"
+           class="list-group-item{% if app.request.requestUri == path('fos_message_sent') %} active {% endif %}">
+            {% trans from 'FOSMessageBundle' %}sent{% endtrans %}
+        </a>
+        <a href="{{ url('fos_message_deleted') }}"
+           class="list-group-item{% if app.request.requestUri == path('fos_message_deleted') %} active {% endif %}">
+            {% trans from 'FOSMessageBundle' %}deleted{% endtrans %}
+        </a>
+    </ul>
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
-        <h1>{% trans from 'FOSMessageBundle' %}messenger{% endtrans %}</h1>
 
-        <ul>
-            <li><a href="{{ url('fos_message_inbox') }}">{% trans from 'FOSMessageBundle' %}inbox{% endtrans %}</a></li>
-            <li><a href="{{ url('fos_message_sent') }}">{% trans from 'FOSMessageBundle' %}sent{% endtrans %}</a></li>
-            <li><a href="{{ url('fos_message_deleted') }}">{% trans from 'FOSMessageBundle' %}deleted{% endtrans %}</a></li>
-        </ul>
-        {% block fos_message_content %}{% endblock %}
+    {% block fos_message_content %}{% endblock %}
 {% endblock %}

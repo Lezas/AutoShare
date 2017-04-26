@@ -1,7 +1,20 @@
 {% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block sidepanel %}
+    <br>
+    {% include  '@StackExchange/widgets/backToMainQuestionsPage.html.twig' %}
+    <h3>Similar Questions</h3>
+    {% include '@StackExchange/widgets/simillarQuestions.twig' with {'questions' : relatedQuestions} %}
+
+    {{ parent() }}
+{% endblock %}
 {% block body %}
 
-    {% include '@StackExchange/Question/question_body.html.twig' with {'question' : question} %}
+    {% include '@StackExchange/Question/question_body.html.twig' with {'question' : question  } %}
     <hr>
     <h3>Answers</h3>
     {% for answer in question.answers %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/Auto/css/autoblog.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Comments/css/comments.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/jgallery.min.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block sidepanel %}
+
+    {% if car is defined %}
+        <br>
+        {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : car} %}
+        <hr>
+        {% include '@CarShow/widget/carMenu.html.twig' with {'car' : car} %}
+
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    {% include '@CarShow/car/carHeader.html.twig' with {'auto' : car } %}
+    <div class="container-fluid">
+        <div class="h2">Make Car Private?</div>
+        <p>Are you sure you want to make this car private? </p>
+        <p>Other users won't be able to see this car</p>
+
+        {{ form_start(form, { 'attr' : {'class' : 'form'}}) }}
+
+        <div class="form-group col-xs-6">
+            {{ form_label(form.yes) }}
+            {{ form_widget(form.yes, { 'attr' : { 'class' : 'btn btn-danger btn-block'}  }) }}
+        </div>
+        <div class="form-group col-xs-6">
+            {{ form_label(form.no) }}
+            {{ form_widget(form.no, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+
+{% endblock %}

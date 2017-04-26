@@ -38,43 +38,35 @@
 
     <h1>You garage</h1>
     <hr>
-    {% for auto in ownedAutos %}
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <div class="panel panel-default clickable">
-                <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}"/>
-                <div class="panel-body ">
+    <div class="row">
+        {% for auto in ownedAutos %}
+            {% if auto.deleted != true %}
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="car-cover"
+                             style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
+                        </div>
+                        <div class="panel-body ">
+                            <h4 style="margin-top: 0">
+                                <a href="{{ path('car_show_get_car', {'id' : auto.getId}) }}">
+                                    {{ auto.year | date("Y") }} {{ auto.brand }} {{ auto.model|e }}
+                                </a>
+                            </h4>
 
-                    <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
-
-                    <a href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+                            {% if auto.private %}
+                                <p><b>Private Mode</b></p>
+                            {% else %}
+                                <br>
+                            {% endif %}
+                            <p>{{ auto.images | length }} Pictures | {{ auto.posts | length }} Posts</p>
+                            <p>Liked {{ auto.likedUsersCount }} | Subscribed {{ auto.FavoritedUsersCount }}</p>
+                        </div>
+                    </div>
                 </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 
-            </div>
-            <div class="add-service-history">
-                <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Service
-                </a>
-            </div>
-            <div class="edit-car">
-                <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}" class="btn btn-default btn-sm ">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </a>
-            </div>
-            <div class="add-post-button">
-                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Post
-                </a>
-            </div>
-            <div class="add-fuel-consumption">
-                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                    <span class="glyphicon glyphicon-road"></span>
-
-                </a>
-            </div>
-        </div>
-    {% endfor %}
 
 {% endblock %}
 

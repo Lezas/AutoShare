@@ -1,4 +1,10 @@
 <div class="row">
+    <div class="col-md-10 offset-md-1">
+        <h2>{{ question.title }}</h2>
+    </div>
+
+</div>
+<div class="row">
     <div class="col-sm-1 se_question_vote_container">
         <div class="row">
             <div class="text-center ">
@@ -24,9 +30,7 @@
         </div>
     </div>
     <div class="col-sm-11">
-        <div class="row">
-            <h3>{{ question.title }}</h3>
-        </div>
+
 
         <div class="row">
             {{ question.text | raw }}
@@ -50,7 +54,8 @@
                          alt="{{ question.author.username }}"
                     >
                 {% else %}
-                    <img width="30" height="30" src="{{ question.author.photo }}" alt="{{ question.author.username }}"
+
+                    <img width="30" height="30" src="{% path question.author.photo, 'big' %}" alt="{{ question.author.username }}"
                     >
                 {% endif %}
                 <a href="{{ path('user_profile_main', {'username' : question.author}) }}">{{ question.author }}</a>

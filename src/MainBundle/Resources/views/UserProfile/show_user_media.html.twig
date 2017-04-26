@@ -3,14 +3,19 @@
         <li class="active">
             <a href="#cars" data-toggle="tab">Cars</a>
         </li>
+        {% if user.questions|length > 0 %}
         <li><a href="#questions" data-toggle="tab">Questions</a>
         </li>
+        {% endif %}
+        {% if user.pages|length > 0 %}
         <li><a href="#pages" data-toggle="tab">Pages</a>
         </li>
+        {% endif %}
     </ul>
 
     <div class="tab-content ">
         <div class="tab-pane active" id="cars">
+            <div class="profile-data-div">
             {% for auto in user.cars %}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <div class="panel panel-default clickable">
@@ -23,37 +28,41 @@
                         </div>
 
                     </div>
-                    {% if app.user.id == user.id %}
+                    {% if app.user %}
+                        {% if app.user.id == user.id %}
 
 
-                        <div class="add-service-history">
-                            <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                Service
-                            </a>
-                        </div>
-                        <div class="edit-car">
-                            <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}"
-                               class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
-                        </div>
-                        <div class="add-post-button">
-                            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                Post
-                            </a>
-                        </div>
-                        <div class="add-fuel-consumption">
-                            <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                <span class="glyphicon glyphicon-road"></span>
+                            <div class="add-service-history">
+                                <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    Service
+                                </a>
+                            </div>
+                            <div class="edit-car">
+                                <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}"
+                                   class="btn btn-default btn-sm ">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            </div>
+                            <div class="add-post-button">
+                                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    Post
+                                </a>
+                            </div>
+                            <div class="add-fuel-consumption">
+                                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
+                                    <span class="glyphicon glyphicon-road"></span>
 
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endfor %}
+            </div>
         </div>
+        {% if user.questions|length > 0 %}
         <div class="tab-pane" id="questions">
             {% if user.questions|length == 0 %}
                 There are no questions
@@ -77,10 +86,13 @@
                 {% endfor %}
             {% endif %}
         </div>
+        {% endif %}
+        {% if user.pages|length > 0 %}
         <div class="tab-pane" id="pages">
             {% for page in user.pages %}
                 {{ page.id }}
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 </div>

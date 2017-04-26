@@ -1,70 +1,161 @@
-{% extends 'base.html.twig'  %}
+{% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/main/css/index.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block sidepanel %}
+    <div>
+        <hr>
+        <h4 class="text-center">Most Popular Cars</h4>
+        <ul class="list-group">
+            {% for car in popularCars %}
+                    <a class="list-group-item borderless" href="{{ path('car_show_get_car', {'id' : car.getId}) }}">
+                        <img height="30px" width="40px" src="{% path car.mainPhoto, 'small' %}" alt="">
+                        {{ car.year | date("Y") }} {{ car.brand }} {{ car.model|e }}
+                    </a>
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+    <hr>
+    <div>
+        <h4 class="text-center">Newly arrived cars</h4>
+        <ul class="list-group">
+            {% for car in newestCars %}
+                <a class="list-group-item borderless" href="{{ path('car_show_get_car', {'id' : car.getId}) }}">
+                    <img height="30px" width="40px" src="{% path car.mainPhoto, 'small' %}" alt="">
+                    {{ car.year | date("Y") }} {{ car.brand }} {{ car.model|e }}
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {{ parent() }}
 {% endblock %}
 
 {% block body %}
 
     <div class="row">
-        {% for auto in ownedAutos %}
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <div class="panel panel-default clickable">
-                <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}" />
-                <div class="panel-body ">
-
-                        <h4>{{ auto.year | date("Y") }} {{ auto.brand }} {{ auto.model|e }}</h4>
-                        <p>by <b><a href="{{ path('user_profile_main', {'username' : auto.getUser.getUsername}) }}"></a>{{ auto.getUser.getUsername |e }}</b></p>
-                        <a  href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+        <div class="col-md-3 col-sm-12">
+            <h1 style="font-weight: 600; font-size: 60px;">CARS</h1>
+        </div>
+        <div class="col-md-9 col-sm-12 ">
+            <div class="force-to-bottom" >
+            <div class="input-group ">
+                <input type="text" id="search_field_Search" name="search_field[Search]" required="required"
+                       class="form-control" placeholder="Search for cars, models, engines">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i
+                                class="glyphicon glyphicon-search"></i></button>
                 </div>
             </div>
-            {% if app.user %}
-                <div class="car-block-menu">
-                    {% if auto.autoFavorited(app.user) %}
-                        <div class="favorite-controller">
-                            <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
-                                <span class="glyphicon glyphicon-star"></span>
-                            </div>
-                            <div class="favorite-btn favorite-add btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="favorite-controller">
-                            <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed hidden" data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
-                                <span class="glyphicon glyphicon-star"></span>
-                            </div>
-                            <div class="favorite-btn favorite-add btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% if auto.autoLiked(app.user) %}
-                        <div class="like-controller">
-                            <div class="like-btn unlike btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('unlike_this') }}">
-                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up liked"></span>
-                            </div>
-                            <div class="like-btn like btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('like_this') }}">
-                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up"></span>
-
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="like-controller">
-                            <div class="like-btn unlike btn btn-default btn-sm hidden" data-id="{{ auto.id }}" data-url="{{ url('unlike_this') }}">
-                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up liked"></span>
-                            </div>
-                            <div class="like-btn like btn btn-default btn-sm" data-id="{{ auto.id }}" data-url="{{ url('like_this') }}">
-                                <p class="like-count">{{ auto.likedUsersCount }}</p><span class="glyphicon glyphicon-thumbs-up"></span>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-
         </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li><a class="sortable" style="color: #0a0a0a"><b>Sort By:</b></a></li>
+            <li {% if pagination.isSorted('createdAt') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Creation Date', 'createdAt', {'defaultDirection' : 'desc'}) }}
+            </li>
+            <li {% if pagination.isSorted('updatedAt') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Recent Update', 'updatedAt', {'defaultDirection' : 'desc'}) }}</li>
+            <li {% if pagination.isSorted('postAmount') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Article ammount', 'postAmount', {'defaultDirection' : 'desc'}) }}</li>
+            <li {% if pagination.isSorted('imgAmount') %} class="active"{% endif %}>{{ knp_pagination_sortable(pagination, 'Image ammount', 'imgAmount', {'defaultDirection' : 'desc'}) }}</li>
+
+        </ul>
+
+    </div>
+    <hr style="margin: 5px">
+    <div class="row">
+        {% for auto in pagination %}
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <div class="panel panel-default">
+                    <div class="car-cover"
+                         style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
+                    </div>
+                    <div class="panel-body ">
+                        <h4 style="margin-top: 0">
+                            <a href="{{ path('car_show_get_car', {'id' : auto.getId}) }}">
+                                {{ auto.year | date("Y") }} {{ auto.brand }} {{ auto.model|e }}
+                            </a>
+                        </h4>
+                        <p>
+                            <a href="{{ path('user_profile_main', {'username' : auto.getUser.getUsername}) }}">@{{ auto.getUser.getUsername |e }}</a>
+                            <br>
+                            {{ auto.images | length }} Pictures | {{ auto.posts | length }} Posts
+                        </p>
+
+                    </div>
+                </div>
+                {% if app.user %}
+                    <div class="car-block-menu">
+                        {% if auto.autoFavorited(app.user) %}
+                            <div class="favorite-controller">
+                                <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed"
+                                     data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </div>
+                                <div class="favorite-btn favorite-add btn btn-default btn-sm hidden"
+                                     data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="favorite-controller">
+                                <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed hidden"
+                                     data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </div>
+                                <div class="favorite-btn favorite-add btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('add_to_favorites') }}">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if auto.autoLiked(app.user) %}
+                            <div class="like-controller">
+                                <div class="like-btn unlike btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('unlike_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up liked"></span>
+                                </div>
+                                <div class="like-btn like btn btn-default btn-sm hidden" data-id="{{ auto.id }}"
+                                     data-url="{{ url('like_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up"></span>
+
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="like-controller">
+                                <div class="like-btn unlike btn btn-default btn-sm hidden" data-id="{{ auto.id }}"
+                                     data-url="{{ url('unlike_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up liked"></span>
+                                </div>
+                                <div class="like-btn like btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('like_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up"></span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            </div>
         {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(pagination, 'StackExchangeBundle::pagination.html.twig') }}
+        </div>
     </div>
 {% endblock %}
 
@@ -75,7 +166,7 @@
 
 
     <script type="text/javascript">
-        $('.collapse-btn').click(function(){
+        $('.collapse-btn').click(function () {
             $(this).siblings('.carInfo').toggleClass('collapse');
         });
     </script>

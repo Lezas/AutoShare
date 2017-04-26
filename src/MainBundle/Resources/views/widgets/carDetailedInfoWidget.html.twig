@@ -1,9 +1,6 @@
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h4>{{ car.brand|e }} {{ car.model|e }}</h4>
+
+        <h3 >{{ car.brand|e }} {{ car.model|e }}</h3>
         Owner: <a href="{{ path('user_profile_main', {'username' :  car.user.username }) }}">{{ car.user.username }}</a><br>
         Powertrain: {{ car.powertrain }}<br>
         Fuel type: {{ car.fueltype }}<br>
 
-    </div>
-</div>

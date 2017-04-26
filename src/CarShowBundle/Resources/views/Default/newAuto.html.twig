@@ -1,4 +1,22 @@
-{% extends 'base.html.twig'  %}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
+
+{% block sidepanel %}
+
+    {% if car is defined %}
+        <br>
+        {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : car} %}
+        <hr>
+        {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : car } %}
+        <hr>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
 {% block body %}
     <div class="container-fluid">
         <div class="h2">{{ title }}</div>
@@ -7,19 +25,19 @@
             {{ form_label(form.brand,'Brand', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.brand) }}
             <div class="col-sm-10">
-            {{ form_widget(form.brand, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.brand, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.model,'Model', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.model,'Model', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.model) }}
             <div class="col-sm-10">
-            {{ form_widget(form.model, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.model, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
 
         <div class="form-group">
-            {{ form_label(form.year,'Date', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.year,'Date', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             <div class="col-sm-10">
                 <div class="input-group" id="time_input">
                     {{ form_widget(form.year, { 'attr' : {'class' : 'form-control' } }) }}
@@ -28,52 +46,59 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.bodyType,'Body Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.bodyType,'Body Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.bodyType) }}
             <div class="col-sm-10">
-            {{ form_widget(form.bodyType, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.bodyType, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.powertrain,'Power Train', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.power,'Power in kilowatts', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_errors(form.power) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.power, { 'attr' : { 'class' : 'form-control'}  }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.powertrain,'Power Train', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.powertrain) }}
             <div class="col-sm-10">
-            {{ form_widget(form.powertrain, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.powertrain, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.engineCapacity,'Engine Capacity in liters', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.engineCapacity,'Engine Capacity in liters', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.engineCapacity) }}
             <div class="col-sm-10">
-            {{ form_widget(form.engineCapacity, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.engineCapacity, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.fuelType,'Fuel Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.fuelType,'Fuel Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.fuelType) }}
             <div class="col-sm-10">
-            {{ form_widget(form.fuelType, { 'attr' : { 'class' : 'form-control'}  }) }}
+                {{ form_widget(form.fuelType, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.foto,'Foto of your car', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.foto,'Foto of your car', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.foto) }}
             <div class="col-sm-10">
-            {{ form_widget(form.foto) }}
+                {{ form_widget(form.foto) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.private,'Is your car private?', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  })  }}
+            {{ form_label(form.private,'Is your car private?', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.private) }}
             <div class="col-sm-10">
                 {{ form_widget(form.private) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.additionalInfo,'Aditional Info')  }}
+            {{ form_label(form.additionalInfo,'Aditional Info') }}
             {{ form_errors(form.additionalInfo) }}
             <div class="col-sm-12">
-            {{ form_widget(form.additionalInfo, { 'attr' : { 'class' : 'tinymce'}  }) }}
+                {{ form_widget(form.additionalInfo, { 'attr' : { 'class' : 'tinymce'}  }) }}
             </div>
         </div>
 
@@ -81,16 +106,13 @@
             {{ form_label(form.submit) }}
             {{ form_widget(form.submit, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
         </div>
-        {{ form_row(form.images.vars.prototype) }}
-        {{ form_errors(form.images) }}
-        {{ form_label(form.images) }}
-        {{ form_widget(form.images) }}
+
         {{ form_end(form) }}
     </div>
 {% endblock body %}
 
 {% block javascripts %}
-    <script src="{{asset('bundles/Auto/js/datePicker.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/Auto/js/datePicker.js') }}" type="text/javascript"></script>
 
     <script type="text/javascript" src="{{ asset('bundles/stfalcontinymce/vendor/tinymce/tinymce.min.js') }}"></script>
     <script type="text/javascript">

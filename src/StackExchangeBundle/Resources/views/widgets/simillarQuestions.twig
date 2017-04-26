@@ -1,0 +1,15 @@
+<ul class="list-group">
+    {% for question in questions %}
+        <li class="list-group-item">
+            <div class="inline" style="display:inline; padding: 2px 10px 2px 10px; background-color:
+            {% if question.answered %}
+
+            {% else %}
+                    rgb(0,225,217)
+            {% endif %}
+                    "><b>{{ question.score }}</b></div>
+            <a href="{{ path('question', {'id' : question.id}) }}">{{ question.title }}</a>
+        </li>
+    {% endfor %}
+
+</ul>

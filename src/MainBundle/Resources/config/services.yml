@@ -1,6 +1,11 @@
 services:
-#    main.example:
-#        class: MainBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    main.form.registration:
+        class: MainBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
 
+    main.form.edit_profile:
+        class: MainBundle\Form\ProfileFormType
+        tags:
+            - { name: form.type, alias: main_user_profile }
 

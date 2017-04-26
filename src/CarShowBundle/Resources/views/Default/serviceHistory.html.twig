@@ -1,85 +1,97 @@
-{% extends 'base.html.twig'  %}
+{% extends 'base.html.twig' %}
 {% block stylesheets %}
-    <link href="{{asset('bundles/Auto/css/autoblog.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{asset('bundles/Comments/css/comments.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Auto/css/autoblog.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Auto/css/index.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/Comments/css/comments.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('bundles/jGallery-1.6.1/css/jgallery.min.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
+{% block sidepanel %}
+
+    <br>
+    {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : auto} %}
+    <hr>
+    {% include '@CarShow/widget/carMenu.html.twig' with {'car' : auto} %}
+    <hr>
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
 
     {# Blog head#}
-    <div class="header-bg" style="background: url({{ asset('uploads/foto/' ~ auto.foto) }}); background-size: cover; background-position: center">
+    {% include '@CarShow/car/carHeader.html.twig' with {'auto' : auto } %}
+    <h3>Service History</h3>
+    <p>Document you car service history. That way you will never forget when and what has been done to your car</p>
+    <div>
+        {{ form_start(form, { 'attr' : {'class' : 'form'}}) }}
 
-        <div class="pull-down pull-left" style="padding: 0 20px 0 20px; background: darkorange;">
-            <h2 style="color: white; padding: 0; margin: 1px">{{ auto.year | date('Y') }} {{ auto.brand }} {{ auto.model }} </h2>
+        <div class="form-group col-sm-4">
+            {{ form_label(form.mileage,'Mileage') }}
+            {{ form_errors(form.mileage) }}
+
+            {{ form_widget(form.mileage, { 'attr' : { 'class' : 'form-control'}  }) }}
+
         </div>
+        <div class="form-group col-sm-8">
+            {{ form_label(form.date,'Service date') }}
+
+            <div class="input-group" id="time_input">
+                {{ form_widget(form.date, { 'attr' : {'class' : 'form-control' } }) }}
+            </div>
+
+        </div>
+
+        <div class="form-group col-xs-12">
+            {{ form_label(form.text,'Info', { 'label_attr' : { 'class' : 'control-label'}  }) }}
+            {{ form_errors(form.text) }}
+            {{ form_widget(form.text, { 'attr' : {'class' : 'form-control' } }) }}
+        </div>
+
+        <div class="form-group col-xs-12">
+            {{ form_label(form.submit) }}
+            {{ form_widget(form.submit, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
+        </div>
+        {{ form_end(form) }}
 
     </div>
-    ---------------
 
-
-
-        <div class="container-fluid">
-            {{ form_start(form, { 'attr' : {'class' : 'form-inline'}}) }}
-
-            <div class="form-group">
-                {{ form_label(form.mileage,'Mileage')  }}
-                {{ form_errors(form.mileage) }}
-
-                    {{ form_widget(form.mileage, { 'attr' : { 'class' : 'form-control'}  }) }}
-
-            </div>
-            <div class="form-group">
-                {{ form_label(form.date,'Service date')  }}
-
-                    <div class="input-group" id="time_input">
-                        {{ form_widget(form.date, { 'attr' : {'class' : 'form-control' } }) }}
-                    </div>
-
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.text,'Info', { 'label_attr' : { 'class' : 'control-label'}  })  }}
-                {{ form_errors(form.text) }}
-                {{ form_widget(form.text) }}
-
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.submit) }}
-                {{ form_widget(form.submit, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
-            </div>
-            {{ form_end(form) }}
-        </div>
-
-<table class="table table-striped table-bordered">
-    <thead>
+    <table class="table table-striped table-bordered">
+        <thead>
         <tr>
             <th></th>
             <th>Mileage and date</th>
             <th>Info</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for history in serviceHistory %}
-        <tr>
-            <td class="col-md-1">
-                    <a href="{{ path('car_history_edit', { 'serviceHistory': history.id, 'carId' : auto.id }) }}" class="btn btn-default btn-xs ">
+        </thead>
+        <tbody>
+        {% for history in serviceHistory %}
+            <tr>
+                <td class="col-md-1">
+                    <a href="{{ path('car_history_edit', { 'serviceHistory': history.id, 'carId' : auto.id }) }}"
+                       class="btn btn-default btn-xs ">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a href="{{ path('car_history_remove', { 'serviceHistory': history.id}) }}" class="btn btn-default btn-xs ">
+                    <a href="{{ path('car_history_remove', { 'serviceHistory': history.id}) }}"
+                       class="btn btn-default btn-xs ">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
-            </td>
-            <td class="col-md-2">
-                {{ history.mileage }}<br>
-                {{ history.date | date("Y-m-d") }}
-            </td>
-            <td class="col-md-9">
-                {{ history.text }}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+                </td>
+                <td class="col-md-2">
+                    {{ history.mileage }}<br>
+                    {{ history.date | date("Y-m-d") }}
+                </td>
+                <td class="col-md-9">
+                    {{ history.text }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock body %}
 
+{% block javascripts %}
+
+{% endblock %}

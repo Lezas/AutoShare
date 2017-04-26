@@ -26,7 +26,7 @@ class CarEvent extends Event
     /**
      * @return CarInterface
      */
-    public function getAnswer()
+    public function getCar()
     {
         return $this->car;
     }
