@@ -76,13 +76,19 @@ class CommentController extends FOSRestController
         $form->setData($comment);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && !empty($comment->getBody())) {
 
             $comment->setAuthor($user);
             $commentManager->saveComment($comment);
 
             return $this->getViewHandler()->handle($this->onCreateCommentSuccess($form, $id));
         }
+
+        $this->addFlash(
+            'notice',
+            'Comment must contain text!'
+        );
+        return $this->redirectToRoute('question', ['id' => $id]);
 
         return $this->getViewHandler()->handle($this->onCreateCommentError($form, $id));
     }
@@ -114,13 +120,19 @@ class CommentController extends FOSRestController
         $form->setData($comment);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && !empty($comment->getBody())) {
 
             $comment->setAuthor($user);
             $commentManager->saveComment($comment);
 
             return $this->getViewHandler()->handle($this->onCreateCommentSuccess($form, $questionId));
         }
+
+        $this->addFlash(
+            'notice',
+            'Comment must contain text!'
+        );
+        return $this->redirectToRoute('question', ['id' => $id]);
 
         return $this->getViewHandler()->handle($this->onCreateCommentError($form, $questionId));
     }
@@ -182,12 +194,18 @@ class CommentController extends FOSRestController
         $form->setData($comment);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && !empty($comment->getBody())) {
 
             $commentManager->saveComment($comment);
 
             return $this->getViewHandler()->handle($this->onCreateCommentSuccess($form, $answer->getQuestion()->getId()));
         }
+
+        $this->addFlash(
+            'notice',
+            'Comment must contain text!'
+        );
+        return $this->redirectToRoute('question', ['id' => $answer->getQuestion()->getId()]);
 
         return $this->getViewHandler()->handle($this->onCreateCommentError($form, $id));
     }
@@ -219,13 +237,19 @@ class CommentController extends FOSRestController
         $form->setData($comment);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && !empty($comment->getBody())) {
 
             $comment->setAuthor($user);
             $commentManager->saveComment($comment);
 
             return $this->getViewHandler()->handle($this->onCreateCommentSuccess($form, $comment->getAnswer()->getQuestion()->getId()));
         }
+
+        $this->addFlash(
+            'notice',
+            'Comment must contain text!'
+        );
+        return $this->redirectToRoute('question', ['id' => $answer->getQuestion()->getId()]);
 
         $view = View::create()
             ->setData(array(

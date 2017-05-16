@@ -5,3 +5,30 @@ search : Search
 page_main_title : Some Kind Of Title
 edit : edit
 car_show_add_car : Add Car
+widget_name_subscribed: Subscribed
+widget_name_most_popular_cars: Most Popular Cars
+widget_name_new_arrived_cars: Newly arrived cars
+title_cars: CARS
+search_for_cars_placeholder: Search for cars, models, engines
+search_everywhere_placeholder: Search everywhere
+sort_by: Sort By
+sort_by_date: Creation Date
+sort_by_update: Recent Update
+sort_by_post_ammount: Article ammount
+sort_by_image_quantity: Image ammount
+photo_many: Photos
+photo_one: Photo
+post_many: Posts
+post_one: Post
+garage: Garage
+messages: Messages
+your_profile: Your Profile
+log_out: Log Out
+main_tab_name_Cars: Cars
+main_tab_name_Questions: Quesitons
+main_car_box_service: Service
+main_car_box_post: Post
+main_profile_send_message: Send message
+main_profile_modify: Modify
+main_profile_modify_general: General
+main_profile_modify_change_password: Change Password

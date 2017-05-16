@@ -4,6 +4,8 @@ namespace CarShowBundle\Controller;
 
 use Application\Sonata\MediaBundle\Entity\Media;
 use CarShowBundle\Entity\Car;
+use CarShowBundle\Event\CarEvent;
+use CarShowBundle\Events;
 use CarShowBundle\Form\Type\AutoType;
 use CarShowBundle\Form\Type\PictureSelectType;
 use CarShowBundle\Form\Type\PicturesType;
@@ -47,22 +49,24 @@ class CarController extends Controller
             $fotoData = $form->get('foto')->getData();
             $ImagemimeTypes = array('image/jpeg', 'image/png');
 
-            $media = new Media();
-            $media->setContext('default');
-            $media->setBinaryContent($fotoData);
-            if (in_array($fotoData->getMimeType(), $ImagemimeTypes)) {
-                $media->setProviderName('sonata.media.provider.image');
-                $car->addImage($media);
-                $media->setCar($car);
-                $mediaManager->save($media);
-            }
-            $car->setMainPhoto($media);
+            if (null != $fotoData) {
+                $media = new Media();
+                $media->setContext('default');
+                $media->setBinaryContent($fotoData);
+                if (in_array($fotoData->getMimeType(), $ImagemimeTypes)) {
+                    $media->setProviderName('sonata.media.provider.image');
+                    $car->addImage($media);
+                    $media->setCar($car);
+                    $mediaManager->save($media);
+                }
+                $car->setMainPhoto($media);
 
+            }
             $carManager->saveCar($car);
 
             $this->addFlash(
                 'notice',
-                'Your car has been saved!'
+                'Tavo automobilis išsaugotas!'
             );
 
             return $this->redirectToRoute('car_show_get_car', ['id' => $car->getId()]);
@@ -71,7 +75,7 @@ class CarController extends Controller
 
         return $this->render('@CarShow/Default/newAuto.html.twig', [
             'form' => $form->createView(),
-            'title' => 'New Auto'
+            'title' => 'Naujas automobilis'
         ]);
     }
 
@@ -107,7 +111,11 @@ class CarController extends Controller
 
             $car->setUser($user);
 
+            $event = new CarEvent($car);
+            $this->get('event_dispatcher')->dispatch(Events::CAR_PRE_UPDATE, $event);
             $carManager->saveCar($car);
+
+            $this->get('event_dispatcher')->dispatch(Events::CAR_POST_UPDATE, $event);
 
             $this->addFlash(
                 'notice',
@@ -280,8 +288,8 @@ class CarController extends Controller
 
         $user = $this->getUser();
         $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Yes'))
-            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->add('yes', SubmitType::class, array('label' => 'Taip'))
+            ->add('no', SubmitType::class, array('label' => 'Ne'))
             ->getForm();
 
         $form->handleRequest($request);
@@ -292,6 +300,8 @@ class CarController extends Controller
             if ($form->get('yes')->isClicked()) {
                 $car->setDeleted(true);
                 $carManager->saveCar($car);
+                $event = new CarEvent($car);
+                $this->get('event_dispatcher')->dispatch(Events::CAR_DELETE, $event);
                 $this->addFlash(
                     'notice',
                     'Your car has been deleted!'
@@ -335,8 +345,8 @@ class CarController extends Controller
 
         $user = $this->getUser();
         $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Yes'))
-            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->add('yes', SubmitType::class, array('label' => 'Taip'))
+            ->add('no', SubmitType::class, array('label' => 'Ne'))
             ->getForm();
 
         $form->handleRequest($request);
@@ -387,8 +397,8 @@ class CarController extends Controller
 
         $user = $this->getUser();
         $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Yes'))
-            ->add('no', SubmitType::class, array('label' => 'No'))
+            ->add('yes', SubmitType::class, array('label' => 'Taip'))
+            ->add('no', SubmitType::class, array('label' => 'Ne'))
             ->getForm();
 
         $form->handleRequest($request);

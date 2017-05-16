@@ -23,10 +23,10 @@
 {% block body %}
     {% include '@CarShow/car/carHeader.html.twig' with {'auto' : car } %}
     <div class="container-fluid">
-        <div class="h2">Delete Car?</div>
-        <p>Are you sure you want to delete this car? </p>
-        <p>After agreement you won't be able to recover it</p>
-        <p>Maybe it would be better to <b><a href="{{ path('car_show_make_private_car', {'id' : car.id}) }}">make it private</a></b>?</p>
+        <div class="h2">Šalinti automobilį?</div>
+        <p>Ar esate tikras jog norite pašalinti šį automobilį?</p>
+        <p>Po sutikimo nebus galimybės atstatyti automobilio profilio</p>
+        <p> Gal geriau būtų <b><a href="{{ path('car_show_make_private_car', {'id' : car.id}) }}">padaryti atumobilį privatų</a></b>?</p>
 
         {{ form_start(form, { 'attr' : {'class' : 'form'}}) }}
 

@@ -6,7 +6,6 @@ use CarShowBundle\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use MultiBlogBundle\Entity\Page;
 use StackExchangeBundle\Entity\Answer;
 use StackExchangeBundle\Entity\AnswerComment;
 use StackExchangeBundle\Entity\Question;
@@ -60,11 +59,6 @@ class User extends BaseUser implements ParticipantInterface
      */
     protected $questions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="MultiBlogBundle\Entity\Page", mappedBy="author")
-     * @var Page[]|ArrayCollection
-     */
-    protected $pages;
 
     /**
      * @ORM\OneToMany(targetEntity="StackExchangeBundle\Entity\QuestionComment", mappedBy="user")
@@ -87,7 +81,7 @@ class User extends BaseUser implements ParticipantInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -165,6 +159,11 @@ class User extends BaseUser implements ParticipantInterface
         return $this->favorites->contains($auto);
     }
 
+    public function getFavoritedAutos()
+    {
+        return $this->favorites;
+    }
+
 
     public function addAutoToLiked(Car $auto)
     {
@@ -236,21 +235,6 @@ class User extends BaseUser implements ParticipantInterface
         return $this->questions;
     }
 
-    /**
-     * @return ArrayCollection|Page[]
-     */
-    public function getPages()
-    {
-        return $this->pages;
-    }
-
-    /**
-     * @param ArrayCollection|Page[] $pages
-     */
-    public function setPages($pages)
-    {
-        $this->pages = $pages;
-    }
 
     /**
      * @return string

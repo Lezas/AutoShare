@@ -83,7 +83,7 @@ class CarPostController extends Controller
         return $this->render('@CarShow/Default/newPost.html.twig', [
             'form' => $form->createView(),
             'car' => $auto,
-            'title' => 'New Post',
+            'title' => 'Naujas įrašas',
         ]);
     }
 

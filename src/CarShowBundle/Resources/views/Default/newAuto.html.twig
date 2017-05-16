@@ -22,14 +22,14 @@
         <div class="h2">{{ title }}</div>
         {{ form_start(form, { 'attr' : {'class' : 'form-horizontal'}}) }}
         <div class="form-group">
-            {{ form_label(form.brand,'Brand', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.brand,'Markė*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.brand) }}
             <div class="col-sm-10">
                 {{ form_widget(form.brand, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.model,'Model', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.model,'Modelis*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.model) }}
             <div class="col-sm-10">
                 {{ form_widget(form.model, { 'attr' : { 'class' : 'form-control'}  }) }}
@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.year,'Date', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.year,'Pagaminimo data*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             <div class="col-sm-10">
                 <div class="input-group" id="time_input">
                     {{ form_widget(form.year, { 'attr' : {'class' : 'form-control' } }) }}
@@ -46,56 +46,56 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.bodyType,'Body Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.bodyType,'Kebulo tipas*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.bodyType) }}
             <div class="col-sm-10">
                 {{ form_widget(form.bodyType, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.power,'Power in kilowatts', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.power,'Galia (Kw)*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.power) }}
             <div class="col-sm-10">
                 {{ form_widget(form.power, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.powertrain,'Power Train', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.powertrain,'Važiuoklės tipas*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.powertrain) }}
             <div class="col-sm-10">
                 {{ form_widget(form.powertrain, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.engineCapacity,'Engine Capacity in liters', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.engineCapacity,'Variklio tūris (litrais)*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.engineCapacity) }}
             <div class="col-sm-10">
                 {{ form_widget(form.engineCapacity, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.fuelType,'Fuel Type', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.fuelType,'Degalų tipas*', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.fuelType) }}
             <div class="col-sm-10">
                 {{ form_widget(form.fuelType, { 'attr' : { 'class' : 'form-control'}  }) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.foto,'Foto of your car', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.foto,'Tavo automobilio nuotrauka', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.foto) }}
             <div class="col-sm-10">
                 {{ form_widget(form.foto) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.private,'Is your car private?', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+            {{ form_label(form.private,'Ar tavo automobilis privatus?', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
             {{ form_errors(form.private) }}
             <div class="col-sm-10">
                 {{ form_widget(form.private) }}
             </div>
         </div>
         <div class="form-group">
-            {{ form_label(form.additionalInfo,'Aditional Info') }}
+            {{ form_label(form.additionalInfo,'Automobilio aprašymas') }}
             {{ form_errors(form.additionalInfo) }}
             <div class="col-sm-12">
                 {{ form_widget(form.additionalInfo, { 'attr' : { 'class' : 'tinymce'}  }) }}
@@ -103,7 +103,7 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.submit) }}
+            {{ form_label(form.submit, 'saugoti') }}
             {{ form_widget(form.submit, { 'attr' : { 'class' : 'btn btn-success btn-block'}  }) }}
         </div>
 

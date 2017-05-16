@@ -2,6 +2,7 @@
 
 namespace CarShowBundle\Entity;
 
+use CommentBundle\Entity\Thread;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,7 +64,7 @@ class Post
     private $car;
 
     /**
-     * @ORM\OneToOne(targetEntity = "CarShowBundle\Entity\Thread")
+     * @ORM\OneToOne(targetEntity = "CommentBundle\Entity\Thread")
      * @ORM\JoinColumn(name = "thread_id", referencedColumnName = "id")
      * @var Thread
      */
@@ -202,7 +203,7 @@ class Post
     /**
      * Set thread
      *
-     * @param \CarShowBundle\Entity\Thread $thread
+     * @param \CommentBundle\Entity\Thread $thread
      *
      * @return Post
      */
@@ -216,7 +217,7 @@ class Post
     /**
      * Get thread
      *
-     * @return \CarShowBundle\Entity\Thread
+     * @return \CommentBundle\Entity\Thread
      */
     public function getThread()
     {

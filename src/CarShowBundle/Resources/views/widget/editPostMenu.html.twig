@@ -1,0 +1,19 @@
+{% if app.user != null %}
+    {% if app.user.id == car.user.id %}
+        <ul class="nav nav-pills nav-stacked nav-background-upgrade" >
+            <li class="{% if app.request.requestUri == path('editCarPost', {'carId' : car.id, 'postId' : post.id}) %} active {% endif %}">
+                <a href="{{ path('editCarPost', {'carId' : car.id, 'postId' : post.id}) }}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Redaguoti įrašą
+                </a>
+            </li>
+            <li class="{% if app.request.requestUri == path('deleteCarPost', {'carId' : car.id, 'postId' : post.id}) %} active {% endif %}">
+                <a href="{{ path('deleteCarPost', {'carId' : car.id, 'postId' : post.id}) }}">
+                    <span class="glyphicon glyphicon-minus"></span>
+                    Šalinti įrašą
+                </a>
+            </li>
+
+        </ul>
+    {% endif %}
+{% endif %}

@@ -104,3 +104,7 @@ li.borderless {
     border-color: #d0d0d0;
     border-radius: 5px;
 }
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    cursor: pointer;
+}

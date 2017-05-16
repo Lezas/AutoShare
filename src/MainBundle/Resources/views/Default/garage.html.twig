@@ -22,10 +22,10 @@
 
             {% else %}
                 <li class="list-group-item">
-                    <a href="{{ path('fos_user_security_login') }}">Sign up</a>
+                    <a href="{{ path('fos_user_security_login') }}">Prisijungti</a>
                 </li>
                 <li class="list-group-item">
-                    <a href="{{ path('fos_user_registration_register') }}">Registration</a>
+                    <a href="{{ path('fos_user_registration_register') }}">Registracija</a>
                 </li>
             {% endif %}
         </div>
@@ -36,7 +36,7 @@
 
 {% block body %}
 
-    <h1>You garage</h1>
+    <h1>Tavo garažas</h1>
     <hr>
     <div class="row">
         {% for auto in ownedAutos %}
@@ -58,8 +58,26 @@
                             {% else %}
                                 <br>
                             {% endif %}
-                            <p>{{ auto.images | length }} Pictures | {{ auto.posts | length }} Posts</p>
-                            <p>Liked {{ auto.likedUsersCount }} | Subscribed {{ auto.FavoritedUsersCount }}</p>
+
+                            {% set images = auto.images | length %}
+                            {% set photo_many = 'photo_many' | trans %}
+                            {% set photo_one = 'photo_one' | trans %}
+                            {% transchoice images %}
+                            {0} Nėra %photo_many%|{1} %images% Nuotrauka |]1,Inf[ %images% %photo_many%
+                            {% endtranschoice %}
+                            |
+
+                            {% set post_many = 'post_many' | trans %}
+                            {% set post_many_what = 'post_many_what' | trans %}
+                            {% set post_one = 'post_one' | trans %}
+                            {% set post_ammount = auto.posts | length %}
+                            {% transchoice post_ammount %}
+                            {0} Nėra %post_many_what% |
+                            {1} %post_ammount% %post_one% |
+                            ]1,Inf[ %post_ammount% %post_many%
+                            {% endtranschoice %}
+
+                            <p>Patinka {{ auto.likedUsersCount }} | Seka {{ auto.FavoritedUsersCount }}</p>
                         </div>
                     </div>
                 </div>

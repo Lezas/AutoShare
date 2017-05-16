@@ -22,20 +22,20 @@
 
     {# Blog head#}
     {% include '@CarShow/car/carHeader.html.twig' with {'auto' : auto } %}
-    <h3>Service History</h3>
-    <p>Document you car service history. That way you will never forget when and what has been done to your car</p>
+    <h3>Serviso istorija</h3>
+    <p>Saugoma automobilio serviso istorija.</p>
     <div>
         {{ form_start(form, { 'attr' : {'class' : 'form'}}) }}
 
         <div class="form-group col-sm-4">
-            {{ form_label(form.mileage,'Mileage') }}
+            {{ form_label(form.mileage,'Kilometražas') }}
             {{ form_errors(form.mileage) }}
 
             {{ form_widget(form.mileage, { 'attr' : { 'class' : 'form-control'}  }) }}
 
         </div>
         <div class="form-group col-sm-8">
-            {{ form_label(form.date,'Service date') }}
+            {{ form_label(form.date,'Serviso data') }}
 
             <div class="input-group" id="time_input">
                 {{ form_widget(form.date, { 'attr' : {'class' : 'form-control' } }) }}
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group col-xs-12">
-            {{ form_label(form.text,'Info', { 'label_attr' : { 'class' : 'control-label'}  }) }}
+            {{ form_label(form.text,'Informacija', { 'label_attr' : { 'class' : 'control-label'}  }) }}
             {{ form_errors(form.text) }}
             {{ form_widget(form.text, { 'attr' : {'class' : 'form-control' } }) }}
         </div>
@@ -61,8 +61,8 @@
         <thead>
         <tr>
             <th></th>
-            <th>Mileage and date</th>
-            <th>Info</th>
+            <th>Kilometražas ir data</th>
+            <th>Informacija</th>
         </tr>
         </thead>
         <tbody>

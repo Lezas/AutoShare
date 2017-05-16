@@ -33,8 +33,8 @@ class ServiceHistoryType extends AbstractType
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('text', TextareaType::class, ['label' => 'Info about service', 'required' => false])
-            ->add('submit', SubmitType::class, ['label' => 'Save']);
+            ->add('text', TextareaType::class, ['label' => 'Informacija', 'required' => false])
+            ->add('submit', SubmitType::class, ['label' => 'Saugoti']);
     }
 
     public function getName()

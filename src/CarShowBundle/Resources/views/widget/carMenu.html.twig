@@ -4,38 +4,37 @@
             <li class="{% if app.request.requestUri == path('car_history', {'id' : car.id}) %} active {% endif %}">
                 <a href="{{ path('car_history', {'id' : car.id}) }}">
                     <span class="glyphicon glyphicon-road"></span>
-                    Service History
+                    Serviso istorija
                 </a>
             </li>
             <li class="{% if app.request.requestUri == path('newCarPost', {'carId' : car.id}) %} active {% endif %}">
                 <a href="{{ path('newCarPost', {'carId' : car.id}) }}">
                     <span class="glyphicon glyphicon-file"></span>
-                    Add Post
+                    Pridėti įrašą
                 </a>
             </li>
             <li class="{% if app.request.requestUri == path('car_show_add_pictures', {'id' : car.id}) %} active {% endif %}">
                 <a href="{{ path('car_show_add_pictures', {'id' : car.id}) }}">
                     <span class="glyphicon glyphicon-picture"></span>
-                    Add Picture
+                    Pridėti paveikslėlį
                 </a>
             </li>
             <li class="">
                 <a class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-cog"></span>
-                    Edit
+                    Redaguoti
                     <span class="caret"></span>
                 </a>
 
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path('car_show_change_main_picture', {'id' : car.id}) }}">Change Main
-                            Picture</a></li>
-                    <li><a href="{{ path('auto_car_edit', {'id' : car.id}) }}">Edit car Info</a></li>
+                    <li><a href="{{ path('car_show_change_main_picture', {'id' : car.id}) }}">Pakeisti pagrindinį paveikslėlį</a></li>
+                    <li><a href="{{ path('auto_car_edit', {'id' : car.id}) }}">Redaguoti automobilio informaciją</a></li>
                     {% if car.private %}
-                        <li><a href="{{ path('car_show_make_public_car', {'id' : car.id}) }}">Make Public</a></li>
+                        <li><a href="{{ path('car_show_make_public_car', {'id' : car.id}) }}">Padaryti viešą</a></li>
                     {% else %}
-                        <li><a href="{{ path('car_show_make_private_car', {'id' : car.id}) }}">Make Private</a></li>
+                        <li><a href="{{ path('car_show_make_private_car', {'id' : car.id}) }}">Padaryti privatų</a></li>
                     {% endif %}
-                    <li><a href="{{ path('car_show_delete_car', {'id' : car.id}) }}">Delete</a></li>
+                    <li><a href="{{ path('car_show_delete_car', {'id' : car.id}) }}">Ištrinti</a></li>
 
                 </ul>
             </li>

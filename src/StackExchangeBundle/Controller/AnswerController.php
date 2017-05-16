@@ -60,16 +60,19 @@ class AnswerController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && !empty($answer->getText())) {
             if ($answerManager->saveAnswer($answer) !== false) {
 
                 return $this->redirectToRoute('question', ['id' => $questionId]);
             }
         }
 
-        //TODO move to normal method
-        dump($form->getErrors());
-        exit;
+        $this->addFlash(
+            'notice',
+            'Answer must contain text!'
+        );
+        return $this->redirectToRoute('question', ['id' => $questionId]);
+
     }
 
     /**

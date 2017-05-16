@@ -7,7 +7,7 @@
 {% block sidepanel %}
     <br>
     {% include  '@StackExchange/widgets/backToMainQuestionsPage.html.twig' %}
-    <h3>Similar Questions</h3>
+    <h3>{% trans %}se_similar_questions{% endtrans %}</h3>
     {% include '@StackExchange/widgets/simillarQuestions.twig' with {'questions' : relatedQuestions} %}
 
     {{ parent() }}
@@ -22,7 +22,7 @@
         <hr>
     {% endfor %}
 
-    <h3>Submit your answer</h3>
+    <h3>{% trans %}se_submit_your_answer{% endtrans %}</h3>
     {{ render(controller(
     'StackExchangeBundle:Answer:newAnswer',
     { 'questionId': question.id }

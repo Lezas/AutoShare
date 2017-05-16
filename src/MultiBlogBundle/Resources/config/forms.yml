@@ -1,7 +1,0 @@
-services:
-    multi_blog.form_type.page:
-        class: MultiBlogBundle\Form\PageType
-
-    multi_blog.form_factory.page:
-        class: MultiBlogBundle\FormFactory\PageFormFactory
-        arguments: ["@form.factory", "@multi_blog.form_type.page", "%%multi_blog.form.page.name%%"]

@@ -1,5 +1,0 @@
-services:
-    multi_blog.listener.tag_score:
-        class: MultiBlogBundle\EventListener\TagScoreListener
-        tags:
-            - { name: kernel.event_subscriber }

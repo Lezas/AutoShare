@@ -10,6 +10,7 @@ namespace StackExchangeBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use StackExchangeBundle\Model\QuestionVoteManager as BaseVoteManager;
+use StackExchangeBundle\Model\Vote;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use StackExchangeBundle\Model\Vote as BaseVote;
 
@@ -52,7 +53,7 @@ class QuestionVoteManager extends BaseVoteManager
      * Finds one comment thread by the given criteria
      *
      * @param  array $criteria
-     * @return Question
+     * @return Vote
      */
     public function findVoteBy(array $criteria)
     {

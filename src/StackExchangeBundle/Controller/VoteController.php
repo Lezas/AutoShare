@@ -101,13 +101,52 @@ class VoteController extends FOSRestController
     }
 
     /**
+     * Action executed when a vote was succesfully created.
+     *
+     * @param FormInterface $form Form with the error
+     * @param string $id Id of the thread
+     *
+     * @return View
+     * @todo Think about what to show. For now the new score of the comment.
+     */
+    protected
+    function onCreateVoteSuccess(FormInterface $form, $id)
+    {
+        //TODO change path
+        return View::createRouteRedirect('stack_exchange_get_question_votes', array('id' => $id), 201);
+    }
+
+    /**
+     * Returns a HTTP_BAD_REQUEST response when the form submission fails.
+     *
+     * @param FormInterface $form Form with the error
+     * @param string $id Id of the thread
+     *
+     * @return View
+     */
+    protected
+    function onCreateVoteError(FormInterface $form, $id)
+    {
+        $view = View::create()
+            ->setStatusCode(400)
+            ->setData(array(
+                'id' => $id,
+                'form' => $form,
+            ))
+            ->setTemplate(new TemplateReference('StackExchangeBundle', 'Vote', 'vote_new'));
+
+        return $view;
+    }
+
+    /**
      * Get the votes of a Question.
      *
      * @param string $id Id of the question
      *
      * @return View
      */
-    public function getQuestionVotesAction($id)
+    public
+    function getQuestionVotesAction($id)
     {
         $question = $this->get('stack_exchange.manager.question')->findQuestionById($id);
 
@@ -132,7 +171,8 @@ class VoteController extends FOSRestController
      *
      * @return View|Response
      */
-    public function newAnswerVoteAction(Request $request, $id)
+    public
+    function newAnswerVoteAction(Request $request, $id)
     {
         $answer = $this->get('stack_exchange.manager.answer')->findAnswerById($id);
 
@@ -162,7 +202,8 @@ class VoteController extends FOSRestController
      *
      * @return View
      */
-    public function postAnswerVotesAction(Request $request, $id)
+    public
+    function postAnswerVotesAction(Request $request, $id)
     {
         $answer = $this->get('stack_exchange.manager.answer')->findAnswerById($id);
 
@@ -215,7 +256,8 @@ class VoteController extends FOSRestController
      *
      * @return View
      */
-    public function getAnswerVotesAction($id)
+    public
+    function getAnswerVotesAction($id)
     {
         $answer = $this->get('stack_exchange.manager.answer')->findAnswerById($id);
 
@@ -230,43 +272,6 @@ class VoteController extends FOSRestController
             ->setTemplate(new TemplateReference('StackExchangeBundle', 'Vote', 'answer_votes'));
 
         return $this->getViewHandler()->handle($view);
-    }
-
-
-    /**
-     * Action executed when a vote was succesfully created.
-     *
-     * @param FormInterface $form Form with the error
-     * @param string $id Id of the thread
-     *
-     * @return View
-     * @todo Think about what to show. For now the new score of the comment.
-     */
-    protected function onCreateVoteSuccess(FormInterface $form, $id)
-    {
-        //TODO change path
-        return View::createRouteRedirect('stack_exchange_get_question_votes', array('id' => $id), 201);
-    }
-
-    /**
-     * Returns a HTTP_BAD_REQUEST response when the form submission fails.
-     *
-     * @param FormInterface $form Form with the error
-     * @param string $id Id of the thread
-     *
-     * @return View
-     */
-    protected function onCreateVoteError(FormInterface $form, $id)
-    {
-        $view = View::create()
-            ->setStatusCode(400)
-            ->setData(array(
-                'id' => $id,
-                'form' => $form,
-            ))
-            ->setTemplate(new TemplateReference('StackExchangeBundle', 'Vote', 'vote_new'));
-
-        return $view;
     }
 
 }

@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/main/css/index.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+
+
+
+    <div class="row">
+            <h1 style="font-weight: 600; font-size: 60px;">Paieškos rezultatai</h1>
+
+    </div>
+    <div class="row">
+                {{ render(controller(
+                'SearchBundle:Search:newSearchCars')) }}
+
+
+    </div>
+    <hr style="margin: 5px">
+    <div class="row">
+        {% for auto in cars %}
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <div class="panel panel-default">
+                    <div class="car-cover"
+                         style="background: url({% path auto.mainPhoto, 'big' %}); background-size: cover; background-position: center">
+                    </div>
+                    <div class="panel-body ">
+                        <h4 style="margin-top: 0">
+                            <a href="{{ path('car_show_get_car', {'id' : auto.getId}) }}">
+                                {{ auto.year | date("Y") }} {{ auto.brand }} {{ auto.model|e }}
+                            </a>
+                        </h4>
+                        <p>
+                            <a href="{{ path('user_profile_main', {'username' : auto.getUser.getUsername}) }}">@{{ auto.getUser.getUsername |e }}</a>
+                            <br>
+                            {% set images = auto.images | length %}
+                            {% set photo_many = 'photo_many' | trans %}
+                            {% set photo_one = 'photo_one' | trans %}
+                            {% transchoice images %}
+                            {0} Nėra %photo_many%|{1} %images% Nuotrauka |]1,Inf[ %images% %photo_many%
+                            {% endtranschoice %}
+                            |
+
+                            {% set post_many = 'post_many' | trans %}
+                            {% set post_many_what = 'post_many_what' | trans %}
+                            {% set post_one = 'post_one' | trans %}
+                            {% set post_ammount = auto.posts | length %}
+                            {% transchoice post_ammount %}
+                            {0} Nėra %post_many_what% |
+                            {1} %post_ammount% %post_one% |
+                            ]1,Inf[ %post_ammount% %post_many%
+                            {% endtranschoice %}
+
+                        </p>
+
+                    </div>
+                </div>
+                {% if app.user %}
+                    <div class="car-block-menu">
+                        {% if auto.autoFavorited(app.user) %}
+                            <div class="favorite-controller">
+                                <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed"
+                                     data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </div>
+                                <div class="favorite-btn favorite-add btn btn-default btn-sm hidden"
+                                     data-id="{{ auto.id }}" data-url="{{ url('add_to_favorites') }}">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="favorite-controller">
+                                <div class="favorite-btn favorite-remove btn btn-default btn-sm subscribed hidden"
+                                     data-id="{{ auto.id }}" data-url="{{ url('remove_from_favorites') }}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </div>
+                                <div class="favorite-btn favorite-add btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('add_to_favorites') }}">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if auto.autoLiked(app.user) %}
+                            <div class="like-controller">
+                                <div class="like-btn unlike btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('unlike_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up liked"></span>
+                                </div>
+                                <div class="like-btn like btn btn-default btn-sm hidden" data-id="{{ auto.id }}"
+                                     data-url="{{ url('like_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up"></span>
+
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="like-controller">
+                                <div class="like-btn unlike btn btn-default btn-sm hidden" data-id="{{ auto.id }}"
+                                     data-url="{{ url('unlike_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up liked"></span>
+                                </div>
+                                <div class="like-btn like btn btn-default btn-sm" data-id="{{ auto.id }}"
+                                     data-url="{{ url('like_this') }}">
+                                    <p class="like-count">{{ auto.likedUsersCount }}</p><span
+                                            class="glyphicon glyphicon-thumbs-up"></span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+
+    </div>
+
+
+{% endblock %}

@@ -80,6 +80,15 @@ final class Events
      */
     const CAR_CREATE = 'car_show.car.create';
 
+    const CAR_DELETE = 'car_show.car.delete';
+
+    const CAR_UNDELETE = 'car_show.car.undelete';
+
+    const CAR_PRIVATE = 'car_show.car.private';
+
+    const CAR_PUBLIC = 'car_show.car.public';
+
+
     const POST_CREATE = 'car_show.post.create';
 
     const POST_PRE_PERSIST = 'car_show.post.pre_persist';

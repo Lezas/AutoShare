@@ -1,10 +1,14 @@
 {% extends 'base.html.twig'  %}
 
 {% block sidepanel %}
+    <br>
+    {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : auto} %}
+    <br>
 
-
+    {% include '@CarShow/widget/editPostMenu.html.twig'  with {'car' : auto, 'post' : post} %}
+    <br>
     {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : auto} %}
-    <h3>Other Posts</h3>
+    <h3>Kiti įrašai</h3>
     {% include '@CarShow/widget/carPostsWidget.html.twig' with {'posts' : sidePosts} %}
 
     {{ parent() }}
@@ -14,6 +18,7 @@
     <link href="{{asset('bundles/Auto/css/autoblog.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{asset('bundles/Auto/css/index.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{asset('bundles/Comments/css/comments.css')}}" rel="stylesheet" type="text/css"/>
+
 {% endblock %}
 
 {% block body %}
@@ -32,20 +37,7 @@
         <div class="panel-footer">
             {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': post.thread.id} %}
         </div>
-        {% if app.user != null %}
-            {% if app.user.id == auto.user.id %}
-                <div class="edit-car">
-                    <a href="{{ path('editCarPost', { 'postId': post.id, 'carId' : auto.id }) }}" class="btn btn-default btn-sm ">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </a>
-                </div>
-                <div class="remove-post">
-                    <a href="{{ path('deleteCarPost', { 'postId': post.id, 'carId' : auto.id }) }}" class="btn btn-default btn-sm ">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                </div>
-            {% endif %}
-        {% endif %}
+
     </div>
 
     {# End of blog posts#}

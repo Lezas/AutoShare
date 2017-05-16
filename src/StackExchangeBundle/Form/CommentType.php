@@ -25,7 +25,6 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('Body', TextareaType::class, [
-            'required' => true,
             'attr' => [
                 'id' => 'soemthign',
                 'class' => 'tinymce',

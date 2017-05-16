@@ -23,9 +23,9 @@
 {% block body %}
     {% include '@CarShow/car/carHeader.html.twig' with {'auto' : car } %}
     <div class="container-fluid">
-        <div class="h2">Make Car Private?</div>
-        <p>Are you sure you want to make this car private? </p>
-        <p>Other users won't be able to see this car</p>
+        <div class="h2">Padaryti automobilį privatų?</div>
+        <p>Ar jūs tikras jog norite pakeisti automobilio statusą į privatų?</p>
+        <p>Kiti negalės matyti šio automoblio</p>
 
         {{ form_start(form, { 'attr' : {'class' : 'form'}}) }}
 

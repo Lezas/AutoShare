@@ -48,7 +48,7 @@ class PictureSelectType extends AbstractType
                 'class' => 'imagePicker'
             ]
         ))
-            ->add('submit', SubmitType::class, ['label' => 'Save']);
+            ->add('submit', SubmitType::class, ['label' => 'Saugoti']);
     }
 
     public function getName()

@@ -28,7 +28,6 @@ class AppKernel extends Kernel
             new CarShowBundle\CarShowBundle(),
             new SearchBundle\SearchBundle(),
             new MainBundle\MainBundle(),
-            new MultiBlogBundle\MultiBlogBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new Sonata\CoreBundle\SonataCoreBundle(),
@@ -41,9 +40,10 @@ class AppKernel extends Kernel
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new CoopTilleuls\Bundle\CKEditorSonataMediaBundle\CoopTilleulsCKEditorSonataMediaBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new Discutea\DForumBundle\DForumBundle(),
             new FOS\MessageBundle\FOSMessageBundle(),
             new UserBundle\UserBundle(),
+            new MessageBundle\MessageBundle(),
+            new CommentBundle\CommentBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

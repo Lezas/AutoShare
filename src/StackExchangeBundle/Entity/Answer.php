@@ -10,7 +10,7 @@ namespace StackExchangeBundle\Entity;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
-use CarShowBundle\Entity\Thread;
+use CommentBundle\Entity\Thread;
 use MainBundle\Entity\User;
 use StackExchangeBundle\Model\CommentableInterface;
 use StackExchangeBundle\Model\CommentInterface;
@@ -71,12 +71,6 @@ class Answer implements VotableInterface, SignedInterface, CommentableInterface
      */
     protected $score;
 
-    /**
-     * @ORM\OneToOne(targetEntity = "CarShowBundle\Entity\Thread")
-     * @ORM\JoinColumn(name = "thread_id", referencedColumnName = "id")
-     * @var Thread
-     */
-    private $thread;
 
     /**
      * @ORM\ManyToOne(targetEntity = "MainBundle\Entity\User", inversedBy = "answers")
@@ -266,31 +260,7 @@ class Answer implements VotableInterface, SignedInterface, CommentableInterface
         return $this->author;
     }
 
-    //------COMMENTING-----//
 
-    /**
-     * Set thread
-     *
-     * @param \CarShowBundle\Entity\Thread $thread
-     *
-     * @return Answer
-     */
-    public function setThread(Thread $thread = null)
-    {
-        $this->thread = $thread;
-
-        return $this;
-    }
-
-    /**
-     * Get thread
-     *
-     * @return Thread
-     */
-    public function getThread()
-    {
-        return $this->thread;
-    }
 
     //------SCORE----//
 

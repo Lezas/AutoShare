@@ -52,8 +52,8 @@
 
         <div class="row">
             <div class="pull-left">
-                <a href="#">share</a>
-                <a href="{{ url('answer_edit', {'id' : answer.id}) }}">edit</a>
+                <a href="#">{% trans %}se_share{% endtrans %}</a>
+                <a href="{{ url('answer_edit', {'id' : answer.id}) }}">{% trans %}se_edit{% endtrans %}</a>
             </div>
             <div class="col-sm-4 pull-right">
                 Created: {{ answer.createdAt | date('Y-m-d') }}<br>
@@ -92,7 +92,7 @@
             <div class="se_comment_editor">
                 <a class="se_answer_comment_add_comment"
                    data-url="{{ url('stack_exchange_new_answer_comment', {'id' : answer.id}) }}"
-                   data-target="#se_comment_text_editor_{{ answer.id }}_answer">Add comment</a>
+                   data-target="#se_comment_text_editor_{{ answer.id }}_answer">{% trans %}se_add_comment{% endtrans %}</a>
                 <div id="se_comment_text_editor_{{ answer.id }}_answer" class="se_comment_text_editor ">
 
                 </div>

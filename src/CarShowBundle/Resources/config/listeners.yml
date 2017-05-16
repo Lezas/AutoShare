@@ -3,3 +3,9 @@ services:
         class: CarShowBundle\EventListener\CarUpdatedListener
         tags:
             - { name: kernel.event_subscriber }
+
+    car_show.listener.search:
+        arguments: ['@monolog.logger', '@es.manager']
+        class: CarShowBundle\EventListener\CarSearchListener
+        tags:
+            - { name: kernel.event_subscriber }

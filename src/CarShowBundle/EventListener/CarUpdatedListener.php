@@ -16,10 +16,11 @@ class CarUpdatedListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::CAR_POST_UPDATE => 'setUpdatedAt',
+            Events::CAR_PRE_UPDATE => 'setUpdatedAt',
             Events::CAR_POST_PERSIST => 'setUpdatedAt',
             Events::POST_PRE_PERSIST => 'setCarUpdatedFromPost',
             Events::POST_DELETE => 'setCarUpdatedFromPost',
+            Events::CAR_PRE_PERSIST => 'setMandatoryInfo'
         );
     }
 
@@ -36,5 +37,23 @@ class CarUpdatedListener implements EventSubscriberInterface
         $post = $event->getPost();
         $car = $post->getAuto();
         $car->setUpdatedAt(new \DateTime('now'));
+    }
+
+    public function setMandatoryInfo(CarEvent $event)
+    {
+        /** @var Car $car */
+        $car = $event->getCar();
+
+        if (null == $car->getDeleted()) {
+            $car->setDeleted(false);
+        }
+
+        if (null == $car->getCreatedAt()) {
+            $car->setCreatedAt(new \DateTime('now'));
+        }
+
+        if (null == $car->getUpdatedAt()) {
+            $car->setUpdatedAt(new \DateTime('now'));
+        }
     }
 }

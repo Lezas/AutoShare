@@ -51,7 +51,7 @@ class AutoType extends AbstractType
             )
             ->add('private', CheckboxType::class, array('required' => false))
             ->add('additionalInfo', TextareaType::class, ['label' => 'Additional Info', 'required' => false])
-            ->add('submit', SubmitType::class, ['label' => 'Save']);
+            ->add('submit', SubmitType::class, ['label' => 'Saugoti']);
     }
 
     public function getName()

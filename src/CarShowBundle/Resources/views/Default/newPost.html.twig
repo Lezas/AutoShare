@@ -10,9 +10,10 @@
     {% if car is defined %}
         <br>
         {% include '@CarShow/widget/backToMainCarPage.html.twig' with {'car' : car} %}
-        <hr>
-
+        <br>
         {% include '@Main/widgets/carInfoWidget.html.twig' with {'car' : car } %}
+        {% include '@CarShow/widget/carMenu.html.twig' with {'car' : car } %}
+
     {% endif %}
 
     {{ parent() }}
@@ -25,21 +26,21 @@
             {{ form_start(form, { 'attr' : {'class' : 'form-horizontal'}}) }}
 
             <div class="form-group">
-                {{ form_label(form.title,'Title', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+                {{ form_label(form.title,'Pavadinimas', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
                 {{ form_errors(form.title) }}
                 <div class="col-sm-10">
                     {{ form_widget(form.title, { 'attr' : { 'class' : 'form-control'}  }) }}
                 </div>
             </div>
             <div class="form-group">
-                {{ form_label(form.mileage,'Mileage', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+                {{ form_label(form.mileage,'Kilometražas', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
                 {{ form_errors(form.mileage) }}
                 <div class="col-sm-10">
                     {{ form_widget(form.mileage, { 'attr' : { 'class' : 'form-control'}  }) }}
                 </div>
             </div>
             <div class="form-group">
-                {{ form_label(form.date,'Service date', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
+                {{ form_label(form.date,'Data', { 'label_attr' : { 'class' : 'control-label col-sm-2'}  }) }}
                 <div class="col-sm-10">
                     <div class="input-group" id="time_input">
                         {{ form_widget(form.date, { 'attr' : {'class' : 'form-control' } }) }}
@@ -48,7 +49,7 @@
             </div>
 
             <div class="form-group">
-                {{ form_label(form.text,'Info about done jobs', { 'label_attr' : { 'class' : 'control-label'}  }) }}
+                {{ form_label(form.text,'Informacija', { 'label_attr' : { 'class' : 'control-label'}  }) }}
                 {{ form_errors(form.text) }}
                 {{ form_widget(form.text, { 'attr' : { 'class' : '   tinymce'}  }) }}
 

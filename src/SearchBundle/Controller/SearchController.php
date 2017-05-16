@@ -30,7 +30,7 @@ class SearchController extends Controller
         $form->handleRequest($request);
         $questions = new ArrayCollection();
 
-        $mana = $this->get('es.manager')->getClient()->ping();
+            $mana = $this->get('es.manager')->getClient()->ping();
 
         if ($form->isValid()) {
 
@@ -44,6 +44,8 @@ class SearchController extends Controller
             $search->addQuery($queryStringQuery);
 
             $results = $repo->findDocuments($search);
+
+
 
             for ($i = 1; $i <= $results->count(); $i++) {
                 $qId = $results->current()->question_id;
@@ -62,6 +64,50 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
+     * @Route("/search/cars", name="search_cars")
+     * @return Response
+     *
+     */
+    public function searchForCarsAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
+
+        $form->handleRequest($request);
+        $cars = new ArrayCollection();
+
+        $mana = $this->get('es.manager')->getClient()->ping();
+
+        if ($form->isValid()) {
+
+            $keyword = $form->getData()['Search'];
+
+            $manager = $this->get('es.manager');
+            $repo = $manager->getRepository('CarShowBundle:CarProfileDocument');
+            $search = $repo->createSearch();
+
+            $queryStringQuery = new QueryStringQuery($keyword);
+            $search->addQuery($queryStringQuery);
+
+            $results = $repo->findDocuments($search);
+
+
+
+            for ($i = 1; $i <= $results->count(); $i++) {
+                $qId = $results->current()->id;
+                $car = $this->get('car_show.manager.car')->findCarById($qId);
+                $cars->add($car);
+                $results->next();
+            }
+
+        }
+
+        return $this->render('@Search/Default/searchCars.html.twig', [
+            'cars' => $cars,
+        ]);
+    }
+
+    /**
+     * @param Request $request
      * @Route("/search/new", name="new_search")
      * @return Response
      *
@@ -73,6 +119,21 @@ class SearchController extends Controller
         return $this->render('@Search/Default/searchField.html.twig', [
             'form' => $form->createView(),
             'title' => 'Edit post',
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/search/new/cars", name="new_search_cars")
+     * @return Response
+     *
+     */
+    public function newSearchCarsAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
+
+        return $this->render('@Search/Default/searchCarsField.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

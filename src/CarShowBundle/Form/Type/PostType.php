@@ -43,7 +43,7 @@ class PostType extends AbstractType
                     'filebrowserImageBrowseRouteParameters' => ['car_id' => $auto->getId()]
                 ]
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Save']);
+            ->add('submit', SubmitType::class, ['label' => 'Saugoti']);
 
     }
     public function getName()

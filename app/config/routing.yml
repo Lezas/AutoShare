@@ -1,3 +1,13 @@
+comment:
+    resource: "@CommentBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+message:
+    resource: "@MessageBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 user:
     resource: "@UserBundle/Controller/"
     type:     annotation
@@ -21,11 +31,6 @@ stack_exchange:
 
 my_auto:
     resource: "@CarShowBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-multi_blog:
-    resource: "@MultiBlogBundle/Controller/"
     type:     annotation
     prefix:   /
 
@@ -79,10 +84,6 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
-
-discutea_forum:
-    resource: "@DForumBundle/Resources/config/routing.yml"
-    prefix:   /
 
 fos_message:
     resource: "@FOSMessageBundle/Resources/config/routing.xml"

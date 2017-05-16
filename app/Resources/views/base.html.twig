@@ -49,19 +49,16 @@
                                     {% trans %}se_question_name{% endtrans %}
                                 </a>
                             </li>
-                            <li class="{% if app.request.requestUri == path('multi_blog_all_pages') %} active {% endif %}">
-                                <a href="{{ path('multi_blog_all_pages') }}"> {% trans %}multi_blog_pages{% endtrans %}</a>
-                            </li>
 
                             {% if app.user %}
                                 <li class="{% if app.request.requestUri == path('garage') %} active {% endif %}">
                                     <a href="{{ path('garage') }}">
-                                        <span class="glyphicon glyphicon-home" title="Garage"></span>
+                                        <span class="glyphicon glyphicon-home" title="{% trans %}garage{% endtrans %}"></span>
                                     </a>
                                 </li>
                                 <li class="{% if app.request.requestUri == path('fos_message_inbox') %} active {% endif %}">
                                     <a href="{{ path('fos_message_inbox') }}">
-                                        <span class="glyphicon glyphicon-comment" title="Massages" >
+                                        <span class="glyphicon glyphicon-comment" title="{% trans %}messages{% endtrans %}" >
 
                                         </span>
                                         {% if  fos_message_nb_unread()  > 0 %}
@@ -70,23 +67,23 @@
 
                                     </a>
                                 </li>
-                                <li class="{% if app.request.requestUri == path('fos_user_profile_show') %} active {% endif %}">
-                                    <a href="{{ path('fos_user_profile_show') }}">
-                                        <span class="glyphicon glyphicon-user" title="You Profile"></span>
-                                    </a>
-                                </li>
 
-                                <li>
-                                    <a href="{{ path('fos_user_security_logout') }}">
-                                    <span class="glyphicon glyphicon-off" title="Logout"></span>
-                                    </a>
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" title="{% trans %}your_profile{% endtrans %}"></span>  <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('fos_user_profile_show') }}">{% trans %}your_profile{% endtrans %}</a></li>
+
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{{ path('fos_user_security_logout') }}">{% trans %}log_out{% endtrans %}</a></li>
+                                    </ul>
                                 </li>
                             {% else %}
                                 <li class="{% if app.request.requestUri == path('fos_user_security_login') %} active {% endif %}">
-                                    <a href="{{ path('fos_user_security_login') }}">Sign up</a>
+                                    <a href="{{ path('fos_user_security_login') }}">Prisijungti</a>
                                 </li>
                                 <li class="{% if app.request.requestUri == path('fos_user_registration_register') %} active {% endif %}">
-                                    <a href="{{ path('fos_user_registration_register') }}">Registration</a>
+                                    <a href="{{ path('fos_user_registration_register') }}">Registracija</a>
                                 </li>
                             {% endif %}
                         </ul>

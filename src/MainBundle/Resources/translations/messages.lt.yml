@@ -2,6 +2,34 @@ title : Automobilių informacijos dalyjimosi sistema
 logout : Atsijungti
 main_page : Pagrindinis puslapis
 search : Paieška
-page_main_title : Auto ifnormacijos Dalyjimos sistema
+page_main_title : Auto informacijos Dalijimos sistema
 edit : redaguoti
 car_show_add_car : Prideti automobilį
+widget_name_subscribed: Sekami
+widget_name_most_popular_cars: Populiariausi automobiliai
+widget_name_new_arrived_cars: Naujai atvykę automobiliai
+title_cars: CARS
+search_for_cars_placeholder: Ieškok automobilių, modelių, variklių, t.t.
+search_everywhere_placeholder: Ieškoti visur
+sort_by: Rikiuoti pagal
+sort_by_date: Sukūrimo datą
+sort_by_update: Atnaujinimo datą
+sort_by_post_ammount: Įrašų kiekį
+sort_by_image_quantity: Nuotraukas
+photo_many: Nuotraukos
+photo_one: Nuotrauka
+post_many: Įrašai
+post_many_what: Įrašų
+post_one: Įrašas
+garage: Garažas
+messages: Žinutės
+your_profile: Tavo Profilis
+log_out: Atsijungti
+main_tab_name_Cars: Automobiliai
+main_tab_name_Questions: Klausimai
+main_car_box_service: Servisas
+main_car_box_post: Įrašas
+main_profile_send_message: Siūsti žinute
+main_profile_modify: Redaguoti
+main_profile_modify_general: Bendrieji nustatymai
+main_profile_modify_change_password: Pakeisti slaptažodi

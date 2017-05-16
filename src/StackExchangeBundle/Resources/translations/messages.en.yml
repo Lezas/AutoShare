@@ -3,3 +3,16 @@ se_question_name: Questions
 se_set_answer_accepted: Set Answer As Accepted
 se_this_answer_is_approved: This answer is approved by Question Author
 se_create_new_question: Create New Question
+se_most_active_this_week: Most active this week
+se_title_questions: QUESTIONS
+se_search_placeholder: Search for questions or answers like 'how to fix this..'
+se_votes: votes
+se_answers: answers
+se_views: views
+se_asked: Asked
+se_similar_questions: Similar Questions
+se_submit_your_answer: Submit your answer
+se_share: share
+se_edit: edit
+se_add_comment: Add comment
+se_back_to_main_question_page: Back to Main Questions page
