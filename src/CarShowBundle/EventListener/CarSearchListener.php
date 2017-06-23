@@ -84,29 +84,42 @@ class CarSearchListener implements EventSubscriberInterface
         /** @var Car $car */
         $car = $event->getCar();
 
-        $questionDoc = $this->ESManager->find('CarShowBundle:CarProfileDocument', $car->getId());
+        $carDoc = $this->ESManager->find('CarShowBundle:CarProfileDocument', $car->getId());
 
-        if (null == $questionDoc) {
+        if (null == $carDoc) {
             return;
         }
 
-        /** @var QuestionDocument $questionDoc */
+        /** @var CarProfileDocument $questionDoc */
         //Need to reset tags
-        $questionDoc->setTags(new Collection());
 
-        $questionDoc->setId($question->getId());
-        $questionDoc->setTitle($question->getTitle());
-        $questionDoc->setQuestionId($question->getId());
-        $questionDoc->setBody($question->getText());
+        $carDoc = new CarProfileDocument();
+        $carDoc->setId($car->getId());
+        $carDoc->setCarId($car->getId());
+        $carDoc->setBrand($car->getBrand());
+        $carDoc->setModel($car->getModel());
+        $carDoc->setYear($car->getYear()->format('Y-m-d H:i:s'));
+        $carDoc->setBodyType($car->getBodyType());
+        $carDoc->setPowerTrain($car->getPowerTrain());
+        $carDoc->setEngineCapacity($car->getEngineCapacity());
+        $carDoc->setFuelType($car->getFuelType());
+        $carDoc->setAdditionalInfo($car->getAdditionalInfo());
+        $carDoc->setCreatedAt($car->getCreatedAt());
+        $carDoc->setPower($car->getPower());
+        $carDoc->setOwner($car->getUser()->getUsername());
 
-        /** @var Tag $tag */
-        foreach ($question->getTags() as $tag) {
-            $tagDocument = new TagDocument();
-            $tagDocument->setTitle($tag->getName());
-            $questionDoc->addTag($tagDocument);
+        /** @var Post $post */
+        foreach ($car->getPosts() as $post) {
+            $postDocument = new PostDocument();
+            $postDocument->setTitle($post->getTitle());
+            $postDocument->setMileage($post->getMileage());
+            $postDocument->setText($post->getText());
+            $postDocument->setCreatedAt($post->getDate()->format('Y-m-d H:i:s'));
+            $carDoc->addPost($postDocument);
         }
+
         $manager = $this->ESManager;
-        $manager->persist($questionDoc);
+        $manager->persist($carDoc);
         $manager->commit();
     }
 

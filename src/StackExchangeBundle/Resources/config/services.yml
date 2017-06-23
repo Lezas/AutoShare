@@ -43,3 +43,6 @@ services:
     stack_exchange.manager.answer_comment:
         class: StackExchangeBundle\Entity\AnswerCommentManager
         arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+# tags:
+#   - { name: kernel.event_subscriber }

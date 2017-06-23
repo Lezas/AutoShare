@@ -46,7 +46,6 @@ class SearchController extends Controller
             $results = $repo->findDocuments($search);
 
 
-
             for ($i = 1; $i <= $results->count(); $i++) {
                 $qId = $results->current()->question_id;
                 $question = $this->get('stack_exchange.manager.question')->findQuestionById($qId);
@@ -57,6 +56,50 @@ class SearchController extends Controller
         }
 
         return $this->render('@Search/Default/search.html.twig', [
+            'questions' => $questions,
+        ]);
+
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/search/questions", name="search_questions")
+     * @return Response
+     *
+     */
+    public function searchQuestionsAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
+
+        $form->handleRequest($request);
+        $questions = new ArrayCollection();
+
+        $mana = $this->get('es.manager')->getClient()->ping();
+
+        if ($form->isValid()) {
+
+            $keyword = $form->getData()['Search'];
+
+            $manager = $this->get('es.manager');
+            $repo = $manager->getRepository('StackExchangeBundle:QuestionDocument');
+            $search = $repo->createSearch();
+
+            $queryStringQuery = new QueryStringQuery($keyword);
+            $search->addQuery($queryStringQuery);
+
+            $results = $repo->findDocuments($search);
+
+
+            for ($i = 1; $i <= $results->count(); $i++) {
+                $qId = $results->current()->question_id;
+                $question = $this->get('stack_exchange.manager.question')->findQuestionById($qId);
+                $questions->add($question);
+                $results->next();
+            }
+
+        }
+
+        return $this->render('@Search/Default/searchQuestions.html.twig', [
             'questions' => $questions,
         ]);
 
@@ -91,7 +134,6 @@ class SearchController extends Controller
             $results = $repo->findDocuments($search);
 
 
-
             for ($i = 1; $i <= $results->count(); $i++) {
                 $qId = $results->current()->id;
                 $car = $this->get('car_show.manager.car')->findCarById($qId);
@@ -123,16 +165,31 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @Route("/search/new/cars", name="new_search_cars")
-     * @return Response
-     *
-     */
+ * @param Request $request
+ * @Route("/search/new/cars", name="new_search_cars")
+ * @return Response
+ *
+ */
     public function newSearchCarsAction(Request $request)
     {
         $form = $this->createForm(SearchFieldType::class);
 
         return $this->render('@Search/Default/searchCarsField.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/search/new/questions", name="new_search_questions")
+     * @return Response
+     *
+     */
+    public function newSearchQuestionsAction(Request $request)
+    {
+        $form = $this->createForm(SearchFieldType::class);
+
+        return $this->render('@Search/Default/searchQuestionsField.html.twig', [
             'form' => $form->createView(),
         ]);
     }

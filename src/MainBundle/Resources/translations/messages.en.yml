@@ -10,6 +10,7 @@ widget_name_most_popular_cars: Most Popular Cars
 widget_name_new_arrived_cars: Newly arrived cars
 title_cars: CARS
 search_for_cars_placeholder: Search for cars, models, engines
+search_for_questions_placeholder: Search for questions
 search_everywhere_placeholder: Search everywhere
 sort_by: Sort By
 sort_by_date: Creation Date

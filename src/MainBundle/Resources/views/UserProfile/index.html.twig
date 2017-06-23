@@ -28,7 +28,7 @@
             {% if app.user != user %}
                 <div class="btn-group">
                     <a class="btn btn-info" href="{{ path('fos_message_thread_new') }}"><span
-                                class="glyphicon glyphicon-envelope"></span> Send message{% trans %}main_profile_send_message{% endtrans %}</a>
+                                class="glyphicon glyphicon-envelope"></span> {% trans %}main_profile_send_message{% endtrans %}</a>
                 </div>
             {% else %}
                 <div class="dropdown">

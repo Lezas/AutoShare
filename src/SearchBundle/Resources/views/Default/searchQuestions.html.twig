@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/main/css/index.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="row">
+        <h1 style="font-weight: 600; font-size: 60px;">Paieškos rezultatai</h1>
+
+    </div>
+    <div class="row">
+    {{ render(controller(
+    'SearchBundle:Search:newSearchQuestions')) }}
+    </div>
+    <br>
+    <div class="col-xs-12">
+
+
+
+    {% for question in questions %}
+        {% include 'StackExchangeBundle:Question:question_row.html.twig' with {'question' : question} %}
+        <hr>
+    {% endfor %}
+    </div>
+
+
+{% endblock %}

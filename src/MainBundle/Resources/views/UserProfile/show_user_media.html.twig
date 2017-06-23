@@ -4,84 +4,89 @@
             <a href="#cars" data-toggle="tab">{% trans %}main_tab_name_Cars{% endtrans %}</a>
         </li>
         {% if user.questions|length > 0 %}
-        <li><a href="#questions" data-toggle="tab">{% trans %}main_tab_name_Questions{% endtrans %}</a>
-        </li>
+            <li><a href="#questions" data-toggle="tab">{% trans %}main_tab_name_Questions{% endtrans %}</a>
+            </li>
         {% endif %}
     </ul>
 
     <div class="tab-content ">
         <div class="tab-pane active" id="cars">
             <div class="profile-data-div">
-            {% for auto in user.cars %}
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                    <div class="panel panel-default clickable">
-                        <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}"/>
-                        <div class="panel-body ">
+                {% for auto in user.cars %}
+                    {% if not auto.deleted %}
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <div class="panel panel-default clickable">
+                                <img class="img-responsive" src="{% path auto.mainPhoto, 'big' %}"/>
+                                <div class="panel-body ">
 
-                            <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
+                                    <h4>{{ auto.year | date("Y") }} {{ auto.brand|e }} {{ auto.model|e }}</h4>
 
-                            <a href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+                                    <a href="{{ path('car_show_get_car', { 'id': auto.id }) }}"><span></span></a>
+                                </div>
+
+                            </div>
+                            {% if app.user %}
+                                {% if app.user.id == user.id %}
+
+
+                                    <div class="add-service-history">
+                                        <a href="{{ path('car_history', {'id' : auto.id}) }}"
+                                           class="btn btn-default btn-sm ">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                            {% trans %}main_car_box_service{% endtrans %}
+                                        </a>
+                                    </div>
+                                    <div class="edit-car">
+                                        <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}"
+                                           class="btn btn-default btn-sm ">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                    </div>
+                                    <div class="add-post-button">
+                                        <a href="{{ path('newCarPost', {'carId' : auto.id}) }}"
+                                           class="btn btn-default btn-sm ">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                            {% trans %}main_car_box_post{% endtrans %}
+                                        </a>
+                                    </div>
+                                    <div class="add-fuel-consumption">
+                                        <a href="{{ path('newCarPost', {'carId' : auto.id}) }}"
+                                           class="btn btn-default btn-sm ">
+                                            <span class="glyphicon glyphicon-road"></span>
+
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                         </div>
-
-                    </div>
-                    {% if app.user %}
-                        {% if app.user.id == user.id %}
-
-
-                            <div class="add-service-history">
-                                <a href="{{ path('car_history', {'id' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                    {% trans %}main_car_box_service{% endtrans %}
-                                </a>
-                            </div>
-                            <div class="edit-car">
-                                <a href="{{ path('auto_car_edit', { 'id': auto.id }) }}"
-                                   class="btn btn-default btn-sm ">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
-                            </div>
-                            <div class="add-post-button">
-                                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                    {% trans %}main_car_box_post{% endtrans %}
-                                </a>
-                            </div>
-                            <div class="add-fuel-consumption">
-                                <a href="{{ path('newCarPost', {'carId' : auto.id}) }}" class="btn btn-default btn-sm ">
-                                    <span class="glyphicon glyphicon-road"></span>
-
-                                </a>
-                            </div>
-                        {% endif %}
                     {% endif %}
-                </div>
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
         {% if user.questions|length > 0 %}
-        <div class="tab-pane" id="questions" style="margin: 10px 10px 10px 10px;">
-            {% if user.questions|length == 0 %}
-                There are no questions
-            {% else %}
-                {% for question in user.questions %}
-                    <div class="row">
-                        <div class="col-xs-1">
-                            <center>{{ question.score }}</center>
-                            {% trans %}se_votes{% endtrans %}
-                        </div>
-                        <div class="col-xs-1">
-                            <center>{{ question.answers | length }}</center>
-                            {% trans %}se_answers{% endtrans %}
-                        </div>
-                        <div class="col-xs-10">
-                            <a href="{{ path('question', { 'id' : question.id}) }}"> {{ question.title }}</a>
-                        </div>
+            <div class="tab-pane" id="questions" style="margin: 10px 10px 10px 10px;">
+                {% if user.questions|length == 0 %}
+                    There are no questions
+                {% else %}
+                    {% for question in user.questions %}
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <center>{{ question.score }}</center>
+                                {% trans %}se_votes{% endtrans %}
+                            </div>
+                            <div class="col-xs-1">
+                                <center>{{ question.answers | length }}</center>
+                                {% trans %}se_answers{% endtrans %}
+                            </div>
+                            <div class="col-xs-10">
+                                <a href="{{ path('question', { 'id' : question.id}) }}"> {{ question.title }}</a>
+                            </div>
 
-                    </div>
-                    <hr>
-                {% endfor %}
-            {% endif %}
-        </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% endif %}
+            </div>
         {% endif %}
 
     </div>

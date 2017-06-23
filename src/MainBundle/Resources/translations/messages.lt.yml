@@ -10,6 +10,7 @@ widget_name_most_popular_cars: Populiariausi automobiliai
 widget_name_new_arrived_cars: Naujai atvykę automobiliai
 title_cars: CARS
 search_for_cars_placeholder: Ieškok automobilių, modelių, variklių, t.t.
+search_for_questions_placeholder: Ieškoti klausimų
 search_everywhere_placeholder: Ieškoti visur
 sort_by: Rikiuoti pagal
 sort_by_date: Sukūrimo datą
@@ -29,7 +30,7 @@ main_tab_name_Cars: Automobiliai
 main_tab_name_Questions: Klausimai
 main_car_box_service: Servisas
 main_car_box_post: Įrašas
-main_profile_send_message: Siūsti žinute
+main_profile_send_message: Siųsti žinute
 main_profile_modify: Redaguoti
 main_profile_modify_general: Bendrieji nustatymai
 main_profile_modify_change_password: Pakeisti slaptažodi
