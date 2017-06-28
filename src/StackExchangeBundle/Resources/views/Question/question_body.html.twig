@@ -49,7 +49,7 @@
             <div class="col-sm-4 pull-right">
                 {#TODO Posible to move to other controller. Answer also uses same type of showing owner of object #}
                 {% trans %}se_asked{% endtrans %}: {{ question.createdAt | date('Y-m-d') }}<br>
-                {% if question.author.photo == "" %}
+                {% if not question.author.photo %}
                     <img width="30" height="30" src="https://avatars3.githubusercontent.com/u/8930526?v=3&s=460"
                          alt="{{ question.author.username }}"
                     >
