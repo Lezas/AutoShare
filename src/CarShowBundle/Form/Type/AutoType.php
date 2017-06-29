@@ -19,21 +19,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AutoType extends AbstractType
 {
-    /**
-     * @var User
-     */
-    private $user;
 
-    public function __construct(User $user = null)
-    {
-        $this->user = $user;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        $this->user = $options['user'];
-
         $builder->add('brand', TextType::class, ['label' => 'Brand'])
             ->add('model', TextType::class, ['label' => 'Model'])
             ->add('year', DateType::class, [
@@ -72,7 +61,7 @@ class AutoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'user' => null
+            'data_class' => Car::class
         ]);
     }
 }

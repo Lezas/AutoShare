@@ -33,8 +33,8 @@ class CarController extends Controller
         /** @var Car $car */
         $car = $carManager->createCar();
 
-        $user = $this->getUser();
-        $form = $this->createForm(AutoType::class, $car, ['user' => $user]);
+        $form = $this->get('car_show.form_factory.car')->createForm();
+        $form->setData($car);
 
         $form->handleRequest($request);
 
@@ -102,13 +102,12 @@ class CarController extends Controller
 
         }
 
-        $form = $this->createForm(AutoType::class, $car, ['user' => $user]);
+        $form = $this->get('car_show.form_factory.car')->createForm();
+        $form->setData($car);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $user = $this->getUser();
-
             $car->setUser($user);
 
             $event = new CarEvent($car);
@@ -137,7 +136,7 @@ class CarController extends Controller
      * @return Response
      *
      */
-    public function selectedAutoAction($id = null, Request $request)
+    public function showCarAction($id = null, Request $request)
     {
         /** @var Car $car */
         $car = $this->get('car_show.manager.car')->findCarById($id);
@@ -173,7 +172,7 @@ class CarController extends Controller
             throw new NotFoundHttpException();
         }
 
-        if ($this->getUser() != $car->getUser()  && !$car->getDeleted()) {
+        if ($this->getUser() != $car->getUser() && !$car->getDeleted()) {
             throw new NotFoundHttpException();
         }
 
@@ -208,7 +207,6 @@ class CarController extends Controller
             }
 
             $this->get('car_show.manager.car')->saveCar($car);
-
         }
 
         $carImages = $car->getImages();
@@ -235,16 +233,12 @@ class CarController extends Controller
             throw new NotFoundHttpException();
         }
 
-        if ($this->getUser() != $car->getUser()  && !$car->getDeleted()) {
+        if ($this->getUser() != $car->getUser() && !$car->getDeleted()) {
             throw new NotFoundHttpException();
         }
 
-        $posts = $car->getPosts();
-
         $pictures = $car->getImages();
-
         $formManager = $this->get('car_show.form_factory.picture_select');
-
         $form = $formManager->createForm($car, $pictures);
 
         $form->handleRequest($request);
@@ -286,16 +280,11 @@ class CarController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $user = $this->getUser();
-        $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Taip'))
-            ->add('no', SubmitType::class, array('label' => 'Ne'))
-            ->getForm();
+        $form = $this->getConfirmForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             if ($form->get('yes')->isClicked()) {
                 $car->setDeleted(true);
@@ -343,11 +332,7 @@ class CarController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $user = $this->getUser();
-        $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Taip'))
-            ->add('no', SubmitType::class, array('label' => 'Ne'))
-            ->getForm();
+        $form = $this->getConfirmForm();
 
         $form->handleRequest($request);
 
@@ -395,11 +380,7 @@ class CarController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $user = $this->getUser();
-        $form = $this->createFormBuilder()
-            ->add('yes', SubmitType::class, array('label' => 'Taip'))
-            ->add('no', SubmitType::class, array('label' => 'Ne'))
-            ->getForm();
+        $form = $this->getConfirmForm();
 
         $form->handleRequest($request);
 
@@ -422,6 +403,19 @@ class CarController extends Controller
             'form' => $form->createView(),
             'car' => $car,
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getConfirmForm()
+    {
+        $form = $this->createFormBuilder()
+            ->add('yes', SubmitType::class, array('label' => 'Taip'))
+            ->add('no', SubmitType::class, array('label' => 'Ne'))
+            ->getForm();
+
+        return $form;
     }
 
 }
