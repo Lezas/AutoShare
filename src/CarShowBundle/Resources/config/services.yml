@@ -6,6 +6,9 @@ imports:
     - { resource: forms.yml }
 
 services:
+    car_show.model.car.class:
+        class: CarShowBundle\Entity\Car
+
     car_show.car:
         class: CarShowBundle\Service\CarService
         arguments: ['@doctrine.orm.entity_manager']
