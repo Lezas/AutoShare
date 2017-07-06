@@ -4,6 +4,7 @@ namespace CarShowBundle\Controller;
 
 use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,11 +21,11 @@ class LikeController extends Controller
     /**
      * @param Request $request
      * @Route("/like", name="like_this")
+     * @Security("has_role('ROLE_USER')")
      * @return Response
      */
     public function likeAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
         $carManager = $this->get('car_show.manager.car');
@@ -51,11 +52,11 @@ class LikeController extends Controller
     /**
      * @param Request $request
      * @Route("/unlike", name="unlike_this")
+     * @Security("has_role('ROLE_USER')")
      * @return Response
      */
     public function unlikeAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
         $carManager = $this->get('car_show.manager.car');
@@ -76,6 +77,5 @@ class LikeController extends Controller
 
         $response['count'] = $car->getLikedUsersCount();
         return new JsonResponse($response);
-
     }
 }

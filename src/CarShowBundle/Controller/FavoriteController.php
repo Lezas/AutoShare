@@ -4,6 +4,7 @@ namespace CarShowBundle\Controller;
 
 use CarShowBundle\Entity\Car;
 use MainBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,10 +22,10 @@ class FavoriteController extends Controller
      * @param Request $request
      * @Route("/add", name="add_to_favorites")
      * @return Response
+     * @Security("has_role('ROLE_USER')")
      */
     public function addToFavoriteAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
         $carManager = $this->get('car_show.manager.car');
@@ -45,17 +46,16 @@ class FavoriteController extends Controller
 
         $response['success'] = true;
         return new JsonResponse($response);
-
     }
 
     /**
      * @param Request $request
      * @Route("/remove", name="remove_from_favorites")
+     * @Security("has_role('ROLE_USER')")
      * @return Response
      */
     public function RemoveFromFavoriteAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $carId = $request->request->get('carId');
 
         $carManager = $this->get('car_show.manager.car');
@@ -75,6 +75,5 @@ class FavoriteController extends Controller
 
         $response['success'] = true;
         return new JsonResponse($response);
-
     }
 }

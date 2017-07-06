@@ -2,10 +2,13 @@
 
 namespace CarShowBundle\Controller;
 
+use CarShowBundle\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use CarShowBundle\Entity\ServiceHistory;
 use CarShowBundle\Form\Type\ServiceHistoryType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,36 +23,27 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ServiceHistoryController extends Controller
 {
     /**
+     * @param Car $car
      * @param Request $request
-     * @Route("/car/{id}/service/history", name="car_history")
      * @return Response
+     * @Route("/car/{car}/service/history", name="car_history")
+     * @ParamConverter("car", class="CarShowBundle:Car")
+     * @Security("user == car.getUser() and false == car.getDeleted() and has_role('ROLE_USER')")
      */
-    public function newServiceHistoryAction($id = null, Request $request)
+    public function newServiceHistoryAction(Car $car, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
-        $car = $em->getRepository('CarShowBundle:Car')->find($id);
-
-        if (!$car || $user != $car->getUser()) {
-            throw new NotFoundHttpException("Page not found");
-        }
-
-        $SH = new ServiceHistory();
+        $SHManager = $this->get('car_show.manager.service_history');
+        $SH = $SHManager->createServiceHistory();
+        //TODO move to proper form factory
         $form = $this->createForm(ServiceHistoryType::class, $SH);
 
         $form->handleRequest($request);
 
-        if($form->isValid()){
-
+        if ($form->isValid()) {
             $SH->setAuto($car);
             $car->addServiceHistory($SH);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($SH);
-            $em->persist($car);
-            $em->flush();
+            $SHManager->saveServiceHistory($SH);
+            $this->get('car_show.manager.car')->saveCar($car);
             $this->addFlash(
                 'notice',
                 'Your service has been saved!'
@@ -60,13 +54,13 @@ class ServiceHistoryController extends Controller
 
         $orderedCollection = new ArrayCollection();
 
-        for($i=$serviceHistory->count()-1; $i>=0; $i--){
+        for ($i = $serviceHistory->count() - 1; $i >= 0; $i--) {
             $orderedCollection->add($serviceHistory->get($i));
         }
 
-        $SH = new ServiceHistory();
+        $SH = $SHManager->createServiceHistory();
         $form = $this->createForm(ServiceHistoryType::class, $SH);
-        return $this->render('@CarShow/Default/serviceHistory.html.twig',[
+        return $this->render('@CarShow/Default/serviceHistory.html.twig', [
             'form' => $form->createView(),
             'auto' => $car,
             'serviceHistory' => $orderedCollection,
@@ -75,57 +69,45 @@ class ServiceHistoryController extends Controller
     }
 
     /**
-     * @param null $carId
-     * @param null $serviceHistory
+     * @param Car $car
+     * @param ServiceHistory $serviceHistory
      * @param Request $request
      * @return Response
-     * @Route("/car/{carId}/service/history/{serviceHistory}", name="car_history_edit")
+     * @Route("/car/{car}/service/history/{serviceHistory}", name="car_history_edit")
+     * @ParamConverter("car", class="CarShowBundle:Car")
+     * @ParamConverter("serviceHistory", class="CarShowBundle:ServiceHistory")
+     * @Security("user == car.getUser() and false == car.getDeleted() and car == serviceHistory.getAuto() and has_role('ROLE_USER')")
      */
-    public function editServiceHistoryAction($carId = null, $serviceHistory = null, Request $request)
+    public function editServiceHistoryAction(Car $car, ServiceHistory $serviceHistory, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
-        $car = $em->getRepository('CarShowBundle:Car')->find($carId);
-        $SH = $em->getRepository('CarShowBundle:ServiceHistory')->find($serviceHistory);
-
-        if (!$car || !$SH || !$user) {
-            throw new NotFoundHttpException("Page not found");
-        }
-
-        $form = $this->createForm(ServiceHistoryType::class, $SH);
-
+        //TODO move to form factory
+        $form = $this->createForm(ServiceHistoryType::class, $serviceHistory);
         $form->handleRequest($request);
 
-        if($form->isValid()){
+        if ($form->isValid()) {
+            $serviceHistory->setAuto($car);
+            $car->addServiceHistory($serviceHistory);
 
-            $SH->setAuto($car);
-            $car->addServiceHistory($SH);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($SH);
-            $em->persist($car);
-            $em->flush();
+            $this->get('car_show.manager.service_history')->saveServiceHistory($serviceHistory);
+            $this->get('car_show.manager.car')->saveCar($car);
             $this->addFlash(
                 'notice',
                 'Your service has been saved!'
             );
 
             return $this->redirectToRoute('car_history', ['id' => $car->getId()]);
-
         }
 
-        $serviceHistory = $car->getServiceHistory();
+        $serviceHistories = $car->getServiceHistory();
 
         $orderedCollection = new ArrayCollection();
 
-        for($i=$serviceHistory->count()-1; $i>=0; $i--){
-            $orderedCollection->add($serviceHistory->get($i));
+        for ($i = $serviceHistories->count() - 1; $i >= 0; $i--) {
+            $orderedCollection->add($serviceHistories->get($i));
         }
 
-        $form = $this->createForm(ServiceHistoryType::class, $SH);
-        return $this->render('@CarShow/Default/serviceHistory.html.twig',[
+        $form = $this->createForm(ServiceHistoryType::class, $serviceHistory);
+        return $this->render('@CarShow/Default/serviceHistory.html.twig', [
             'form' => $form->createView(),
             'auto' => $car,
             'serviceHistory' => $orderedCollection,
@@ -134,36 +116,22 @@ class ServiceHistoryController extends Controller
     }
 
     /**
-     * @param null $serviceHistory
+     * @param $serviceHistory
      * @param Request $request
      * @return Response
      * @Route("/service/history/remove/{serviceHistory}", name="car_history_remove")
+     * @ParamConverter("serviceHistory", class="CarShowBundle:ServiceHistory")
+     * @Security("user == serviceHistory.getAuto().getUser() and false == serviceHistory.getAuto().getDeleted() and has_role('ROLE_USER')")
      */
-    public function deleteServiceHistoryAction($serviceHistory = null, Request $request)
+    public function deleteServiceHistoryAction(ServiceHistory $serviceHistory, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $car = $serviceHistory->getAuto();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
+        $car->removeServiceHistory($serviceHistory);
 
-        $SH = $em->getRepository('CarShowBundle:ServiceHistory')->find($serviceHistory);
-
-        if (!$SH) {
-            throw new NotFoundHttpException("Page not found");
-        }
-        $car = $SH->getAuto();
-
-        if (!$car) {
-            throw new NotFoundHttpException("Page not found");
-        }
-
-        $car->removeServiceHistory($SH);
-
-        $em->persist($car);
-        $em->remove($SH);
-        $em->flush();
+        $this->get('car_show.manager.car')->saveCar($car);
+        $this->get('car_show.manager.service_history')->delete($serviceHistory);
 
         return new JsonResponse(['success' => true]);
-
     }
 }

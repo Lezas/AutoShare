@@ -16,7 +16,6 @@ class CarUpdatedListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::CAR_PRE_UPDATE => 'setUpdatedAt',
             Events::CAR_POST_PERSIST => 'setUpdatedAt',
             Events::POST_PRE_PERSIST => 'setCarUpdatedFromPost',
             Events::POST_DELETE => 'setCarUpdatedFromPost',

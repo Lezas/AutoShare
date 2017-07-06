@@ -256,8 +256,7 @@ class VoteController extends FOSRestController
      *
      * @return View
      */
-    public
-    function getAnswerVotesAction($id)
+    public function getAnswerVotesAction($id)
     {
         $answer = $this->get('stack_exchange.manager.answer')->findAnswerById($id);
 
