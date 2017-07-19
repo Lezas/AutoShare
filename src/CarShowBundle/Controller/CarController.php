@@ -39,28 +39,17 @@ class CarController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
-
             $car->setUser($user);
-
             $carManager->saveCar($car);
-
             $mediaManager = $this->get('sonata.media.manager.media');
-            $fotoData = $form->get('foto')->getData();
-            $ImagemimeTypes = array('image/jpeg', 'image/png');
 
-            if (null != $fotoData) {
-                $media = new Media();
-                $media->setContext('default');
-                $media->setBinaryContent($fotoData);
-                if (in_array($fotoData->getMimeType(), $ImagemimeTypes)) {
-                    $media->setProviderName('sonata.media.provider.image');
-                    $car->addImage($media);
-                    $media->setCar($car);
-                    $mediaManager->save($media);
-                }
+            if ($media = $this->createMedia($form->get('foto')->getData())){
+                $car->addImage($media);
+                $media->setCar($car);
+                $mediaManager->save($media);
                 $car->setMainPhoto($media);
-
             }
+
             $carManager->saveCar($car);
 
             $this->addFlash(
@@ -98,7 +87,6 @@ class CarController extends Controller
             $event = new CarEvent($car);
             $this->get('event_dispatcher')->dispatch(Events::CAR_PRE_UPDATE, $event);
             $this->get('car_show.manager.car')->saveCar($car);
-
             $this->get('event_dispatcher')->dispatch(Events::CAR_POST_UPDATE, $event);
 
             $this->addFlash(
@@ -150,19 +138,10 @@ class CarController extends Controller
             $form->handleRequest($request);
 
             $mediaManager = $this->get('sonata.media.manager.media');
-
             $data = $form->get('images')->getData();
 
-            $ImagemimeTypes = array('image/jpeg', 'image/png', 'image/jpg');
-
             foreach ($data as $datum) {
-
-                $media = new Media();
-                $media->setContext('default');
-                $media->setBinaryContent($datum);
-
-                if (in_array($datum->getMimeType(), $ImagemimeTypes)) {
-                    $media->setProviderName('sonata.media.provider.image');
+                if ($media = $this->createMedia($datum)){
                     $car->addImage($media);
                     $media->setCar($car);
                     $mediaManager->save($media);
@@ -332,6 +311,25 @@ class CarController extends Controller
             'form' => $form->createView(),
             'car' => $car,
         ]);
+    }
+
+    protected function createMedia($imageData)
+    {
+        if (empty($imageData))
+            return null;
+
+        $ImagemimeTypes = array('image/jpeg', 'image/png');
+
+        $media = new Media();
+        $media->setContext('default');
+        $media->setBinaryContent($imageData);
+
+        if (in_array($imageData->getMimeType(), $ImagemimeTypes)) {
+            $media->setProviderName('sonata.media.provider.image');
+            return $media;
+        }
+
+        return null;
     }
 
 }

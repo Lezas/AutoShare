@@ -8,6 +8,9 @@
 
 namespace StackExchangeBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use StackExchangeBundle\Entity\Question;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,22 +43,19 @@ class AnswerController extends Controller
     }
 
     /**
-     * @Route("/{questionId}/answer/POST", name="answer_POST")
-     * @param $questionId
+     * @Route("/{question}/answer/POST", name="answer_POST")
+     * @ParamConverter("question", class="StackExchangeBundle:Question")
+     * @Security("user == car.getUser() and false == car.getDeleted()")
+     * @param Question $question
      * @param Request $request
      * @return Response
      */
-    public function postAnswerAction($questionId, Request $request)
+    public function postAnswerAction(Question $question, Request $request)
     {
-        $question = $this->get('stack_exchange.manager.question')->findQuestionById($questionId);
-        if (!$question) {
-            throw new NotFoundHttpException(sprintf('Question with identifier of "%s" does not exist', $questionId));
-        }
-
         $answerManager = $this->get('stack_exchange.manager.answer');
         $answer = $answerManager->createAnswer($question);
 
-        $form = $this->get('stack_exchange.form_factory.answer')->createForm($this->generateUrl('answer_POST', ['questionId' => $questionId]));
+        $form = $this->get('stack_exchange.form_factory.answer')->createForm($this->generateUrl('answer_POST', ['questionId' => $question->getId()]));
         $form->setData($answer);
 
         $form->handleRequest($request);
@@ -63,7 +63,7 @@ class AnswerController extends Controller
         if ($form->isValid() && !empty($answer->getText())) {
             if ($answerManager->saveAnswer($answer) !== false) {
 
-                return $this->redirectToRoute('question', ['id' => $questionId]);
+                return $this->redirectToRoute('question', ['id' => $question->getId()]);
             }
         }
 
@@ -71,7 +71,7 @@ class AnswerController extends Controller
             'notice',
             'Answer must contain text!'
         );
-        return $this->redirectToRoute('question', ['id' => $questionId]);
+        return $this->redirectToRoute('question', ['id' => $question->getId()]);
 
     }
 

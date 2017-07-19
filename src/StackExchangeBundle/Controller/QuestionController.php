@@ -3,6 +3,9 @@
 namespace StackExchangeBundle\Controller;
 
 use MainBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use StackExchangeBundle\Entity\Answer;
 use StackExchangeBundle\Entity\Question;
 use StackExchangeBundle\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class QuestionController extends Controller
 {
     /**
+     * TODO: is this function used anywhere?
      * @Route("/question/new", name="question_new")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -31,6 +35,7 @@ class QuestionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            //TODO WTF IS DIS
             if (null !== $questionManager->findQuestionById($question->getId())) {
                 return new Response(sprintf("Duplicate question id '%s'.", $form->getData()->getId()), 400);
             }
@@ -53,18 +58,16 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/question/{id}", name="question")
-     * @param $id
+     * @Route("/question/{question}", name="question")
+     * @ParamConverter("question", class="StackExchangeBundle:Question")
+     * @Security(" false == question.isDeleted()")
+     * @param Question $question
      * @param Request $request
      * @return Response
      */
-    public function getQuestionAction($id, Request $request)
+    public function getQuestionAction(Question $question, Request $request)
     {
-        $questionManager = $this->get('stack_exchange.manager.question');
-        $question = $questionManager->findQuestionById($id);
-
-        $relatedQuestions = $questionManager->findSimilarQuestionsByTags($question);
-
+        $relatedQuestions = $this->get('stack_exchange.manager.question')->findSimilarQuestionsByTags($question);
 
         return $this->render('StackExchangeBundle:Question:question_page.html.twig', [
                 'question' => $question,
@@ -116,21 +119,18 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/question/{id}/edit", name="question_edit")
+     * @Route("/question/{question}/edit", name="question_edit")
+     * @ParamConverter("question", class="StackExchangeBundle:Question")
+     * @Security("user == question.getAuthor() and false == question.isDeleted() and has_role('ROLE_USER')")
+     * @param Question $question
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function editQuestionAction($id, Request $request)
+    public function editQuestionAction(Question $question, Request $request)
     {
         $this->getUser();
 
-        $questionManager = $this->get('stack_exchange.manager.question');
         $tagManager = $this->get('stack_exchange.manager.tag');
-        $question = $questionManager->findQuestionById($id);
-        if ($question == null) {
-            return new Response(sprintf("Cant find question with id '%s'.", $id), 400);
-        }
-
         $tagsInString = $tagManager->convertTagsToString($question->getTags()->getValues());
 
         $form = $this->get('stack_exchange.form_factory.question')->createForm();
@@ -159,7 +159,7 @@ class QuestionController extends Controller
                 }
             }
 
-            $questionManager->updateQuestion($question);
+            $this->get('stack_exchange.manager.question')->updateQuestion($question);
 
             return $this->redirectToRoute('question', ['id' => $question->getId()]);
         }
@@ -170,27 +170,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * @Route("/question/{questionId}/answered/{answerId}", name="set_question_answered")
-     * @param $questionId
-     * @param $answerId
+     * @Route("/question/{question}/answered/{answer}", name="set_question_answered")
+     * @ParamConverter("question", class="StackExchangeBundle:Question")
+     * @ParamConverter("answer", class="StackExchangeBundle:Answer")
+     * @Security("user == question.getAuthor() and false == question.isDeleted() and has_role('ROLE_USER') and question == answer.getQuestion()")
+     * @param Question $question
+     * @param Answer $answer
      * @return Response
      */
-    public function setQuestionAnsweredAction($questionId, $answerId)
+    public function setQuestionAnsweredAction(Question $question, Answer $answer)
     {
         $questionManager = $this->get('stack_exchange.manager.question');
-        $answerManager = $this->get('stack_exchange.manager.answer');
 
-        $question = $questionManager->findQuestionById($questionId);
-        $answer = $answerManager->findAnswerById($answerId);
-
-        if (null == $question or null == $answer) {
-            return new Response(sprintf("Cant find entities with ids: '%s' '%d'.", $questionId, $answerId), 400);
-        }
-
-        $result = $questionManager->setQuestionToAnswered($question, $answer);
-
-        if (true !== $result) {
+        if (!$questionManager->setQuestionToAnswered($question, $answer)) {
             //TODO add dome kind of error reporting for user
+
             return new Response("Something wen't wrong!", 400);
         }
         $questionManager->saveQuestion($question);

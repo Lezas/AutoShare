@@ -20,3 +20,8 @@ services:
     car_show.manager.post:
         class: CarShowBundle\Entity\PostManager
         arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
+    car_show.manager.service_history:
+        class: CarShowBundle\Entity\ServiceHistoryManager
+        arguments: ["@event_dispatcher","@doctrine.orm.entity_manager"]
+
